@@ -1,20 +1,28 @@
 package com.example.subscribble.activities
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +40,8 @@ fun HomeScreen() {
     val formattedvideoPrice = String.format("%.2f", videoPrice)
     val musicPrice = 0f
     val formattedmusicPrice = String.format("%.2f", musicPrice)
+
+    val haveStreaming = false
 
     Scaffold(
         topBar = {
@@ -60,8 +70,10 @@ fun HomeScreen() {
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(top = 22.dp, start = 26.dp, end = 26.dp).weight(1f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                        .weight(1f)
                 ) {
                     Text(
                         text = "Total Price",
@@ -86,8 +98,10 @@ fun HomeScreen() {
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(top = 22.dp, start = 26.dp, end = 26.dp).weight(1f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                        .weight(1f)
                 ) {
                     Text(
                         text = "Video Streaming",
@@ -106,8 +120,10 @@ fun HomeScreen() {
                 }
 
                 Row(
-                    modifier = Modifier.fillMaxWidth()
-                        .padding(start = 26.dp, end = 26.dp).weight(1f)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 26.dp, end = 26.dp)
+                        .weight(1f)
                 ) {
                     Text(
                         text = "Music Streaming",
@@ -126,6 +142,7 @@ fun HomeScreen() {
                 }
             }
 
+
             Text(
                 text = "Your subscription",
                 fontWeight = FontWeight.Bold,
@@ -134,6 +151,34 @@ fun HomeScreen() {
             )
 
             //Subscriptions
+
+            Column(modifier = Modifier. fillMaxHeight()) {
+
+                if (!haveStreaming){    //Show add button when haveStreaming is false
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(140.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 28.dp)
+                        .shadow(elevation = 16.dp, shape = RoundedCornerShape(28.dp))
+                        .clickable {println("add")}, //To add Screen!!!!!!!!!!!!
+                        shape = RoundedCornerShape(28.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Add icon",
+                            tint = Color(0xFFD9D9D9),
+                            modifier = Modifier
+                                .size(50.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .weight(1f)
+                        )
+                    }
+                }
+
+                //Show Streaming
+
+            }
 
         }
     }
