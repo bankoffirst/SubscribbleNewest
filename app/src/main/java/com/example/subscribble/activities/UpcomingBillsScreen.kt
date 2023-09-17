@@ -18,12 +18,12 @@ import androidx.compose.ui.unit.sp
 fun UpcomingBillsScreen(){
     Scaffold(
         topBar = {
-            Text(
-                text = "Upcoming Bills",
-                fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
-                modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-            )
+        Text(
+            text = "Upcoming Bills",
+            fontWeight = FontWeight.Bold,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
+        )
         }
     ) { contentPadding ->
 
@@ -38,7 +38,7 @@ fun UpcomingBillsScreen(){
 
 }
 
-@Preview(showBackground = true, widthDp = 480, heightDp = 1030)
+@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
 @Composable
 fun UpcomingBillsScreenPreview(){
     UpcomingBillsScreen()

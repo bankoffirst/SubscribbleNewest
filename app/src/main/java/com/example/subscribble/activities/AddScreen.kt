@@ -21,7 +21,7 @@ fun AddScreen(){
             Text(
                 text = "Add",
                 fontWeight = FontWeight.Bold,
-                fontSize = 28.sp,
+                fontSize = 24.sp,
                 modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
             )
         }
@@ -38,7 +38,7 @@ fun AddScreen(){
 
 }
 
-@Preview(showBackground = true, widthDp = 480, heightDp = 1030)
+@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
 @Composable
 fun AddScreenPreview(){
     AddScreen()

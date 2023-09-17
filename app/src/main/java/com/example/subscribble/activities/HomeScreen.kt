@@ -48,7 +48,7 @@ fun HomeScreen() {
                 Text(
                     text = "Home",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 28.sp,
+                    fontSize = 24.sp,
                     modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
                 )
         }
@@ -64,9 +64,9 @@ fun HomeScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 20.dp, end = 20.dp)
-                    .height(220.dp),
-                shape = RoundedCornerShape(28.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF29292B))
+                    .height(200.dp),
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color.Black)
             ) {
 
                 Row(
@@ -78,13 +78,13 @@ fun HomeScreen() {
                     Text(
                         text = "Total Price",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "$formattedTotal THB",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp,
+                        fontSize = 20.sp,
                         color = Color(0xFF0AA6EC),
                         textAlign = TextAlign.Right,
                         modifier = Modifier.fillMaxWidth()
@@ -106,13 +106,13 @@ fun HomeScreen() {
                     Text(
                         text = "Video Streaming",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(0xFF808080)
                     )
                     Text(
                         text = "$formattedvideoPrice THB",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(0xFF808080),
                         textAlign = TextAlign.Right,
                         modifier = Modifier.fillMaxWidth()
@@ -128,13 +128,13 @@ fun HomeScreen() {
                     Text(
                         text = "Music Streaming",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(0xFF808080)
                     )
                     Text(
                         text = "$formattedmusicPrice THB",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
+                        fontSize = 14.sp,
                         color = Color(0xFF808080),
                         textAlign = TextAlign.Right,
                         modifier = Modifier.fillMaxWidth()
@@ -146,7 +146,7 @@ fun HomeScreen() {
             Text(
                 text = "Your subscription",
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 modifier = Modifier.padding(start = 26.dp, top = 28.dp)
             )
 
@@ -157,11 +157,11 @@ fun HomeScreen() {
                 if (!haveStreaming){    //Show add button when haveStreaming is false
                     Card(modifier = Modifier
                         .fillMaxWidth()
-                        .height(140.dp)
+                        .height(120.dp)
                         .padding(start = 20.dp, end = 20.dp, top = 28.dp)
-                        .shadow(elevation = 16.dp, shape = RoundedCornerShape(28.dp))
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
                         .clickable {println("add")}, //To add Screen!!!!!!!!!!!!
-                        shape = RoundedCornerShape(28.dp),
+                        shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
                         Icon(
@@ -169,7 +169,7 @@ fun HomeScreen() {
                             contentDescription = "Add icon",
                             tint = Color(0xFFD9D9D9),
                             modifier = Modifier
-                                .size(50.dp)
+                                .size(40.dp)
                                 .align(Alignment.CenterHorizontally)
                                 .weight(1f)
                         )
@@ -185,7 +185,7 @@ fun HomeScreen() {
 }
 
 
-@Preview(showBackground = true, widthDp = 480, heightDp = 1030)
+@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
 @Composable
 fun HomeScreenPreview(){
     HomeScreen()
