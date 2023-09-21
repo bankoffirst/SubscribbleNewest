@@ -24,11 +24,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.subscribble.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +43,7 @@ fun HomeScreen() {
     val musicPrice = 0f
     val formattedmusicPrice = String.format("%.2f", musicPrice)
 
-    val haveStreaming = false
+    val haveStreaming = true
 
     Scaffold(
         topBar = {
@@ -66,7 +68,7 @@ fun HomeScreen() {
                     .padding(start = 20.dp, end = 20.dp)
                     .height(200.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Black)
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.cus_black))
             ) {
 
                 Row(
@@ -144,7 +146,7 @@ fun HomeScreen() {
 
 
             Text(
-                text = "Your subscription",
+                text = "Your subscriptions",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 modifier = Modifier.padding(start = 26.dp, top = 28.dp)
@@ -158,9 +160,9 @@ fun HomeScreen() {
                     Card(modifier = Modifier
                         .fillMaxWidth()
                         .height(120.dp)
-                        .padding(start = 20.dp, end = 20.dp, top = 28.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                        .clickable {println("add")}, //To add Screen!!!!!!!!!!!!
+                        .clickable { println("add subscription") },
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {
@@ -169,10 +171,26 @@ fun HomeScreen() {
                             contentDescription = "Add icon",
                             tint = Color(0xFFD9D9D9),
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(50.dp)
                                 .align(Alignment.CenterHorizontally)
                                 .weight(1f)
                         )
+                    }
+                }
+
+                else{ //Show subscriptions
+                    Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(120.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                        .clickable { println("add subscription") },
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+
+
+
                     }
                 }
 
