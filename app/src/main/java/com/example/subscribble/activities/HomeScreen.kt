@@ -1,7 +1,9 @@
 package com.example.subscribble.activities
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -213,18 +217,31 @@ fun HomeScreen() {
                                     .fillMaxSize()
                                     .padding(start = 10.dp),
                             ) {
-                                Text(
-                                    text = "Netflix", modifier = Modifier
-                                        .fillMaxSize()
-                                        .weight(1f),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                )
-                                Spacer(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .weight(0.2f)
-                                )
+
+
+                                Box(modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f)
+                                    ,contentAlignment = Alignment.BottomStart
+                                ) {
+                                        Row(modifier = Modifier
+                                            .fillMaxWidth()) {
+                                            Text(
+                                                text = "Netflix",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 18.sp,
+                                            )
+
+                                            Spacer(modifier = Modifier.width(5.dp))
+
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(10.dp)
+                                                    .background(Color.Red, shape = CircleShape)
+                                            )
+
+                                        }
+                                }
                                 Text(
                                     text = "199/month", modifier = Modifier
                                         .fillMaxSize()
