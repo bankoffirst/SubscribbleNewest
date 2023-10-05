@@ -260,7 +260,7 @@ fun HomeScreen() {
                                     .padding(end = 20.dp)
                                 ,contentAlignment = Alignment.CenterEnd
                             ){
-                                Text(text = "29 Apr", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                Text(text = "5 Oct", fontSize = 16.sp, fontWeight = FontWeight.Medium)
                             }
 
                         }
