@@ -2,6 +2,7 @@ package com.example.subscribble.activities
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,10 +26,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.subscribble.navbar.NavScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(){
+fun AddScreen(navController: NavController){
     Scaffold(
         topBar = {
             Text(
@@ -39,75 +42,115 @@ fun AddScreen(){
             )
         }
     ) { contentPadding ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
 
-            Text(
-                text = "New payment method",
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(start = 26.dp)
-            )
+            Column(modifier = Modifier. fillMaxHeight()) {
 
-            Card(
-                modifier = Modifier
+                Text(
+                    text = "New Payment method",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(start = 26.dp, top = 28.dp)
+                )
+
+                //Show add payment method
+                Card(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-                    .height(200.dp)
+                    .height(250.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 28.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable {println("add payment")},
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add icon",
-                    tint = Color(0xFFD9D9D9),
-                    modifier = Modifier
-                        .size(50.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .weight(1f)
+                    .clickable { navController.navigate(NavScreen.AddPayment.route) }, //To add card
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add icon",
+                        tint = Color(0xFFD9D9D9),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .weight(1f)
+                    )
+                }
+
+                //Show Streaming
+
+                Text(
+                    text = "New Subscription",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(start = 26.dp, top = 100.dp)
                 )
+
+                //Show add subscription method
+                Card(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 28.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                    .clickable { navController.navigate(NavScreen.AddSubscription.route) }, //To add subscription
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add icon",
+                        tint = Color(0xFFD9D9D9),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .weight(1f)
+                    )
+                }
+
             }
 
             Text(
-                text = "New subscription",
+                text = "New Subscription",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
-                modifier = Modifier.padding(start = 26.dp, top = 22.dp)
+                modifier = Modifier.padding(start = 28.dp, top = 28.dp)
             )
 
-            Card(modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                .clickable {println("add subscription")},
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add icon",
-                    tint = Color(0xFFD9D9D9),
-                    modifier = Modifier
-                        .size(50.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .weight(1f)
-                )
+            Column(modifier = Modifier. fillMaxHeight()) {
+                //Show add payment method
+                Card(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
+                    .padding(start = 20.dp, end = 20.dp, top = 28.dp)
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                    .clickable { println("add") }, //To add Screen!!!!!!!!!!!!
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add icon",
+                        tint = Color(0xFFD9D9D9),
+                        modifier = Modifier
+                            .size(40.dp)
+                            .align(Alignment.CenterHorizontally)
+                            .weight(1f)
+                    )
+                }
+
+                //Show Streaming
+
             }
-            
+
+
         }
     }
 
 }
 
-@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
-@Composable
-fun AddScreenPreview(){
-    AddScreen()
-}
+//@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
+//@Composable
+//fun AddScreenPreview(){
+//    AddScreen()
+//}

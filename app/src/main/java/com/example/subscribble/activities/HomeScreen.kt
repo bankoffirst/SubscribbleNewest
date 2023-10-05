@@ -37,11 +37,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.subscribble.R
+import com.example.subscribble.navbar.NavScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(/*navController: NavController*/) {
 
     val total = 0f
     val formattedTotal = String.format("%.2f", total)
@@ -170,7 +172,7 @@ fun HomeScreen() {
                             .height(120.dp)
                             .padding(start = 20.dp, end = 20.dp, top = 20.dp)
                             .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                            .clickable { println("add subscription") },
+                            .clickable { /*navController.navigate(NavScreen.AddSubscription.route)*/ },
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White)
                     ) {

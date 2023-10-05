@@ -3,7 +3,6 @@
 package com.example.subscribble.navbar
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -61,7 +60,7 @@ fun BottomBar(navController: NavController)
     Row(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            .background(Color.White)
+            //.background(Color.White)
             .fillMaxWidth()
     ) {
         screens.forEach {screen ->

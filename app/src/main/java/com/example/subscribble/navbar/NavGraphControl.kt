@@ -5,7 +5,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.subscribble.activities.AddPayment
 import com.example.subscribble.activities.AddScreen
+import com.example.subscribble.activities.AddSubscription
 import com.example.subscribble.activities.DataVisualizationScreenScreen
 import com.example.subscribble.activities.HomeScreen
 import com.example.subscribble.activities.UpcomingBillsScreen
@@ -20,11 +22,11 @@ fun NavGraphControl(
     ){
         composable(route = BottomBarScreen.Home.route)
         {
-            HomeScreen()
+            HomeScreen(/*navController = navController*/)
         }
         composable(route = BottomBarScreen.Add.route)
         {
-            AddScreen()
+            AddScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Data_visual.route)
         {
@@ -33,6 +35,14 @@ fun NavGraphControl(
         composable(route = BottomBarScreen.Bills.route)
         {
             UpcomingBillsScreen()
+        }
+        composable(route = NavScreen.AddPayment.route)
+        {
+            AddPayment(navController = navController)
+        }
+        composable(route = NavScreen.AddSubscription.route)
+        {
+            AddSubscription(navController = navController)
         }
     }
 }
