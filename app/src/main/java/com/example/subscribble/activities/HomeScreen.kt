@@ -75,7 +75,7 @@ fun HomeScreen() {
                     .padding(start = 20.dp, end = 20.dp)
                     .height(200.dp),
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.cus_black))
+                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.cus_black)) //Custom Color
             ) {
 
                 Row(
@@ -214,7 +214,7 @@ fun HomeScreen() {
 
                             Column(
                                 modifier = Modifier
-                                    .fillMaxSize()
+                                    .width(150.dp)
                                     .padding(start = 10.dp),
                             ) {
 
@@ -236,8 +236,9 @@ fun HomeScreen() {
 
                                             Box(
                                                 modifier = Modifier
-                                                    .size(10.dp)
+                                                    .size(12.dp)
                                                     .background(Color.Red, shape = CircleShape)
+                                                    .align(Alignment.CenterVertically)
                                             )
 
                                         }
@@ -248,9 +249,19 @@ fun HomeScreen() {
                                         .weight(1f),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp,
+
                                 )
+
                             }
 
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(end = 20.dp)
+                                ,contentAlignment = Alignment.CenterEnd
+                            ){
+                                Text(text = "29 Apr", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                            }
 
                         }
                     }
