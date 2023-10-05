@@ -236,7 +236,7 @@ fun HomeScreen() {
 
                                             Box(
                                                 modifier = Modifier
-                                                    .size(12.dp)
+                                                    .size(10.dp)
                                                     .background(Color.Red, shape = CircleShape)
                                                     .align(Alignment.CenterVertically)
                                             )
