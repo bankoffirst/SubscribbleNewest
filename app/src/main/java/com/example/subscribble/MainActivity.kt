@@ -10,7 +10,9 @@ import androidx.compose.ui.Modifier
 import com.example.subscribble.activities.HomeScreen
 import com.example.subscribble.navbar.NavControl
 import com.example.subscribble.ui.theme.SubscribbleTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

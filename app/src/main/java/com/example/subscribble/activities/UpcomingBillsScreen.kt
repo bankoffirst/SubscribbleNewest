@@ -31,8 +31,9 @@ fun UpcomingBillsScreen(){
             modifier = Modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+
         ) {
-            
+
         }
     }
 

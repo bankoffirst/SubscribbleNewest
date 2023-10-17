@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.clickable
@@ -37,19 +36,36 @@ import androidx.compose.material3.IconButton
 import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.subscribble.navbar.BottomBarScreen
+import com.example.subscribble.database.CardList
+import com.example.subscribble.database.module.SubscriptionViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPayment(navController: NavController){
+fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel = hiltViewModel()) {
+
+    val cards = cardViewmodel.cards.collectAsState(initial = emptyList())
+
+    val name = remember {
+        mutableStateOf("")
+    }
+
+    val detail = remember {
+        mutableStateOf("")
+    }
+
+    val alert = remember {
+        mutableStateOf("")
+    }
 
     val total = 0f
     val formattedTotal = String.format("%.2f", total)
@@ -89,13 +105,14 @@ fun AddPayment(navController: NavController){
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            Column(modifier = Modifier. fillMaxHeight()) {
+            Column(modifier = Modifier.fillMaxHeight()) {
 
-                Card(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(750.dp)
-                    .padding(start = 20.dp, end = 20.dp, top = 0.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(750.dp)
+                        .padding(start = 20.dp, end = 20.dp, top = 0.dp)
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
@@ -141,7 +158,7 @@ fun AddPayment(navController: NavController){
                                 .fillMaxWidth()
                                 .padding(top = 22.dp, start = 26.dp, end = 26.dp)
                                 .weight(1f)
-                        ){
+                        ) {
                             Text(
                                 text = textDetail, // credit card number
                                 fontWeight = FontWeight.Bold,
@@ -209,7 +226,7 @@ fun AddPayment(navController: NavController){
                         value = textName,
                         onValueChange = { textName = it },
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp),
-                        placeholder = { Text(text =  "Credit or Debit Name")},
+                        placeholder = { Text(text = "Credit or Debit Name") },
                         shape = RectangleShape,
                         singleLine = true,
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -229,45 +246,64 @@ fun AddPayment(navController: NavController){
                         value = textDetail,
                         onValueChange = { textDetail = it },
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp),
-                        placeholder = { Text(text =  "Details of Card")},
+                        placeholder = { Text(text = "Details of Card") },
                         shape = RectangleShape,
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                         maxLines = 1,
                         singleLine = true
                     )
 
-                    //Icon Add
+                    Column(modifier = Modifier.padding(start = 26.dp, top = 30.dp)) {
+                        Text(
+                            text = alert.value,
+                            color = Color.Red,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
 
-                    IconButton(
-                        onClick = {
-                            navController.navigate(BottomBarScreen.Home.route)
-                            //println("Card Name : $textName. And Details : $textDetail")
-                        },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Add icon",
-                                tint = Color(0xFFD9D9D9),
-                                modifier = Modifier
-                                    .size(50.dp)
-                                    .background(color = Color.Black)
-                            )
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 150.dp)
-                            .clip(CircleShape)
-                            .size(50.dp)
-                    )
+                        //Icon Add
+
+                        IconButton(
+                            onClick = {
+                                if (textName != "") {
+                                    cardViewmodel.insertCard(
+                                        CardList(
+                                            name = textName,
+                                            detail = textDetail,
+                                        )
+                                    ); navController.popBackStack()
+                                } else {
+                                    alert.value = "Please Fill Card Name"
+                                }
+                                //println("Card Name : $textName. And Details : $textDetail")
+                            },
+                            content = {
+                                Icon(
+                                    imageVector = Icons.Default.Add,
+                                    contentDescription = "Add icon",
+                                    tint = Color(0xFFD9D9D9),
+                                    modifier = Modifier
+                                        .size(50.dp)
+                                        .background(color = Color.Black)
+                                )
+                            },
+                            modifier = Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(top = 150.dp)
+                                .clip(CircleShape)
+                                .size(50.dp)
+                        )
+
+                    }
 
                 }
 
+
             }
-
-
         }
-    }
 
+    }
 }
 
 

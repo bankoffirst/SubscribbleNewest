@@ -60,7 +60,7 @@ fun BottomBar(navController: NavController)
     Row(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            //.background(Color.White)
+            //.background(Color.Blue)
             .fillMaxWidth()
     ) {
         screens.forEach {screen ->
@@ -83,7 +83,8 @@ fun RowScope.AddItem(
         modifier = Modifier
             .height(40.dp)
             .clip(CircleShape)
-            //.background(background)
+            .align(Alignment.CenterVertically)
+            .padding(start = 5.dp, end = 5.dp)
             .clickable(onClick = {
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id)

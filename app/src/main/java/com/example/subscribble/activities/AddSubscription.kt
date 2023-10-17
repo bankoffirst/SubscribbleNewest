@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -55,15 +56,22 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.subscribble.R
+import com.example.subscribble.classify
+import com.example.subscribble.database.SubsList
+import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddSubscription(navController: NavController) {
+fun AddSubscription(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
-    val listItems = arrayOf("Netflix","Disney+","Youtube","Spotify")
+    val subscriptions = subViewmodel.subs.collectAsState(initial = emptyList())
+
+    val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleTV","AppleMusic")
 
     // state of menu
     var expanded by remember {
@@ -86,7 +94,7 @@ fun AddSubscription(navController: NavController) {
     val selectDay = calendar[Calendar.DAY_OF_MONTH]
     val selectDate = remember { mutableStateOf("")}
 
-    val dateToday = DatePickerDialog(context,
+    val dateToday = DatePickerDialog(context, R.style.DatePickerTheme,
         {_: DatePicker, selectYear:Int, selectMonth:Int, selectDay:Int ->
             selectDate.value = "$selectDay/${selectMonth +1}/$selectYear"
         }, selectYear,selectMonth,selectDay
@@ -328,8 +336,22 @@ fun AddSubscription(navController: NavController) {
 
                     IconButton(
                         onClick = {
-                            navController.navigate(BottomBarScreen.Home.route)
-                            //println("Card Name : $textName. And Details : $textDetail")
+                                  if (selectedItem != "" && numPrice != "" && selectDate.value != ""){
+                                      subViewmodel.insertSub(
+                                          SubsList(
+                                              name = selectedItem,
+                                              planName = textPlan,
+                                              price = numPrice.toInt(),
+                                              date = selectDate.value,
+                                              note = textNote,
+                                              type = classify(selectedItem)
+                                          )
+                                      ); navController.navigate(BottomBarScreen.Home.route)
+                                  //println("Item Name : $selectedItem. And expanded : $expanded, plan : $textPlan, Start Date : ${selectDate.value}")
+                                  } else {
+                                      println("Error!")
+                                  }
+                            //navController.navigate(BottomBarScreen.Home.route)
                         },
                         content = {
                             Icon(

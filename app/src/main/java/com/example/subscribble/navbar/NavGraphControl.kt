@@ -10,6 +10,7 @@ import com.example.subscribble.activities.AddScreen
 import com.example.subscribble.activities.AddSubscription
 import com.example.subscribble.activities.DataVisualizationScreenScreen
 import com.example.subscribble.activities.HomeScreen
+import com.example.subscribble.activities.ShowDetailScreen
 import com.example.subscribble.activities.UpcomingBillsScreen
 
 @Composable
@@ -22,7 +23,7 @@ fun NavGraphControl(
     ){
         composable(route = BottomBarScreen.Home.route)
         {
-            HomeScreen(/*navController = navController*/)
+            HomeScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Add.route)
         {
@@ -43,6 +44,10 @@ fun NavGraphControl(
         composable(route = NavScreen.AddSubscription.route)
         {
             AddSubscription(navController = navController)
+        }
+        composable(route = NavScreen.ShowDetailScreen.route)
+        {
+            ShowDetailScreen()
         }
     }
 }

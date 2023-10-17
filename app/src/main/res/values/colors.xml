@@ -11,5 +11,17 @@
     <!-- Custom color -->
 
     <color name="cus_black">#333</color>
+    <color name="light_blue">#0AA6EC</color>
 
+    <color name="custom_background">#F4F4F4</color>
+
+    <color name="custom_text">#333</color>
+
+    <color name="custom_card">#333</color>
+    <color name="custom_card_text">#E8E8E8</color>
+    <color name="custom_card_subtext">#BBB</color>
+
+    <color name="custom_text_light">#656565</color>
+    <color name="custom_card_total">#0AA6EC</color>
+    <color name="custom_list">#FFFFFF</color>
 </resources>

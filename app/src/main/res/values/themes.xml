@@ -2,4 +2,9 @@
 <resources>
 
     <style name="Theme.Subscribble" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorSecondary">@color/white</item>
+        <item name="android:colorAccent">@color/light_blue</item>
+        <item name="colorAccent">@color/light_blue</item>
+    </style>
 </resources>
