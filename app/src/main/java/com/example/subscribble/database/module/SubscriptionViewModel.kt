@@ -47,9 +47,22 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
+    fun updateSub(subsList: SubsList){
+        viewModelScope.launch {
+            repository.updateSubscription(subsList)
+        }
+    }
+
     fun sumPriceByCategory(category: String): Int {
         return repository.sumPriceByCategory(category)
     }
+
+    fun getSub(id: Int){
+        viewModelScope.launch {
+            repository.getSub(id)
+        }
+    }
+
 
 }
 

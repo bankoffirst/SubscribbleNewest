@@ -61,4 +61,8 @@ class Repository @Inject constructor(
         return subDao.sumPriceByCategory(category)
     }
 
+    fun getSub(id:Int): List<SubsList> {
+        return  subDao.getSub(id)
+    }
+
 }
