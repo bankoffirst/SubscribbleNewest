@@ -3,7 +3,10 @@ package com.example.subscribble.activities
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,18 +31,22 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.TextStyle
 import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.foundation.layout.Box
 
 @Composable
-fun doNut(
-    values: List<Float> = listOf(65f, 35f),
+fun doNut1(
+    values: List<Float> = listOf(45f, 35f,20f),
     colors: List<Color> = listOf(
-        Color(0xFF0aa6ec),
-        Color(0xFF56bfee)
+        Color(0xFF000000),
+        Color(0xFFaf0c19),
+        Color(0xFF143692)
     ),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
@@ -75,8 +82,7 @@ fun doNut(
                 startAngle += sweepAngles[i]
             }
         }
-
-        val text = "606/month"
+        val text = "467/month"
 
         Text(
             text = text,
@@ -94,16 +100,28 @@ fun doNut(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataVisualizationScreen(navController: NavController) {
+fun VideoDonut(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Text(
-                text = "Data Visualization",
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
+                    .clickable { navController.popBackStack() }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back",
+                    modifier = Modifier.size(35.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Video Streaming",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 24.sp
+                )
+            }
         }
     ) { contentPadding ->
         Column(
@@ -123,7 +141,8 @@ fun DataVisualizationScreen(navController: NavController) {
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(250.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                    .clickable { navController.navigate(NavScreen.TotalLine.route) },
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
@@ -134,7 +153,7 @@ fun DataVisualizationScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    doNut()
+                    doNut1()
                 }
             }
             Column(
@@ -147,13 +166,12 @@ fun DataVisualizationScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding( start = 30.dp, end = 30.dp)
                         .height(80.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                        .clickable { navController.navigate(NavScreen.VideoDonut.route) },
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Text(
-                        text = "Video Streaming",
+                        text = "App1",
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp)
@@ -164,13 +182,12 @@ fun DataVisualizationScreen(navController: NavController) {
                         .fillMaxWidth()
                         .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                         .height(80.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                        .clickable { navController.navigate(NavScreen.MusicDonut.route) },
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
                     Text(
-                        text = "Music Streaming",
+                        text = "App2",
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp)
@@ -181,5 +198,4 @@ fun DataVisualizationScreen(navController: NavController) {
 
     }
 }
-
 
