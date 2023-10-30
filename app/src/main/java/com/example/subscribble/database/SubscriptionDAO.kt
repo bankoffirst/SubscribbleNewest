@@ -31,20 +31,20 @@ interface SubDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(sub: SubsList)
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(sub: SubsList)
+    @Update
+    suspend fun updateSubscription(sub: SubsList)
 
-    @Query("DELETE FROM subscription WHERE sub_id = :id")
-    fun delete(id:Int)
+    @Delete
+    suspend fun deleteSubscription(sub: SubsList)
 
     @Query("SELECT * FROM subscription")
     fun getAllSubs():List<SubsList>
 
-    @Query("SELECT * FROM subscription WHERE sub_id =:subId")
-    fun getSub(subId:Int):List<SubsList>
+    @Query("SELECT * FROM subscription WHERE sub_id =:id")
+    fun getSubscriptionById(id: Int): SubsList?
 
     @Query("SELECT SUM(sub_price) FROM subscription WHERE sub_category = :category")
-    fun sumPriceByCategory(category: String): Int
+    fun sumPriceByCategory(category: String): Float
 
 
 }

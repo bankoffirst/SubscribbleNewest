@@ -45,24 +45,24 @@ class Repository @Inject constructor(
         }
     }
 
-    suspend fun deleteSubscription(id: Int){
+    suspend fun deleteSubscription(subsList: SubsList){
         withContext(Dispatchers.IO){
-            subDao.delete(id)
+            subDao.deleteSubscription(subsList)
         }
     }
 
     suspend fun updateSubscription(subList: SubsList){
         withContext(Dispatchers.IO){
-            subDao.update(subList)
+            subDao.updateSubscription(subList)
         }
     }
 
-    fun sumPriceByCategory(category : String): Int{
+    fun sumPriceByCategory(category : String): Float{
         return subDao.sumPriceByCategory(category)
     }
 
-    fun getSub(id:Int): List<SubsList> {
-        return  subDao.getSub(id)
+    fun getSubscriptionById(id:Int): SubsList? {
+        return  subDao.getSubscriptionById(id)
     }
 
 }

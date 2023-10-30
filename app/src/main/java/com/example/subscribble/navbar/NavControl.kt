@@ -3,15 +3,15 @@
 package com.example.subscribble.navbar
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -19,8 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,7 +30,9 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.subscribble.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NavControl(){
@@ -59,9 +61,11 @@ fun BottomBar(navController: NavController)
 
     Row(
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, top = 8.dp, bottom = 8.dp)
-            //.background(Color.Blue)
+            .padding(top = 8.dp)
             .fillMaxWidth()
+            .height(50.dp)
+            .background(color = colorResource(id = R.color.default_screen))
+            //.background(Color.Red)
     ) {
         screens.forEach {screen ->
             if (currentDestination != null) {
@@ -79,33 +83,30 @@ fun RowScope.AddItem(
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
-    Box(
+    Row(
         modifier = Modifier
-            .height(40.dp)
-            .clip(CircleShape)
-            .align(Alignment.CenterVertically)
-            .padding(start = 5.dp, end = 5.dp)
-            .clickable(onClick = {
+            .padding(8.dp)
+            .weight(1f)
+            //.background(Color.Blue)
+            .clickable {
                 navController.navigate(screen.route) {
-                    popUpTo(navController.graph.findStartDestination().id)
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
                     launchSingleTop = true
                 }
-            })
-        ){
-        Row(
-            modifier = Modifier
-                .padding(start = 35.dp, end = 35.dp, top = 8.dp, bottom = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = if (selected) screen.icon else screen.icon),
-                contentDescription = "icon",
-                tint = if (selected) Color(0xFF0AA6EC) else Color(0xFFD808080)
-            )
-            
-        }
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Icon(
+            painter = painterResource(id = if (selected) screen.icon else screen.icon),
+            contentDescription = screen.title,
+            tint = if (selected) Color(0xFF0AA6EC) else Color(0xFFD808080),
+            modifier = Modifier.size(40.dp)
+        )
     }
+
 }
 
 @Composable

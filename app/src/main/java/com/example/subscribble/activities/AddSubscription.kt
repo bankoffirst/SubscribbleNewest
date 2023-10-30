@@ -4,11 +4,9 @@ import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.widget.DatePicker
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +20,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -50,10 +47,11 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -103,25 +101,28 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
     Scaffold(
         topBar = {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier.size(40.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp)) // Add some spacing between the icon and text
-
+                IconButton(onClick = { navController.popBackStack() },
+                    modifier = Modifier.size(24.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow_back_ios),
+                        contentDescription = "arrow back",
+                        tint = colorResource(id = R.color.custom_text)
+                    )
+                }
                 Text(
-                    text = "Add",
+                    text = "AddSubscription",
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text),
+                    modifier = Modifier.padding(start = 2.dp)
                 )
             }
         }
+
+
     ) { contentPadding ->
 
         Column(
@@ -249,7 +250,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                             textStyle = TextStyle(fontSize = 18.sp)
                         )
                         Text(
-                            text = "Baht / Month",
+                            text = "/Month",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
                             modifier = Modifier.padding(top = 15.dp)
@@ -341,7 +342,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                           SubsList(
                                               name = selectedItem,
                                               planName = textPlan,
-                                              price = numPrice.toInt(),
+                                              price = numPrice.toFloat(),
                                               date = selectDate.value,
                                               note = textNote,
                                               type = classify(selectedItem)

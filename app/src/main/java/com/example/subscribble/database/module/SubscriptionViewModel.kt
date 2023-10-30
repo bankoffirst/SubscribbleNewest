@@ -41,26 +41,31 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
-    fun deleteSub(id: Int){
+    fun deleteSubscription(subsList: SubsList){
         viewModelScope.launch {
-            repository.deleteSubscription(id)
+            repository.deleteSubscription(subsList)
+            _sub.emit(repository.getAllSubs())
         }
     }
 
-    fun updateSub(subsList: SubsList){
+    fun loadSubs(){
+        viewModelScope.launch {
+            _sub.value = repository.getAllSubs()
+        }
+    }
+
+    fun updateSubscription(subsList: SubsList){
         viewModelScope.launch {
             repository.updateSubscription(subsList)
         }
     }
 
-    fun sumPriceByCategory(category: String): Int {
+    fun sumPriceByCategory(category: String): Float {
         return repository.sumPriceByCategory(category)
     }
 
-    fun getSub(id: Int){
-        viewModelScope.launch {
-            repository.getSub(id)
-        }
+    fun getSubscriptionById(id: Int): SubsList? {
+        return repository.getSubscriptionById(id)
     }
 
 

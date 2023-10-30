@@ -30,7 +30,7 @@ data class SubsList(
     val planName:String,
 
     @ColumnInfo(name = "sub_price")
-    val price:Int,
+    val price:Float,
 
     @ColumnInfo(name = "sub_date")
     val date:String,

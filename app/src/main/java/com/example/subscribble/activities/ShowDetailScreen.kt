@@ -1,6 +1,8 @@
 package com.example.subscribble.activities
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,8 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,43 +32,46 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
-import com.example.subscribble.database.SubsList
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
+import com.example.subscribble.navbar.NavScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
-    val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
-    val subs = subscription.value
-    val good = subs[0].id
+    //val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
-    val app = "Netflix"
-    val price = PriceFormat("199")
-    val plan = "Basic"
-    val date = "16/2/2023"
-    val note = "lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua obcaecati ipsa assumenda doloremque ipsam eos cupiditate libero fuga provident nemo architecto deserunt magnam praesentium natus impedit tenetur dolor pariatur suscipit ab sunt aspernatur vel ipsum necessitatibus voluptatum mollitia odio eligendi"
+    val subscription = subViewmodel.getSubscriptionById(subsId)
 
-    if (subscription == null) {
+//    val app = "Netflix"
+//    val price = PriceFormat("199")
+//    val plan = "Basic"
+//    val date = "16/2/2023"
+//    val note = "lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua obcaecati ipsa assumenda doloremque ipsam eos cupiditate libero fuga provident nemo architecto deserunt magnam praesentium natus impedit tenetur dolor pariatur suscipit ab sunt aspernatur vel ipsum necessitatibus voluptatum mollitia odio eligendi"
 
-    } else {
+    subscription?.let { subs ->
+        val app = subs.name
+        val price = PriceFormat(subs.price.toString())
+        val plan = subs.planName
+        val date = subs.date
+        val note = subs.note
+
         Scaffold(
             topBar = {
                 Row(
                     Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(24.dp)) {
+                    IconButton(onClick = { navController.popBackStack() },
+                        modifier = Modifier.size(24.dp)) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_back_ios),
                             contentDescription = "arrow back",
@@ -116,7 +120,7 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
                                 painter = painterResource(id = getDrawableResource(app)),
                                 contentDescription = "",
                                 modifier = Modifier
-                                    .size(80.dp)
+                                    .size(64.dp)
                                     .clip(RoundedCornerShape(20.dp))
                             )
 
@@ -125,7 +129,6 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
                                     .width(150.dp)
                                     .padding(start = 10.dp),
                             ) {
-
 
                                 Box(
                                     modifier = Modifier
@@ -147,15 +150,14 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
                                         Spacer(modifier = Modifier.width(5.dp))
                                     }
                                 }
-                                Text(
 
+                                Text(
                                     text = price,
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .weight(1f),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 20.sp,
-
                                     )
 
                             }
@@ -164,7 +166,9 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
                                 modifier = Modifier
                                     .fillMaxSize(), contentAlignment = Alignment.CenterEnd
                             ) {
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = { subViewmodel.deleteSubscription(subs)
+                                                        navController.popBackStack()})
+                                {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_delete),
                                         contentDescription = "delete",
@@ -175,7 +179,7 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
 
                         }
 
-                        Row(modifier = Modifier.padding(top = 22.dp)) {
+                        Row {
                             Text(
                                 text = "Plan",
                                 fontWeight = FontWeight.Bold,
@@ -209,19 +213,138 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
                             )
                         }
 
-                        Text(
-                            text = "Usage", fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = colorResource(id = R.color.custom_text),
-                            modifier = Modifier.padding(top = 22.dp)
-                        )
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Payment method",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = colorResource(id = R.color.custom_text)
+                            )
+                            Text(
+                                text = "-",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
 
-                        Text(
-                            text = "Price per usage", fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = colorResource(id = R.color.custom_text),
-                            modifier = Modifier.padding(top = 22.dp)
-                        )
+                        Row(modifier = Modifier.padding(top = 12.dp)) {
+                            Text(
+                                text = "Usage",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = colorResource(id = R.color.custom_text)
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Sep",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "20hr",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Aug",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "18hr",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Jul",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "4hr",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 12.dp)){
+                            Text(
+                                text = "Price per usage",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = colorResource(id = R.color.custom_text)
+                            )
+                            Text(
+                                text = "THB/hr",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Sep",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "8.45",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Aug",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "9.38",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Row(modifier = Modifier.padding(top = 4.dp)){
+                            Text(
+                                text = "Jul",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light)
+                            )
+                            Text(
+                                text = "42.25",
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_text_light),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
 
                         Text(
                             text = "Note", fontWeight = FontWeight.Bold,
@@ -232,6 +355,21 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
 
                         Text(text = note)
 
+                        Row(modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 20.dp)
+                            , horizontalArrangement = Arrangement.Center
+                            , verticalAlignment = Alignment.Bottom) {
+                            IconButton(onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") }, modifier = Modifier
+                                .clip(CircleShape)
+                                .background(Color(0xFF333333))
+                                .size(46.dp)) {
+                                Icon(painter = painterResource(id = R.drawable.ic_edit),
+                                    contentDescription = "edit", tint = Color.White,
+                                    modifier = Modifier.size(24.dp))
+                            }
+                        }
+
 
                     }
 
@@ -239,7 +377,10 @@ fun ShowDetailScreen(/*navController: NavController*/ subViewmodel: Subscription
 
             }
         }
+
     }
+
+
 }
 
 

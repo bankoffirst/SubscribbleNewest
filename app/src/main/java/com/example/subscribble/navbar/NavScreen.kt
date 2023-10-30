@@ -17,4 +17,8 @@ sealed class NavScreen(
     object ShowDetailScreen : NavScreen(
         route = "ShowDetailScreen"
     )
+
+    object EditScreen : NavScreen(
+        route = "EditScreen"
+    )
 }

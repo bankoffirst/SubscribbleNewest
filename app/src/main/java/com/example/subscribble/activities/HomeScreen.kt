@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,18 +51,21 @@ import com.example.subscribble.navbar.NavScreen
 @Composable
 fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
-    val total = 0f
-    val formattedTotal = String.format("%.2f", total)
-    val videoPrice = 0f
-    val formattedvideoPrice = String.format("%.2f", videoPrice)
-    val musicPrice = 0f
-    val formattedmusicPrice = String.format("%.2f", musicPrice)
 
     //val haveStreaming = true
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
+    LaunchedEffect(key1 = subViewmodel){
+        subViewmodel.loadSubs()
+    }
+
     val sumPriceMusic = subViewmodel.sumPriceByCategory("music")
     val sumPriceVideo = subViewmodel.sumPriceByCategory("video")
+    val total = sumPriceMusic + sumPriceVideo
+
+    val formattedTotal = String.format("%.2f", total)
+    val formattedvideoPrice = String.format("%.2f", sumPriceVideo)
+    val formattedmusicPrice = String.format("%.2f", sumPriceMusic)
 
     Scaffold(
         topBar = {
@@ -104,7 +108,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                         color = colorResource(id = R.color.custom_card_text)
                     )
                     Text(
-                        text = "${sumPriceVideo+sumPriceMusic} THB",
+                        text = "${formattedTotal} THB",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = colorResource(id = R.color.custom_card_total),
@@ -132,7 +136,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             color = colorResource(id = R.color.custom_card_subtext)
                         )
                         Text(
-                            text = "$sumPriceVideo THB",
+                            text = "$formattedvideoPrice THB",
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = colorResource(id = R.color.custom_card_subtext),
@@ -160,7 +164,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             color = colorResource(id = R.color.custom_card_subtext)
                         )
                         Text(
-                            text = "$sumPriceMusic THB",
+                            text = "$formattedmusicPrice THB",
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = colorResource(id = R.color.custom_card_subtext),
@@ -208,7 +212,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                     } else {
 
                         LazyColumn(modifier = Modifier
-                            .padding(top = 28.dp,bottom = 40.dp)
+                            .padding(top = 28.dp, bottom = 40.dp)
                             .fillMaxHeight()
                             )
                         {
@@ -220,7 +224,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                                         .height(100.dp)
                                         .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
                                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(15.dp))
-                                        .clickable { navController.navigate(NavScreen.ShowDetailScreen.route) },
+                                        .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
 
                                     shape = RoundedCornerShape(20.dp),
                                     colors = CardDefaults.cardColors(containerColor = Color.White)
@@ -283,7 +287,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                                                     .fillMaxSize()
                                                     .weight(1f),
                                                 fontWeight = FontWeight.Bold,
-                                                fontSize = 16.sp,
+                                                fontSize = 16.sp
 
                                                 )
 

@@ -1,19 +1,14 @@
 package com.example.subscribble.activities
 
-
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,10 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.draw.shadow
 import androidx.compose.material3.TextField
@@ -43,8 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.subscribble.R
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.module.SubscriptionViewModel
 
@@ -79,22 +76,23 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
     Scaffold(
         topBar = {
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier.size(35.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp)) // Add some spacing between the icon and text
-
+                IconButton(onClick = { navController.popBackStack() },
+                    modifier = Modifier.size(24.dp)) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow_back_ios),
+                        contentDescription = "arrow back",
+                        tint = colorResource(id = R.color.custom_text)
+                    )
+                }
                 Text(
-                    text = "Add",
+                    text = "AddPayment",
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text),
+                    modifier = Modifier.padding(start = 2.dp)
                 )
             }
         }
@@ -253,18 +251,20 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
                         singleLine = true
                     )
 
-                    Column(modifier = Modifier.padding(start = 26.dp, top = 30.dp)) {
-                        Text(
+
+                    Text(
                             text = alert.value,
                             color = Color.Red,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                        )
+                                .padding(top = 25.dp)
+                    )
+
 
                         //Icon Add
 
-                        IconButton(
+                    IconButton(
                             onClick = {
                                 if (textName != "") {
                                     cardViewmodel.insertCard(
@@ -280,22 +280,20 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
                             },
                             content = {
                                 Icon(
-                                    imageVector = Icons.Default.Add,
+                                    imageVector = Icons.Default.AddCircle,
                                     contentDescription = "Add icon",
-                                    tint = Color(0xFFD9D9D9),
+                                    tint = Color.Black,
                                     modifier = Modifier
                                         .size(50.dp)
-                                        .background(color = Color.Black)
                                 )
                             },
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally)
-                                .padding(top = 150.dp)
+                                .padding(top = 65.dp)
                                 .clip(CircleShape)
                                 .size(50.dp)
-                        )
+                    )
 
-                    }
 
                 }
 
