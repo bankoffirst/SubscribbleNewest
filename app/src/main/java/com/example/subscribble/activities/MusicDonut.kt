@@ -51,15 +51,12 @@ fun doNut2(
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
 ) {
-    // Sum of all the values
     val sumOfValues = values.sum()
 
-    // Calculate each proportion
     val proportions = values.map {
         it * 100 / sumOfValues
     }
 
-    // Convert each proportion to angle
     val sweepAngles = proportions.map {
         360 * it / 100
     }
@@ -85,10 +82,7 @@ fun doNut2(
                 startAngle += sweepAngles[i]
             }
         }
-
-        // Calculate the center of the donut chart
         val text = "366/month"
-
         Text(
             text = text,
             style = TextStyle(
@@ -102,7 +96,6 @@ fun doNut2(
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicDonut(navController: NavController) {
@@ -146,8 +139,7 @@ fun MusicDonut(navController: NavController) {
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(250.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(NavScreen.TotalLine.route) },
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {

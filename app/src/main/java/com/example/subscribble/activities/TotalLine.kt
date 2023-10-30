@@ -146,6 +146,7 @@ fun TotalLine(context: Context,navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
+                    .clickable { navController.popBackStack() }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,

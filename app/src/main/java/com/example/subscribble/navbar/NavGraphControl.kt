@@ -39,7 +39,7 @@ fun NavGraphControl(navController: NavController){
         }
         composable(route = BottomBarScreen.Bills.route)
         {
-            UpcomingBillsScreen()
+            UpcomingBillsScreen(navController = navController)
         }
         composable(route = NavScreen.AddPayment.route)
         {
