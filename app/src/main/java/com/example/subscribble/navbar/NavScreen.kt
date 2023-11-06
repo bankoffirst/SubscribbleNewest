@@ -30,4 +30,7 @@ sealed class NavScreen(
     object TotalLine : NavScreen(
         route = "TotalLine"
     )
+    object TotalMocup : NavScreen(
+        route = "TotalMocup"
+    )
 }

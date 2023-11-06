@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -68,6 +70,8 @@ import com.example.subscribble.navbar.NavScreen
 fun AddSubscription(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
     val subscriptions = subViewmodel.subs.collectAsState(initial = emptyList())
+
+    val cards = subViewmodel.cards.collectAsState(initial = emptyList())
 
     val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleTV","AppleMusic")
 
@@ -298,22 +302,35 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         modifier = Modifier.padding(start = 26.dp, top = 15.dp)
                     )
 
-                    IconButton(
-                        onClick = {navController.navigate(NavScreen.AddPayment.route)},
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.AddCircle,
-                                contentDescription = "Add icon",
-                                tint = Color.Black,
-                                modifier = Modifier
-                                    .size(35.dp)
-                            )
-                        },
-                        modifier = Modifier
-                            .padding(start = 26.dp, top = 10.dp)
-                            .clip(CircleShape)
-                            .size(35.dp)
-                    )
+                    if (cards.value.isEmpty()) {
+                        IconButton(
+                            onClick = { navController.navigate(NavScreen.AddPayment.route) },
+                            content = {
+                                Icon(
+                                    imageVector = Icons.Default.AddCircle,
+                                    contentDescription = "Add icon",
+                                    tint = Color.Black,
+                                    modifier = Modifier
+                                        .size(35.dp)
+                                )
+                            },
+                            modifier = Modifier
+                                .padding(start = 26.dp, top = 10.dp)
+                                .clip(CircleShape)
+                                .size(35.dp)
+                        )
+                    } else {
+                        LazyColumn(modifier = Modifier
+                            .padding(top = 28.dp, bottom = 40.dp)
+                            .fillMaxHeight()
+                        ){
+                            items(cards.value){cardsList ->
+                                OutlinedButton(onClick = { /*TODO*/ }) {
+                                    
+                                }
+                            }
+                        }
+                    }
 
                     Text(
                         text = "Note",

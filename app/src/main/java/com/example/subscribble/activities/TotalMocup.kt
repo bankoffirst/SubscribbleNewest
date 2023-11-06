@@ -22,8 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
-
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.app.AppOpsManager
 import android.provider.Settings
@@ -35,7 +33,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import java.util.Calendar
 import android.graphics.Paint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,10 +48,9 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
+
 @Composable
-fun LineChart(
-    youtubeDataPoints: List<Float>,
-    messengerDataPoints: List<Float>,
+fun LineChart1(
     xAxisLabels: List<String>,
     yAxisLabels: List<String>
 ) {
@@ -66,24 +62,10 @@ fun LineChart(
     ) {
         val paint = Paint()
         paint.color = android.graphics.Color.BLACK
-        val maxValue = maxOf(
-            youtubeDataPoints.maxOrNull() ?: 1.0f,
-            messengerDataPoints.maxOrNull() ?: 1.0f
-        )
-        val minValue = minOf(
-            youtubeDataPoints.minOrNull() ?: 0.0f,
-            messengerDataPoints.minOrNull() ?: 0.0f
-        )
-        val xStep = size.width /(xAxisLabels.size - 1)
-        val yStep = size.height / 12
-
-        val youtubePath = Path()
-        val messengerPath = Path()
-
         drawLine(
             color = Color.Black,
             start = Offset(0f, size.height+10),
-            end = Offset(size.width, size.height+10),
+            end = Offset(size.width, size.height +10),
             strokeWidth = 2.dp.toPx()
         )
 
@@ -93,33 +75,64 @@ fun LineChart(
             end = Offset(0f, size.height+10),
             strokeWidth = 2.dp.toPx()
         )
-        youtubePath.moveTo(0f, size.height - (youtubeDataPoints[0] - minValue) * yStep)
-        messengerPath.moveTo(0f, size.height - (messengerDataPoints[0] - minValue) * yStep)
 
-        youtubeDataPoints.forEachIndexed { index, value ->
-            val x = index * xStep
-            val y = size.height - (value - minValue) * yStep
-            youtubePath.lineTo(x, y)
 
-            drawContext.canvas.nativeCanvas.drawText(
-                xAxisLabels.getOrNull(index) ?: "",
-                x,
-                size.height + 30,
-                paint
-            )
-        }
+        val xStep = size.width / 7
+        val yStep = size.height / 12
 
-        messengerDataPoints.forEachIndexed { index, value ->
-            val x = index * xStep
-            val y = size.height - (value - minValue) * yStep
-            messengerPath.lineTo(x, y)
+        val line1Path = Path()
+        val line2Path = Path()
+        val line3Path = Path()
+        val line4Path = Path()
 
-            drawContext.canvas.nativeCanvas.drawText(
-                xAxisLabels.getOrNull(index) ?: "",
-                x,
-                size.height + 30,
-                paint
-            )
+        line1Path.moveTo(0f, size.height - 0 * yStep)
+        line1Path.lineTo(1 * xStep, size.height - 9 * yStep)
+        line1Path.lineTo(2 * xStep, size.height - 2 * yStep)
+        line1Path.lineTo(3 * xStep, size.height - 3 * yStep)
+        line1Path.lineTo(4 * xStep, size.height - 1 * yStep)
+        line1Path.lineTo(5 * xStep, size.height - 3 * yStep)
+        line1Path.lineTo(6 * xStep, size.height - 3 * yStep)
+        line1Path.lineTo(7 * xStep, size.height - 1 * yStep)
+
+        line2Path.moveTo(0f, size.height - 0 * yStep)
+        line2Path.lineTo(1 * xStep, size.height - 1 * yStep)
+        line2Path.lineTo(2 * xStep, size.height - 3 * yStep)
+        line2Path.lineTo(3 * xStep, size.height - 5 * yStep)
+        line2Path.lineTo(4 * xStep, size.height - 2 * yStep)
+        line2Path.lineTo(5 * xStep, size.height - 5 * yStep)
+        line2Path.lineTo(6 * xStep, size.height - 2 * yStep)
+        line2Path.lineTo(7 * xStep, size.height - 0 * yStep)
+
+        line3Path.moveTo(0f, size.height - 0 * yStep)
+        line3Path.lineTo(1 * xStep, size.height - 5 * yStep)
+        line3Path.lineTo(2 * xStep, size.height - 7 * yStep)
+        line3Path.lineTo(3 * xStep, size.height - 9 * yStep)
+        line3Path.lineTo(4 * xStep, size.height - 6 * yStep)
+        line3Path.lineTo(5 * xStep, size.height - 1 * yStep)
+        line3Path.lineTo(6 * xStep, size.height - 1 * yStep)
+        line3Path.lineTo(7 * xStep, size.height - 3 * yStep)
+
+        line4Path.moveTo(0f, size.height - 0 * yStep)
+        line4Path.lineTo(1 * xStep, size.height - 2 * yStep)
+        line4Path.lineTo(2 * xStep, size.height - 6 * yStep)
+        line4Path.lineTo(3 * xStep, size.height - 1 * yStep)
+        line4Path.lineTo(4 * xStep, size.height - 4 * yStep)
+        line4Path.lineTo(5 * xStep, size.height - 9 * yStep)
+        line4Path.lineTo(6 * xStep, size.height - 0 * yStep)
+        line4Path.lineTo(7 * xStep, size.height - 0 * yStep)
+
+        for (i in xAxisLabels.indices) {
+            drawIntoCanvas { canvas ->
+                val text = xAxisLabels[i]
+                val xPos = (i + 1) * size.width / xAxisLabels.size
+
+                canvas.nativeCanvas.drawText(
+                    text,
+                    xPos - (text.length * 8),
+                    size.height + 30f,
+                    paint
+                )
+            }
         }
         for (i in yAxisLabels.indices) {
             drawIntoCanvas { canvas ->
@@ -134,24 +147,35 @@ fun LineChart(
                 )
             }
         }
-
         drawPath(
-            path = youtubePath,
-            color = Color.Red,
+            path = line1Path,
+            color = Color(android.graphics.Color.parseColor("#fc6c29")),
             style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
         )
 
         drawPath(
-            path = messengerPath,
-            color = Color.Blue,
+            path = line2Path,
+            color = Color(android.graphics.Color.parseColor("#2937fc")),
+            style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
+        )
+
+        drawPath(
+            path = line3Path,
+            color = Color(android.graphics.Color.parseColor("#00c0ad")),
+            style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
+        )
+        drawPath(
+            path = line4Path,
+            color = Color(android.graphics.Color.parseColor("#c00000")),
             style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
         )
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalLine(context: Context,navController: NavController) {
+fun TotalMocup(context: Context,navController: NavController) {
 
     val hasUsagePermission = checkForUsagePermission(context)
 
@@ -209,11 +233,7 @@ fun TotalLine(context: Context,navController: NavController) {
 
                 requestUsagePermission(context)
             }
-            val numberOfWeeks = 4
-            val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube", numberOfWeeks)
-            val messengerDataPoints = getUsageStatsForWeeks(context, "com.facebook.orca", numberOfWeeks)
-
-            val xAxisLabels = (1..numberOfWeeks).map { "Week $it " }
+            val xAxisLabels = listOf("1", "2", "3", "4", "5", "6", "7")
             val yAxisLabels = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
 
             Card(
@@ -221,12 +241,11 @@ fun TotalLine(context: Context,navController: NavController) {
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(300.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(NavScreen.TotalMocup.route) },
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
-                LineChart(youtubeDataPoints, messengerDataPoints, xAxisLabels, yAxisLabels)
+                LineChart1( xAxisLabels, yAxisLabels)
             }
             Card(
                 modifier = Modifier
@@ -273,38 +292,4 @@ private fun checkForUsagePermission(context: Context): Boolean {
 private fun requestUsagePermission(context: Context) {
     val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
     context.startActivity(intent)
-}
-
-private fun getUsageStatsForWeeks(context: Context, packageName: String, numberOfWeeks: Int): List<Float> {
-    val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-    val calendar = Calendar.getInstance()
-
-    val dataPoints = mutableListOf<Float>()
-
-    for (i in 0 until numberOfWeeks) {
-        val weekIndex = i + 1
-        calendar.set(Calendar.WEEK_OF_MONTH, weekIndex)
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-        val startTime = calendar.timeInMillis
-
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY)
-        val endTime = calendar.timeInMillis
-
-        val appUsageData = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY,
-            startTime,
-            endTime
-        )
-
-        var weeklyUsage = 0f
-
-        for (usageStats in appUsageData) {
-            if (usageStats.packageName == packageName) {
-                weeklyUsage += usageStats.totalTimeInForeground / (1000 * 60).toFloat()
-            }
-        }
-        dataPoints.add(weeklyUsage)
-    }
-
-    return dataPoints
 }

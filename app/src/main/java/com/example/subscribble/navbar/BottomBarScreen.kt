@@ -34,4 +34,5 @@ sealed class BottomBarScreen(
         title = "Bills",
         icon = R.drawable.ic_receipt,
     )
+
 }

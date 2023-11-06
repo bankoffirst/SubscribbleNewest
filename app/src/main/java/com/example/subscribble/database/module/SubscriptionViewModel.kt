@@ -2,6 +2,7 @@ package com.example.subscribble.database.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.subscribble.database.CardDao
 import com.example.subscribble.repository.Repository
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.SubsList
@@ -32,6 +33,10 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
             repository.insertCard(cardList)
             _card.emit(repository.getAllCards())
         }
+    }
+
+    fun getCardById(id: Int): CardList?{
+        return repository.getCardById(id)
     }
 
     fun insertSub(subsList: SubsList){

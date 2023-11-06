@@ -35,9 +35,14 @@ class Repository @Inject constructor(
         }
     }
 
+    fun getCardById(id:Int): CardList?{
+        return cardDao.getCardById(id)
+    }
+
     fun getAllSubs(): List<SubsList>{
         return subDao.getAllSubs()
     }
+
 
     suspend fun insertSubscription(subsList: SubsList){
         withContext(Dispatchers.IO){

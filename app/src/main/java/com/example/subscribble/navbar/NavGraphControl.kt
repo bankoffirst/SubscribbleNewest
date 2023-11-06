@@ -19,6 +19,7 @@ import com.example.subscribble.activities.UpcomingBillsScreen
 import com.example.subscribble.activities.VideoDonut
 import com.example.subscribble.activities.MusicDonut
 import com.example.subscribble.activities.TotalLine
+import com.example.subscribble.activities.TotalMocup
 @Composable
 fun NavGraphControl(navController: NavController){
     NavHost(
@@ -84,7 +85,11 @@ fun NavGraphControl(navController: NavController){
             val context = LocalContext.current
             TotalLine(context,navController = navController)
         }
-
+        composable(route = NavScreen.TotalMocup.route)
+        {
+            val context = LocalContext.current
+            TotalMocup(context,navController = navController)
+        }
     }
 
 }
