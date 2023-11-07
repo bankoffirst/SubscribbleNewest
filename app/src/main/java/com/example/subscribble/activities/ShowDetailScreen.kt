@@ -64,6 +64,13 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
         val date = subs.date
         val note = subs.note
 
+        var card = subs.cardName
+        card = if (card == ""){
+            "-"
+        } else {
+            subs.cardName
+        }
+
         Scaffold(
             topBar = {
                 Row(
@@ -221,7 +228,7 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
                                 color = colorResource(id = R.color.custom_text)
                             )
                             Text(
-                                text = "-",
+                                text = card,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 color = colorResource(id = R.color.custom_text_light),

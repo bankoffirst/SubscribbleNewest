@@ -1,5 +1,7 @@
 package com.example.subscribble.activities
 
+import android.graphics.Paint.Align
+import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
@@ -10,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -18,18 +22,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.subscribble.PriceFormat
+import com.example.subscribble.R
+import com.example.subscribble.database.module.SubscriptionViewModel
+import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
+import java.text.SimpleDateFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun UpcomingBillsScreen(navController: NavController) {
+fun UpcomingBillsScreen(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+
+    val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
+
+    LaunchedEffect(key1 = subViewmodel){
+        subViewmodel.loadSubs()
+    }
 
     Scaffold(
         topBar = {
@@ -37,14 +57,14 @@ fun UpcomingBillsScreen(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                    //.clickable { navController.popBackStack() }
             ) {
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowLeft,
-                    contentDescription = "Back",
-                    modifier = Modifier.size(35.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
+//                Icon(
+//                    imageVector = Icons.Default.KeyboardArrowLeft,
+//                    contentDescription = "Back",
+//                    modifier = Modifier.size(35.dp)
+//                )
+//                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "Upcoming Bills",
                     fontWeight = FontWeight.Bold,
@@ -58,30 +78,97 @@ fun UpcomingBillsScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp, start = 30.dp, end = 30.dp)
-                    .height(100.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(BottomBarScreen.Home.route) },
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "App",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
+            LazyColumn(modifier = Modifier
+                .padding(top = 28.dp, bottom = 40.dp)
+                .fillMaxHeight()
+            )
+            {
+                items(subscription.value) { subsList ->
+                    //SubscriptionList(subsList.id, subsList.name, subsList.price,)
+
+                    val dateSubs = subsList.date
+                    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+                    val date = dateFormat.parse(dateSubs)
+                    val formattedDate = SimpleDateFormat("d MMM").format(date)
+
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp)
+                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                            .shadow(elevation = 8.dp, shape = RoundedCornerShape(15.dp))
+                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(start = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Image(
+                                painter = painterResource(id = getDrawableResource(subsList.name)),
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(60.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                            )
+
+                            Column(
+                                modifier = Modifier
+                                    .width(150.dp)
+                                    .padding(start = 10.dp),
+                            ) {
+
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .weight(1f),
+                                    contentAlignment = Alignment.BottomStart
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        Text(
+                                            text = subsList.name,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 18.sp,
+                                            color = colorResource(id = R.color.custom_text),
+                                        )
+
+                                        Spacer(modifier = Modifier.width(5.dp))
+
+                                    }
+                                }
+                                Text(
+                                    text = PriceFormat(price = subsList.price.toString()),
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .weight(1f),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+
+                                )
+
+                            }
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(end = 20.dp)
+                                ,contentAlignment = Alignment.CenterEnd
+                            ){
+                                Text(text = formattedDate, fontSize = 16.sp, fontWeight = FontWeight.Medium, color = colorResource(id = R.color.custom_text))
+                            }
+                        }
+                    }
+
                 }
+
             }
         }
     }

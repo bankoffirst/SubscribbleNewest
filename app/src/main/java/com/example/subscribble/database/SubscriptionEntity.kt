@@ -2,6 +2,9 @@ package com.example.subscribble.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "card_list")
@@ -17,11 +20,22 @@ data class CardList(
     val detail:String
 )
 
-@Entity(tableName = "subscription")
+@Entity(tableName = "subscription",
+//    foreignKeys = [ForeignKey(
+//        entity = CardList::class,
+//        parentColumns = ["card_id"],
+//        childColumns = ["cardId"],
+//        onDelete = ForeignKey.CASCADE
+//    )],
+//    indices = [Index(value = ["cardId"])]
+)
 data class SubsList(
     @ColumnInfo(name = "sub_id")
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0,
+
+//    @ColumnInfo(name = "cardId")
+//    val cardId:Int,
 
     @ColumnInfo(name = "sub_name")
     val name:String,
@@ -39,7 +53,10 @@ data class SubsList(
     val note:String,
 
     @ColumnInfo(name = "sub_category")
-    val type:String
+    val type:String,
+
+    @ColumnInfo(name = "card_name")
+    val cardName: String
 )
 
 

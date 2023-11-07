@@ -62,6 +62,7 @@ fun LineChart1(
     ) {
         val paint = Paint()
         paint.color = android.graphics.Color.BLACK
+
         drawLine(
             color = Color.Black,
             start = Offset(0f, size.height+10),
@@ -124,12 +125,12 @@ fun LineChart1(
         for (i in xAxisLabels.indices) {
             drawIntoCanvas { canvas ->
                 val text = xAxisLabels[i]
-                val xPos = (i + 1) * size.width / xAxisLabels.size
-
+                val xPos = (i +1) * size.width / xAxisLabels.size
+                paint.textSize = 30f
                 canvas.nativeCanvas.drawText(
                     text,
                     xPos - (text.length * 8),
-                    size.height + 30f,
+                    size.height + 45f,
                     paint
                 )
             }
@@ -138,11 +139,11 @@ fun LineChart1(
             drawIntoCanvas { canvas ->
                 val text = yAxisLabels[i]
                 val yPos = size.height - (i + 1) * size.height / yAxisLabels.size
-
+                paint.textSize = 30f
                 canvas.nativeCanvas.drawText(
                     text,
-                    0f -20,
-                    yPos + 10,
+                    0f -50,
+                    yPos +30,
                     paint
                 )
             }
@@ -209,7 +210,7 @@ fun TotalMocup(context: Context,navController: NavController) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Usage per month",
+                text = "Usage per Week",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
@@ -244,8 +245,18 @@ fun TotalMocup(context: Context,navController: NavController) {
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
+
             ) {
-                LineChart1( xAxisLabels, yAxisLabels)
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+
+                ) {
+                    LineChart1( xAxisLabels, yAxisLabels)
+                }
             }
             Card(
                 modifier = Modifier

@@ -70,4 +70,7 @@ class Repository @Inject constructor(
         return  subDao.getSubscriptionById(id)
     }
 
+    fun getSubCardByName(name: String): SubsList?{
+        return subDao.getSubCardByName(name)
+    }
 }

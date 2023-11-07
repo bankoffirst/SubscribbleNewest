@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.subscribble.activities.HomeScreen
+import com.example.subscribble.activities.testScreen
 import com.example.subscribble.navbar.NavControl
 import com.example.subscribble.ui.theme.SubscribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,6 +23,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     //Greeting("Android")
                     NavControl()
+                    //testScreen()
 
                 }
             }

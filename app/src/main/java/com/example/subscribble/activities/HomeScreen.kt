@@ -1,6 +1,7 @@
 package com.example.subscribble.activities
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,13 +21,18 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,13 +52,13 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.NavScreen
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
-
-    //val haveStreaming = true
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
     LaunchedEffect(key1 = subViewmodel){
@@ -66,6 +72,18 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
     val formattedTotal = String.format("%.2f", total)
     val formattedvideoPrice = String.format("%.2f", sumPriceVideo)
     val formattedmusicPrice = String.format("%.2f", sumPriceMusic)
+
+    val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
+//    var expanded by remember{ mutableStateOf(false) }
+//    var selectedCard by remember { mutableStateOf("Total") }
+//
+//    val cardList = mutableListOf("Total Price")
+//
+//    val getCards = listOf("Card1","Card2") //เพิ่ม Card
+//    for (card in getCards) {
+//        cardList.add(card)
+//    }
 
     Scaffold(
         topBar = {
@@ -175,14 +193,52 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                 }
             }
 
+            var expanded by remember{ mutableStateOf(false) }
+            var selectedCard by remember { mutableStateOf("Total Price") }
+            val cardList = mutableListOf("Total Price")
+            cards.value.forEach { cardas ->
+                val getCards = listOf(cardas.name)
+//                var expanded by remember{ mutableStateOf(false) }
+//                var selectedCard by remember { mutableStateOf("Total") }
+                for (i in getCards) {
+                    cardList.add(i)
+                }
+            }
 
-                Text(
-                    text = "Your subscriptions",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(start = 26.dp, top = 28.dp),
-                    color = colorResource(id = R.color.custom_text)
-                )
+                Row(modifier = Modifier
+                    .padding(start = 26.dp, end = 26.dp, top = 10.dp)
+                    .fillMaxWidth()
+                    , verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "Your subscriptions",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = colorResource(id = R.color.custom_text),
+                    )
+
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        TextButton(onClick = { expanded = true }, modifier = Modifier.align(Alignment.CenterEnd)) {
+                            Text(text = selectedCard,
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.custom_card_total))
+
+                            Box(modifier = Modifier.padding(top = 40.dp)) {
+                                DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false },
+                                    modifier = Modifier
+                                        .background(Color.White)) {
+                                    cardList.forEach{
+                                        DropdownMenuItem(onClick = {
+                                            expanded = false
+                                            selectedCard = it},text = {Text(it, color = colorResource(id = R.color.custom_text_light))})
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
 
                 //Subscriptions
 
@@ -217,165 +273,157 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             )
                         {
                             items(subscription.value) { subsList ->
-                                //SubscriptionList(subsList.id, subsList.name, subsList.price,)
-                                Card(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(100.dp)
-                                        .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(15.dp))
-                                        .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
-
-                                    shape = RoundedCornerShape(20.dp),
-                                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                                ) {
-                                    Row(
+                                //val card = subViewmodel.getCardByName(subsList.cardName)
+                                //if (selectedCard == subsList.cardName) {
+                                    Card(
                                         modifier = Modifier
-                                            .fillMaxSize()
-                                            .padding(start = 10.dp),
-                                        verticalAlignment = Alignment.CenterVertically
+                                            .fillMaxWidth()
+                                            .height(100.dp)
+                                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                shape = RoundedCornerShape(15.dp)
+                                            )
+                                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+
+                                        shape = RoundedCornerShape(20.dp),
+                                        colors = CardDefaults.cardColors(containerColor = Color.White)
                                     ) {
-
-                                        Image(
-                                            painter = painterResource(id = getDrawableResource(subsList.name)),
-                                            contentDescription = "",
+                                        Row(
                                             modifier = Modifier
-                                                .size(60.dp)
-                                                .clip(RoundedCornerShape(20.dp))
-                                        )
-
-                                        Column(
-                                            modifier = Modifier
-                                                .width(150.dp)
+                                                .fillMaxSize()
                                                 .padding(start = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically
                                         ) {
-
-                                            Box(
-                                                modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f),
-                                                contentAlignment = Alignment.BottomStart
-                                            ) {
-                                                Row(
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                ) {
-                                                    Text(
-                                                        text = subsList.name,
-                                                        fontWeight = FontWeight.Bold,
-                                                        fontSize = 18.sp,
-                                                        color = colorResource(id = R.color.custom_text),
+                                            Image(
+                                                painter = painterResource(
+                                                    id = getDrawableResource(
+                                                        subsList.name
                                                     )
-
-                                                    Spacer(modifier = Modifier.width(5.dp))
-
-//                                                    Box(
-//                                                        modifier = Modifier
-//                                                            .size(10.dp)
-//                                                            .background(
-//                                                                Color.Red,
-//                                                                shape = CircleShape
-//                                                            )
-//                                                            .align(Alignment.CenterVertically)
-//                                                    )
-
-                                                }
-                                            }
-                                            Text(
-                                                text = PriceFormat(price = subsList.price.toString()),
+                                                ),
+                                                contentDescription = "",
                                                 modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .weight(1f),
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 16.sp
+                                                    .size(60.dp)
+                                                    .clip(RoundedCornerShape(20.dp))
+                                            )
+
+                                            Column(
+                                                modifier = Modifier
+                                                    .width(150.dp)
+                                                    .padding(start = 10.dp),
+                                            ) {
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    contentAlignment = Alignment.BottomStart
+                                                ) {
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                    ) {
+                                                        Text(
+                                                            text = subsList.name,
+                                                            fontWeight = FontWeight.Bold,
+                                                            fontSize = 18.sp,
+                                                            color = colorResource(id = R.color.custom_text),
+                                                        )
+
+                                                        Spacer(modifier = Modifier.width(5.dp))
+
+                                                    }
+                                                }
+                                                Text(
+                                                    text = PriceFormat(price = subsList.price.toString()),
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
 
                                                 )
 
+                                            }
                                         }
                                     }
-                                }
-
-
-//                                Card(
-//                                    modifier = Modifier
-//                                        .fillMaxWidth()
-//                                        .height(100.dp)
-//                                        .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-//                                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(15.dp))
-//                                        .clickable { },
-//                                    shape = RoundedCornerShape(20.dp),
-//                                    colors = CardDefaults.cardColors(containerColor = Color.White)
-//                                ) {
-//                                    Row(
+                                //} //else {
+//                                    Card(
 //                                        modifier = Modifier
-//                                            .fillMaxSize()
-//                                            .padding(start = 10.dp),
-//                                        verticalAlignment = Alignment.CenterVertically
+//                                            .fillMaxWidth()
+//                                            .height(100.dp)
+//                                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+//                                            .shadow(
+//                                                elevation = 8.dp,
+//                                                shape = RoundedCornerShape(15.dp)
+//                                            )
+//                                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+//
+//                                        shape = RoundedCornerShape(20.dp),
+//                                        colors = CardDefaults.cardColors(containerColor = Color.White)
 //                                    ) {
-//
-//                                        Image(
-//                                            painter = painterResource(id = getDrawableResource(subsList.name)),
-//                                            contentDescription = "",
+//                                        Row(
 //                                            modifier = Modifier
-//                                                .size(60.dp)
-//                                                .clip(RoundedCornerShape(20.dp))
-//                                        )
-//
-//                                        Column(
-//                                            modifier = Modifier
-//                                                .width(150.dp)
+//                                                .fillMaxSize()
 //                                                .padding(start = 10.dp),
+//                                            verticalAlignment = Alignment.CenterVertically
 //                                        ) {
-//
-//                                            Box(
-//                                                modifier = Modifier
-//                                                    .fillMaxSize()
-//                                                    .weight(1f),
-//                                                contentAlignment = Alignment.BottomStart
-//                                            ) {
-//                                                Row(
-//                                                    modifier = Modifier
-//                                                        .fillMaxWidth()
-//                                                ) {
-//                                                    Text(
-//                                                        text = subsList.name,
-//                                                        fontWeight = FontWeight.Bold,
-//                                                        fontSize = 18.sp,
-//                                                        color = colorResource(id = R.color.custom_text),
+//                                            Image(
+//                                                painter = painterResource(
+//                                                    id = getDrawableResource(
+//                                                        subsList.name
 //                                                    )
-//
-//                                                    Spacer(modifier = Modifier.width(5.dp))
-//
-////                                                    Box(
-////                                                        modifier = Modifier
-////                                                            .size(10.dp)
-////                                                            .background(
-////                                                                Color.Red,
-////                                                                shape = CircleShape
-////                                                            )
-////                                                            .align(Alignment.CenterVertically)
-////                                                    )
-//
-//                                                }
-//                                            }
-//                                            Text(
-//                                                text = "${subsList.price}/month",
+//                                                ),
+//                                                contentDescription = "",
 //                                                modifier = Modifier
-//                                                    .fillMaxSize()
-//                                                    .weight(1f),
-//                                                fontWeight = FontWeight.Bold,
-//                                                fontSize = 16.sp,
-//                                                color = colorResource(id = R.color.custom_text),
+//                                                    .size(60.dp)
+//                                                    .clip(RoundedCornerShape(20.dp))
+//                                            )
+//
+//                                            Column(
+//                                                modifier = Modifier
+//                                                    .width(150.dp)
+//                                                    .padding(start = 10.dp),
+//                                            ) {
+//
+//                                                Box(
+//                                                    modifier = Modifier
+//                                                        .fillMaxSize()
+//                                                        .weight(1f),
+//                                                    contentAlignment = Alignment.BottomStart
+//                                                ) {
+//                                                    Row(
+//                                                        modifier = Modifier
+//                                                            .fillMaxWidth()
+//                                                    ) {
+//                                                        Text(
+//                                                            text = subsList.name,
+//                                                            fontWeight = FontWeight.Bold,
+//                                                            fontSize = 18.sp,
+//                                                            color = colorResource(id = R.color.custom_text),
+//                                                        )
+//
+//                                                        Spacer(modifier = Modifier.width(5.dp))
+//
+//                                                    }
+//                                                }
+//                                                Text(
+//                                                    text = PriceFormat(price = subsList.price.toString()),
+//                                                    modifier = Modifier
+//                                                        .fillMaxSize()
+//                                                        .weight(1f),
+//                                                    fontWeight = FontWeight.Bold,
+//                                                    fontSize = 16.sp
 //
 //                                                )
 //
+//                                            }
 //                                        }
 //                                    }
-//                                }
+
+                                //}
+
                             }
-
-
-
 
                         }
                     }
@@ -384,6 +432,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
             }
         }
     }
+
 
 
 

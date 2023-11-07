@@ -53,6 +53,12 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
+    fun loadCards(){
+        viewModelScope.launch {
+            _card.value = repository.getAllCards()
+        }
+    }
+
     fun loadSubs(){
         viewModelScope.launch {
             _sub.value = repository.getAllSubs()
@@ -73,6 +79,9 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         return repository.getSubscriptionById(id)
     }
 
+    fun getSubCardByName(name: String): SubsList? {
+        return repository.getSubCardByName(name)
+    }
 
 }
 

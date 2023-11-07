@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -65,6 +68,7 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddSubscription(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
@@ -72,6 +76,10 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
     val subscriptions = subViewmodel.subs.collectAsState(initial = emptyList())
 
     val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
+    LaunchedEffect(key1 = subViewmodel){
+        subViewmodel.loadCards()
+    }
 
     val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleTV","AppleMusic")
 
@@ -85,9 +93,13 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
         mutableStateOf(listItems[0])
     }
 
+    val alert = remember { mutableStateOf("") }
+
+    //var cardId by remember { mutableStateOf(0) }
     var textPlan by remember { mutableStateOf("") }
     var numPrice by remember { mutableStateOf("") }
     var textNote by remember { mutableStateOf("") }
+    var selectedCard by remember { mutableStateOf("") }
 
     val calendar = Calendar.getInstance()
     val context = LocalContext.current
@@ -320,14 +332,16 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 .size(35.dp)
                         )
                     } else {
-                        LazyColumn(modifier = Modifier
-                            .padding(top = 28.dp, bottom = 40.dp)
-                            .fillMaxHeight()
+                        LazyRow(modifier = Modifier
+                            .padding(start = 17.dp)
+                            //.fillMaxWidth()
                         ){
                             items(cards.value){cardsList ->
-                                OutlinedButton(onClick = { /*TODO*/ }) {
-                                    
-                                }
+                                CustomRadioButtons(
+                                    text = cardsList.name,
+                                    isSelected = selectedCard == cardsList.name,
+                                    onSelect = { selectedCard = cardsList.name }
+                                )
                             }
                         }
                     }
@@ -350,6 +364,15 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
                     )
 
+                    Text(
+                        text = alert.value,
+                        color = Color.Red,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 25.dp)
+                    )
+
                     //Icon Add
 
                     IconButton(
@@ -358,16 +381,19 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                       subViewmodel.insertSub(
                                           SubsList(
                                               name = selectedItem,
+                                              //cardId = cardId,
                                               planName = textPlan,
                                               price = numPrice.toFloat(),
                                               date = selectDate.value,
                                               note = textNote,
-                                              type = classify(selectedItem)
+                                              type = classify(selectedItem),
+                                              cardName = selectedCard
                                           )
                                       ); navController.navigate(BottomBarScreen.Home.route)
                                   //println("Item Name : $selectedItem. And expanded : $expanded, plan : $textPlan, Start Date : ${selectDate.value}")
                                   } else {
                                       println("Error!")
+                                      alert.value = "Please fill out the information completely."
                                   }
                             //navController.navigate(BottomBarScreen.Home.route)
                         },
@@ -382,7 +408,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         },
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(top = 65.dp)
+                            .padding(top = 40.dp)
                             .clip(CircleShape)
                             .size(50.dp)
                     )
@@ -392,6 +418,26 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
         }
     }
 
+}
+
+
+@Composable
+fun CustomRadioButtons(text: String, isSelected: Boolean, onSelect: () -> Unit) {
+
+    val backgroundColor = if (isSelected) Color.Gray else Color.White
+    val textColor = if (isSelected) Color.White else Color.Black
+
+    OutlinedButton(
+        onClick = { onSelect() },
+        modifier = Modifier
+            .padding(8.dp)
+            .background(backgroundColor),
+    ) {
+        Text(
+            text = text,
+            color = textColor
+        )
+    }
 }
 
 

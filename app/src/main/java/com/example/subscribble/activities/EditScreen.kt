@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -32,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,17 +68,22 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
 
     val subscription = subViewmodel.getSubscriptionById(subsId)
 
+    val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
     subscription?.let { subs ->
         val app = subs.name
         var price = PriceFormat(subs.price.toString())
         var plan = subs.planName
         var date = subs.date
         var note = subs.note
+        var card = subs.cardName
 
         var planText by remember { mutableStateOf(plan)}
         var priceText by remember { mutableStateOf(subs.price.toString()) }
         var noteText by remember { mutableStateOf(note)}
         val selectDate = remember { mutableStateOf(date) }
+        var selectedCard by remember { mutableStateOf(card) }
+        val alert = remember { mutableStateOf("") }
 
         val calendar = Calendar.getInstance()
         val context = LocalContext.current
@@ -262,22 +271,37 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                             modifier = Modifier.padding(top = 20.dp)
                         )
 
-                        IconButton(
-                            onClick = { navController.navigate(NavScreen.AddPayment.route) },
-                            content = {
-                                Icon(
-                                    imageVector = Icons.Default.AddCircle,
-                                    contentDescription = "Add icon",
-                                    tint = Color.Black,
-                                    modifier = Modifier
-                                        .size(35.dp)
-                                )
-                            },
-                            modifier = Modifier
+                        if (cards.value.isEmpty()) {
+                            IconButton(
+                                onClick = { navController.navigate(NavScreen.AddPayment.route) },
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Default.AddCircle,
+                                        contentDescription = "Add icon",
+                                        tint = Color.Black,
+                                        modifier = Modifier
+                                            .size(35.dp)
+                                    )
+                                },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp)
+                                    .clip(CircleShape)
+                                    .size(35.dp)
+                            )
+                        } else {
+                            LazyRow(modifier = Modifier
                                 .padding(top = 10.dp)
-                                .clip(CircleShape)
-                                .size(35.dp)
-                        )
+                                //.fillMaxWidth()
+                            ){
+                                items(cards.value){cardsList ->
+                                    CustomRadioButtonsEdit(
+                                        text = cardsList.name,
+                                        isSelected = selectedCard == cardsList.name,
+                                        onSelect = { selectedCard = cardsList.name }
+                                    )
+                                }
+                            }
+                        }
 
                         Text(
                             text = "Note",
@@ -294,7 +318,15 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 .fillMaxWidth(),
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                             textStyle = TextStyle(fontSize = 18.sp)
+                        )
 
+                        Text(
+                            text = alert.value,
+                            color = Color.Red,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 15.dp)
                         )
 
                         Row(modifier = Modifier
@@ -303,9 +335,13 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                             , horizontalArrangement = Arrangement.Center
                             , verticalAlignment = Alignment.Bottom) {
                             IconButton(onClick = {
-                                val updateSubs = subs.copy(planName = planText, price = priceText.toFloat(), date = selectDate.value, note = noteText)
-                                subViewmodel.updateSubscription(updateSubs)
-                                navController.popBackStack()},
+                                if (priceText != ""){
+                                    val updateSubs = subs.copy(planName = planText, price = priceText.toFloat(), date = selectDate.value, cardName = selectedCard, note = noteText)
+                                    subViewmodel.updateSubscription(updateSubs)
+                                    navController.popBackStack()
+                                } else {
+                                    alert.value = "Please fill out the price"
+                                } },
                                 modifier = Modifier
                                     .clip(CircleShape)
                                     .background(Color(0xFF333333))
@@ -321,6 +357,25 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                 }
             }
         }
+    }
+}
+
+@Composable
+fun CustomRadioButtonsEdit(text: String, isSelected: Boolean, onSelect: () -> Unit) {
+
+    val backgroundColor = if (isSelected) Color.Gray else Color.White
+    val textColor = if (isSelected) Color.White else Color.Black
+
+    OutlinedButton(
+        onClick = { onSelect() },
+        modifier = Modifier
+            .padding(end = 8.dp)
+            .background(backgroundColor),
+    ) {
+        Text(
+            text = text,
+            color = textColor
+        )
     }
 }
 

@@ -1,5 +1,4 @@
 package com.example.subscribble.database
-
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -46,5 +45,7 @@ interface SubDao{
     @Query("SELECT SUM(sub_price) FROM subscription WHERE sub_category = :category")
     fun sumPriceByCategory(category: String): Float
 
+    @Query("SELECT * FROM subscription WHERE card_name =:name")
+    fun getSubCardByName(name: String): SubsList?
 
 }
