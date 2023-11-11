@@ -73,4 +73,8 @@ class Repository @Inject constructor(
     fun getSubCardByName(name: String): SubsList?{
         return subDao.getSubCardByName(name)
     }
+
+    fun getSubscriptionByCategory(category: String): SubsList?{
+        return subDao.getSubscriptionByCategory(category)
+    }
 }

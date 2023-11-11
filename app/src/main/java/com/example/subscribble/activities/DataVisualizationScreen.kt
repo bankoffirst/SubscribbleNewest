@@ -33,6 +33,9 @@ import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.layout.Box
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.subscribble.PriceFormat
+import com.example.subscribble.database.module.SubscriptionViewModel
 
 @Composable
 fun doNut(
@@ -94,7 +97,13 @@ fun doNut(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataVisualizationScreen(navController: NavController) {
+fun DataVisualizationScreen(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+
+    val sumPriceMusic = subViewmodel.sumPriceByCategory("music")
+    val sumPriceVideo = subViewmodel.sumPriceByCategory("video")
+
+    val formattedvideoPrice = String.format("%.2f", sumPriceVideo)
+    val formattedmusicPrice = String.format("%.2f", sumPriceMusic)
 
     Scaffold(
         topBar = {
@@ -145,7 +154,7 @@ fun DataVisualizationScreen(navController: NavController) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding( start = 30.dp, end = 30.dp)
+                        .padding(start = 30.dp, end = 30.dp)
                         .height(80.dp)
                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
                         .clickable { navController.navigate(NavScreen.VideoDonut.route) },
@@ -154,6 +163,12 @@ fun DataVisualizationScreen(navController: NavController) {
                 ) {
                     Text(
                         text = "Video Streaming",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                    )
+                    Text(
+                        text = PriceFormat(price = formattedvideoPrice),
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp)
@@ -171,6 +186,12 @@ fun DataVisualizationScreen(navController: NavController) {
                 ) {
                     Text(
                         text = "Music Streaming",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                    )
+                    Text(
+                        text = PriceFormat(price = formattedmusicPrice),
                         fontWeight = FontWeight.Bold,
                         fontSize = 15.sp,
                         modifier = Modifier.padding(start = 26.dp, top = 10.dp)

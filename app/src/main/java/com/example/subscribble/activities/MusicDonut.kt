@@ -1,12 +1,15 @@
 package com.example.subscribble.activities
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,13 +35,24 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import com.example.subscribble.navbar.NavScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.subscribble.PriceFormat
+import com.example.subscribble.R
+import com.example.subscribble.database.module.SubscriptionViewModel
+import com.example.subscribble.getApplicationColor
+import com.example.subscribble.getDrawableResource
 
 @Composable
 fun doNut2(
@@ -98,7 +112,11 @@ fun doNut2(
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MusicDonut(navController: NavController) {
+fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+
+    val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
+
+    val musicSub = subViewmodel.getSubscriptionByCategory("music")
 
     Scaffold(
         topBar = {
@@ -115,7 +133,7 @@ fun MusicDonut(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Video Streaming",
+                    text = "Music Streaming",
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp
                 )
@@ -153,44 +171,149 @@ fun MusicDonut(navController: NavController) {
                     doNut2()
                 }
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-            ) {
-                Card(
+
+            if (musicSub == null){
+                Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding( start = 30.dp, end = 30.dp)
-                        .height(80.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Text(
-                        text = "App1",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
-                }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, start = 30.dp, end = 30.dp)
-                        .height(80.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ) {
-                    Text(
-                        text = "App2",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
+                        .padding(top = 20.dp),
+                    textAlign = TextAlign.Center,
+                    text = "No Video Streaming",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+            } else {
+                LazyColumn(modifier = Modifier
+                    .padding(top = 28.dp, bottom = 40.dp)
+                    .fillMaxHeight())
+                {
+                    items(subscription.value) {subsList ->
+                        if (subsList.type == "music"){
+
+                            val colorSub = getApplicationColor(subsList.name)
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(100.dp)
+                                    .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                                    .shadow(
+                                        elevation = 8.dp,
+                                        shape = RoundedCornerShape(15.dp)
+                                    )
+                                //.clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+
+                                ,shape = RoundedCornerShape(20.dp),
+                                colors = CardDefaults.cardColors(containerColor = Color.White)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(start = 10.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Image(
+                                        painter = painterResource(
+                                            id = getDrawableResource(
+                                                subsList.name
+                                            )
+                                        ),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(60.dp)
+                                            .clip(RoundedCornerShape(20.dp))
+                                    )
+
+                                    Column(
+                                        modifier = Modifier
+                                            .width(150.dp)
+                                            .padding(start = 10.dp),
+                                    ) {
+
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .weight(1f),
+                                            contentAlignment = Alignment.BottomStart
+                                        ) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                            ) {
+                                                Text(
+                                                    text = subsList.name,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 18.sp,
+                                                    color = colorResource(id = R.color.custom_text),
+                                                )
+
+                                                Spacer(modifier = Modifier.width(5.dp))
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(10.dp)
+                                                        .background(colorSub, shape = CircleShape)
+                                                        .align(Alignment.CenterVertically)
+                                                )
+
+                                            }
+                                        }
+                                        Text(
+                                            text = PriceFormat(price = subsList.price.toString()),
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .weight(1f),
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 16.sp
+
+                                        )
+
+                                    }
+                                }
+                            }
+                        }
+
+                    }
                 }
             }
+
+//            Column(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(contentPadding)
+//            ) {
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding( start = 30.dp, end = 30.dp)
+//                        .height(80.dp)
+//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+//                    shape = RoundedCornerShape(20.dp),
+//                    colors = CardDefaults.cardColors(containerColor = Color.White)
+//                ) {
+//                    Text(
+//                        text = "App1",
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 15.sp,
+//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+//                    )
+//                }
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 20.dp, start = 30.dp, end = 30.dp)
+//                        .height(80.dp)
+//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+//                    shape = RoundedCornerShape(20.dp),
+//                    colors = CardDefaults.cardColors(containerColor = Color.White)
+//                ) {
+//                    Text(
+//                        text = "App2",
+//                        fontWeight = FontWeight.Bold,
+//                        fontSize = 15.sp,
+//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+//                    )
+//                }
+//            }
         }
 
     }
