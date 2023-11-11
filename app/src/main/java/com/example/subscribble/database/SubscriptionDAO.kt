@@ -48,4 +48,6 @@ interface SubDao{
     @Query("SELECT * FROM subscription WHERE card_name =:name")
     fun getSubCardByName(name: String): SubsList?
 
+    @Query("SELECT * FROM subscription WHERE sub_category =:category")
+    fun getSubscriptionByCategory(category: String): SubsList?
 }
