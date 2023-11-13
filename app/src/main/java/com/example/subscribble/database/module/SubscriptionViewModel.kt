@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.subscribble.repository.Repository
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.SubsList
+import com.example.subscribble.database.TestsList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,17 +21,35 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
     private val _sub = MutableStateFlow(emptyList<SubsList>())
     val subs : StateFlow<List<SubsList>> = _sub
 
+    private val _test = MutableStateFlow(emptyList<TestsList>())
+    val tests : StateFlow<List<TestsList>> = _test
+
+    private val _selectedCard = MutableStateFlow("Total Price")
+    val selectedCard : StateFlow<String> = _selectedCard
+
     init {
         viewModelScope.launch {
             _card.emit(repository.getAllCards())
             _sub.emit(repository.getAllSubs())
+            _test.emit(repository.getAllTests())
         }
+    }
+
+    fun updateSelectedCard(card: String){
+        _selectedCard.value = card
     }
 
     fun insertCard(cardList: CardList){
         viewModelScope.launch {
             repository.insertCard(cardList)
             _card.emit(repository.getAllCards())
+        }
+    }
+
+    fun insertTest(testsList: TestsList){
+        viewModelScope.launch {
+            repository.insertTest(testsList)
+            _test.emit(repository.getAllTests())
         }
     }
 

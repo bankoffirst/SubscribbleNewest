@@ -59,5 +59,15 @@ data class SubsList(
     val cardName: String
 )
 
+@Entity(tableName = "test")
+data class TestsList(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "test_id")
+    val id: Int,
+
+    @ColumnInfo(name = "test_x")
+    val x: Double
+)
+
 
 

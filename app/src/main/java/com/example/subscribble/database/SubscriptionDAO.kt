@@ -50,4 +50,15 @@ interface SubDao{
 
     @Query("SELECT * FROM subscription WHERE sub_category =:category")
     fun getSubscriptionByCategory(category: String): SubsList?
+
+}
+
+@Dao
+interface TestDao{
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(test: TestsList)
+
+    @Query("SELECT * FROM test")
+    fun getAllTests(): List<TestsList>
+
 }

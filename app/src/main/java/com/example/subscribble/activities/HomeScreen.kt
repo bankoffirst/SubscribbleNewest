@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
@@ -61,29 +60,29 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
 
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
-    LaunchedEffect(key1 = subViewmodel){
-        subViewmodel.loadSubs()
-    }
-
-    val sumPriceMusic = subViewmodel.sumPriceByCategory("music")
-    val sumPriceVideo = subViewmodel.sumPriceByCategory("video")
-    val total = sumPriceMusic + sumPriceVideo
-
-    val formattedTotal = String.format("%.2f", total)
-    val formattedvideoPrice = String.format("%.2f", sumPriceVideo)
-    val formattedmusicPrice = String.format("%.2f", sumPriceMusic)
-
     val cards = subViewmodel.cards.collectAsState(initial = emptyList())
 
-//    var expanded by remember{ mutableStateOf(false) }
-//    var selectedCard by remember { mutableStateOf("Total") }
-//
-//    val cardList = mutableListOf("Total Price")
-//
-//    val getCards = listOf("Card1","Card2") //เพิ่ม Card
-//    for (card in getCards) {
-//        cardList.add(card)
-//    }
+    LaunchedEffect(key1 = subViewmodel){
+        subViewmodel.loadSubs()
+        subViewmodel.loadCards()
+    }
+
+    val sumPriceMusic by remember { mutableStateOf(subViewmodel.sumPriceByCategory("music")) }
+    val sumPriceVideo by remember { mutableStateOf(subViewmodel.sumPriceByCategory("video")) }
+    val total by remember { mutableStateOf(sumPriceMusic + sumPriceVideo) }
+
+    var expanded by remember{ mutableStateOf(false) }
+    var selectedCard by remember { mutableStateOf("Total Price") }
+
+    var formattedTotal by remember { mutableStateOf(String.format("%.2f", total)) }
+    var formattedVideoPrice by remember { mutableStateOf(String.format("%.2f", sumPriceVideo)) }
+    var formattedMusicPrice by remember { mutableStateOf(String.format("%.2f", sumPriceMusic)) }
+
+    val cardList = mutableListOf("Total Price")
+    cards.value.forEach { card ->
+        val getCards = listOf(card.name)
+        cardList.addAll(getCards)
+    }
 
     Scaffold(
         topBar = {
@@ -102,7 +101,6 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,7 +124,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                         color = colorResource(id = R.color.custom_card_text)
                     )
                     Text(
-                        text = "${formattedTotal} THB",
+                        text = "$formattedTotal THB",
                         fontWeight = FontWeight.Bold,
                         fontSize = 20.sp,
                         color = colorResource(id = R.color.custom_card_total),
@@ -154,7 +152,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             color = colorResource(id = R.color.custom_card_subtext)
                         )
                         Text(
-                            text = "$formattedvideoPrice THB",
+                            text = "$formattedVideoPrice THB",
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = colorResource(id = R.color.custom_card_subtext),
@@ -182,7 +180,7 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             color = colorResource(id = R.color.custom_card_subtext)
                         )
                         Text(
-                            text = "$formattedmusicPrice THB",
+                            text = "$formattedMusicPrice THB",
                             fontWeight = FontWeight.Bold,
                             fontSize = 14.sp,
                             color = colorResource(id = R.color.custom_card_subtext),
@@ -193,17 +191,6 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                 }
             }
 
-            var expanded by remember{ mutableStateOf(false) }
-            var selectedCard by remember { mutableStateOf("Total Price") }
-            val cardList = mutableListOf("Total Price")
-            cards.value.forEach { cardas ->
-                val getCards = listOf(cardas.name)
-//                var expanded by remember{ mutableStateOf(false) }
-//                var selectedCard by remember { mutableStateOf("Total") }
-                for (i in getCards) {
-                    cardList.add(i)
-                }
-            }
 
                 Row(modifier = Modifier
                     .padding(start = 26.dp, end = 26.dp, top = 10.dp)
@@ -230,7 +217,8 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                                     cardList.forEach{
                                         DropdownMenuItem(onClick = {
                                             expanded = false
-                                            selectedCard = it},text = {Text(it, color = colorResource(id = R.color.custom_text_light))})
+                                            selectedCard = it
+                                        },text = {Text(it, color = colorResource(id = R.color.custom_text_light))})
                                     }
                                 }
                             }
@@ -273,8 +261,8 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             )
                         {
                             items(subscription.value) { subsList ->
-                                //val card = subViewmodel.getCardByName(subsList.cardName)
-                                //if (selectedCard == subsList.cardName) {
+                                if (selectedCard == subsList.cardName) {
+
                                     Card(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -347,81 +335,101 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                                             }
                                         }
                                     }
-                                //} //else {
-//                                    Card(
-//                                        modifier = Modifier
-//                                            .fillMaxWidth()
-//                                            .height(100.dp)
-//                                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
-//                                            .shadow(
-//                                                elevation = 8.dp,
-//                                                shape = RoundedCornerShape(15.dp)
-//                                            )
-//                                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
-//
-//                                        shape = RoundedCornerShape(20.dp),
-//                                        colors = CardDefaults.cardColors(containerColor = Color.White)
-//                                    ) {
-//                                        Row(
-//                                            modifier = Modifier
-//                                                .fillMaxSize()
-//                                                .padding(start = 10.dp),
-//                                            verticalAlignment = Alignment.CenterVertically
-//                                        ) {
-//                                            Image(
-//                                                painter = painterResource(
-//                                                    id = getDrawableResource(
-//                                                        subsList.name
-//                                                    )
-//                                                ),
-//                                                contentDescription = "",
-//                                                modifier = Modifier
-//                                                    .size(60.dp)
-//                                                    .clip(RoundedCornerShape(20.dp))
-//                                            )
-//
-//                                            Column(
-//                                                modifier = Modifier
-//                                                    .width(150.dp)
-//                                                    .padding(start = 10.dp),
-//                                            ) {
-//
-//                                                Box(
-//                                                    modifier = Modifier
-//                                                        .fillMaxSize()
-//                                                        .weight(1f),
-//                                                    contentAlignment = Alignment.BottomStart
-//                                                ) {
-//                                                    Row(
-//                                                        modifier = Modifier
-//                                                            .fillMaxWidth()
-//                                                    ) {
-//                                                        Text(
-//                                                            text = subsList.name,
-//                                                            fontWeight = FontWeight.Bold,
-//                                                            fontSize = 18.sp,
-//                                                            color = colorResource(id = R.color.custom_text),
-//                                                        )
-//
-//                                                        Spacer(modifier = Modifier.width(5.dp))
-//
-//                                                    }
-//                                                }
-//                                                Text(
-//                                                    text = PriceFormat(price = subsList.price.toString()),
-//                                                    modifier = Modifier
-//                                                        .fillMaxSize()
-//                                                        .weight(1f),
-//                                                    fontWeight = FontWeight.Bold,
-//                                                    fontSize = 16.sp
-//
-//                                                )
-//
-//                                            }
-//                                        }
-//                                    }
 
-                                //}
+                                    val categorySum = subscription.value
+                                        .filter { it.cardName == subsList.cardName}
+                                        .sumOf { it.price.toDouble() }
+
+                                    val musicSum = subscription.value
+                                        .filter { it.type == "music" && it.cardName == subsList.cardName }
+                                        .sumOf { it.price.toDouble() }
+
+                                    val videoSum = subscription.value
+                                        .filter { it.type == "video" && it.cardName == subsList.cardName }
+                                        .sumOf { it.price.toDouble() }
+
+                                    formattedMusicPrice = (musicSum.toFloat()).toString()
+                                    formattedVideoPrice = (videoSum.toFloat()).toString()
+                                    formattedTotal = (categorySum.toFloat()).toString()
+
+                                } else if (selectedCard == "Total Price") {
+                                    formattedVideoPrice = String.format("%.2f", sumPriceVideo)
+                                    formattedMusicPrice = String.format("%.2f", sumPriceMusic)
+                                    formattedTotal = String.format("%.2f", sumPriceMusic + sumPriceVideo)
+                                    Card(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(100.dp)
+                                            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+                                            .shadow(
+                                                elevation = 8.dp,
+                                                shape = RoundedCornerShape(15.dp)
+                                            )
+                                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+
+                                        shape = RoundedCornerShape(20.dp),
+                                        colors = CardDefaults.cardColors(containerColor = Color.White)
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .padding(start = 10.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Image(
+                                                painter = painterResource(
+                                                    id = getDrawableResource(
+                                                        subsList.name
+                                                    )
+                                                ),
+                                                contentDescription = "",
+                                                modifier = Modifier
+                                                    .size(60.dp)
+                                                    .clip(RoundedCornerShape(20.dp))
+                                            )
+
+                                            Column(
+                                                modifier = Modifier
+                                                    .width(150.dp)
+                                                    .padding(start = 10.dp),
+                                            ) {
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    contentAlignment = Alignment.BottomStart
+                                                ) {
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                    ) {
+                                                        Text(
+                                                            text = subsList.name,
+                                                            fontWeight = FontWeight.Bold,
+                                                            fontSize = 18.sp,
+                                                            color = colorResource(id = R.color.custom_text),
+                                                        )
+
+                                                        Spacer(modifier = Modifier.width(5.dp))
+
+                                                    }
+                                                }
+                                                Text(
+                                                    text = PriceFormat(price = subsList.price.toString()),
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
+
+                                                )
+
+                                            }
+                                        }
+                                    }
+
+                                }
 
                             }
 
@@ -432,7 +440,6 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
             }
         }
     }
-
 
 
 
