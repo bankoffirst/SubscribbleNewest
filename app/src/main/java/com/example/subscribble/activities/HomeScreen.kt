@@ -3,6 +3,7 @@ package com.example.subscribble.activities
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -53,6 +55,7 @@ import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.NavScreen
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,6 +87,120 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
         cardList.addAll(getCards)
     }
 
+    var showCardDelete by remember { mutableStateOf(false) }
+
+    if (showCardDelete){
+        cards.value.forEach {cardsList ->
+            if (selectedCard == cardsList.name){
+                AlertDialog(
+                    onDismissRequest = { showCardDelete = false },
+                    icon = { Icon(painter = painterResource(id = R.drawable.ic_delete), contentDescription = "delete") },
+                    title = { Text(text = "Delete") },
+                    text = { Text(text = "Do you want to delete \"${cardsList.name}\"? If you delete it,\nyou will not be able to recover the data.") },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showCardDelete = false
+                        }) {
+                            Text(text = "Cancel")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            //ลบ Card
+                            //showCardDelete = false
+                            subViewmodel.deleteCard(cardsList)
+                            subscription.value.forEach { subsList ->
+                                if (subsList.cardName == cardsList.name){
+                                    subsList.cardName = ""
+                                    subViewmodel.updateSubscription(subsList)
+                                    println("Updated to EvilDemon")
+
+                                }
+                            }
+                            selectedCard = "Total Price"
+                            showCardDelete = false
+
+                        }) {
+                            Text(text = "Confirm")
+                        }
+                    }
+                )
+            }
+        }
+//        AlertDialog(
+//            onDismissRequest = { showCardDelete = false },
+//            icon = { Icon(painter = painterResource(id = R.drawable.ic_delete), contentDescription = "delete") },
+//            title = { Text(text = "Delete") },
+//            text = { Text(text = "Do you want to delete \"$cardToDelete\"? If you delete it,\nyou will not be able to recover the data.") },
+//            dismissButton = {
+//                TextButton(onClick = {
+//                    showCardDelete = false
+//                }) {
+//                    Text(text = "Cancel")
+//                }
+//            },
+//            confirmButton = {
+//                TextButton(onClick = {
+//                    //ลบ Card
+//                    showCardDelete = false
+//                }) {
+//                    Text(text = "Confirm")
+//                }
+//            }
+//        )
+    }
+
+    var showCardEdit by remember { mutableStateOf(false) }
+
+    if (showCardEdit){
+        cards.value.forEach { cardsList ->
+            if (selectedCard == cardsList.name){
+                AlertDialog(
+                    onDismissRequest = { showCardEdit = false },
+                    icon = { Icon(painter = painterResource(id = R.drawable.ic_edit), contentDescription = "delete") },
+                    title = { Text(text = "Edit") },
+                    text = { Text(text = "Do you want to edit \"${cardsList.name}\" ?") },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showCardEdit = false
+                        }) {
+                            Text(text = "Cancel")
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = {
+                            navController.navigate(NavScreen.EditCard.route + "/${cardsList.id}")
+                        }) {
+                            Text(text = "Edit")
+                        }
+                    }
+                )
+            }
+
+        }
+//        AlertDialog(
+//            onDismissRequest = { showCardEdit = false },
+//            icon = { Icon(painter = painterResource(id = R.drawable.ic_edit), contentDescription = "delete") },
+//            title = { Text(text = "Edit") },
+//            text = { Text(text = "Do you want to edit \"$cardToDelete\" ?") },
+//            dismissButton = {
+//                TextButton(onClick = {
+//                    showCardEdit = false
+//                }) {
+//                    Text(text = "Cancel")
+//                }
+//            },
+//            confirmButton = {
+//                TextButton(onClick = {
+//                    showCardEdit = false
+//                }) {
+//                    Text(text = "Edit")
+//                }
+//            }
+//        )
+    }
+
+
     Scaffold(
         topBar = {
             Text(
@@ -101,43 +218,16 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp)
-                    .height(200.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card)) //Custom Color
-            ) {
 
-                Row(
+            if (selectedCard == "Total Price") {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
-                        .weight(1f)
-                ) {
-                    Text(
-                        text = "Total Price",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = colorResource(id = R.color.custom_card_text)
-                    )
-                    Text(
-                        text = "$formattedTotal THB",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp,
-                        color = colorResource(id = R.color.custom_card_total),
-                        textAlign = TextAlign.Right,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .fillMaxHeight()
+                        .padding(start = 20.dp, end = 20.dp)
+                        .height(200.dp)
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card)) //Custom Color
                 ) {
                     Row(
                         modifier = Modifier
@@ -146,49 +236,187 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                             .weight(1f)
                     ) {
                         Text(
-                            text = "Video Streaming",
+                            text = "Total Price",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.custom_card_subtext)
+                            fontSize = 20.sp,
+                            color = colorResource(id = R.color.custom_card_text)
                         )
                         Text(
-                            text = "$formattedVideoPrice THB",
+                            text = "$formattedTotal THB",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.custom_card_subtext),
+                            fontSize = 20.sp,
+                            color = colorResource(id = R.color.custom_card_total),
                             textAlign = TextAlign.Right,
                             modifier = Modifier.fillMaxWidth()
                         )
                     }
 
-                    Spacer(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .weight(0.5f)
-                    )
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 26.dp, end = 26.dp, bottom = 22.dp)
                             .weight(1f)
+                            .fillMaxHeight()
                     ) {
-                        Text(
-                            text = "Music Streaming",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.custom_card_subtext)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Video Streaming",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = colorResource(id = R.color.custom_card_subtext)
+                            )
+                            Text(
+                                text = "$formattedVideoPrice THB",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = colorResource(id = R.color.custom_card_subtext),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(0.5f)
                         )
-                        Text(
-                            text = "$formattedMusicPrice THB",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp,
-                            color = colorResource(id = R.color.custom_card_subtext),
-                            textAlign = TextAlign.Right,
-                            modifier = Modifier.fillMaxWidth()
-                        )
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 26.dp, end = 26.dp, bottom = 22.dp)
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Music Streaming",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = colorResource(id = R.color.custom_card_subtext)
+                            )
+                            Text(
+                                text = "$formattedMusicPrice THB",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 14.sp,
+                                color = colorResource(id = R.color.custom_card_subtext),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
                 }
+            } else {
+
+                formattedMusicPrice = "0.00"
+                formattedVideoPrice = "0.00"
+                formattedTotal = "0.00"
+
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp)
+                        .height(200.dp)
+                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
+                        .pointerInput(Unit) {
+                            detectTapGestures(
+                                onLongPress = {
+//                               expandedCardMenu.value = true
+                                    showCardDelete = true
+                                    }
+                                    , onDoubleTap = {
+                                        //ไปหน้า Edit
+                                        showCardEdit = true
+//                                showCardMenu = true
+                                    }
+                                )
+                            }
+                        ,
+                        shape = RoundedCornerShape(20.dp),
+                        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card)) //Custom Color
+                    ){
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                .weight(1f)
+                        ) {
+                            Text(
+                                text = "Total Price",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp,
+                                color = colorResource(id = R.color.custom_card_text)
+                            )
+                            Text(
+                                text = "$formattedTotal THB",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 20.sp,
+                                color = colorResource(id = R.color.custom_card_total),
+                                textAlign = TextAlign.Right,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .fillMaxHeight()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = "Video Streaming",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = colorResource(id = R.color.custom_card_subtext)
+                                )
+                                Text(
+                                    text = "$formattedVideoPrice THB",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = colorResource(id = R.color.custom_card_subtext),
+                                    textAlign = TextAlign.Right,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(0.5f)
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 26.dp, end = 26.dp, bottom = 22.dp)
+                                    .weight(1f)
+                            ) {
+                                Text(
+                                    text = "Music Streaming",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = colorResource(id = R.color.custom_card_subtext)
+                                )
+                                Text(
+                                    text = "$formattedMusicPrice THB",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp,
+                                    color = colorResource(id = R.color.custom_card_subtext),
+                                    textAlign = TextAlign.Right,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
+                        }
+                    }
+
             }
 
 
@@ -348,9 +576,10 @@ fun HomeScreen(navController: NavController, subViewmodel: SubscriptionViewModel
                                         .filter { it.type == "video" && it.cardName == subsList.cardName }
                                         .sumOf { it.price.toDouble() }
 
-                                    formattedMusicPrice = (musicSum.toFloat()).toString()
-                                    formattedVideoPrice = (videoSum.toFloat()).toString()
-                                    formattedTotal = (categorySum.toFloat()).toString()
+                                    formattedMusicPrice = String.format("%.2f", musicSum.toFloat())
+                                    formattedVideoPrice = String.format("%.2f", videoSum.toFloat())
+                                    formattedTotal = String.format("%.2f", categorySum.toFloat())
+
 
                                 } else if (selectedCard == "Total Price") {
                                     formattedVideoPrice = String.format("%.2f", sumPriceVideo)

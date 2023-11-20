@@ -56,7 +56,7 @@ data class SubsList(
     val type:String,
 
     @ColumnInfo(name = "card_name")
-    val cardName: String
+    var cardName: String
 )
 
 @Entity(tableName = "test")

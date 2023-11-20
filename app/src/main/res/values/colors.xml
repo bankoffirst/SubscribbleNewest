@@ -24,4 +24,6 @@
     <color name="custom_text_light">#656565</color>
     <color name="custom_card_total">#0AA6EC</color>
     <color name="custom_list">#FFFFFF</color>
+
+    <color name="custom_alert">#FF0000</color>
 </resources>

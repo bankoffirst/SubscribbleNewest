@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -73,10 +74,10 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
     subscription?.let { subs ->
         val app = subs.name
         var price = PriceFormat(subs.price.toString())
-        var plan = subs.planName
-        var date = subs.date
-        var note = subs.note
-        var card = subs.cardName
+        val plan = subs.planName
+        val date = subs.date
+        val note = subs.note
+        val card = subs.cardName
 
         var planText by remember { mutableStateOf(plan)}
         var priceText by remember { mutableStateOf(subs.price.toString()) }
@@ -264,12 +265,42 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                             }
                         }
 
-                        Text(
-                            text = "Payment Method",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(top = 20.dp)
-                        )
+                        Row (
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ){
+                            Text(
+                                text = "Payment Method",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                            )
+
+                            Spacer(modifier = Modifier.width(5.dp))
+
+                            if (cards.value.isNotEmpty()) {
+                                IconButton(
+                                    onClick = {
+                                        selectedCard = ""
+                                    },
+                                    content = {
+                                        Icon(
+                                            painter = painterResource(R.drawable.ic_cancel),
+                                            contentDescription = "Close icon",
+                                            tint = Color.Red,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        //.align(Alignment.CenterHorizontally)
+                                        .padding(top = 20.dp)
+                                        .background(Color.White)
+                                        .clip(CircleShape)
+                                        .size(20.dp)
+                                )
+                            }
+                        }
 
                         if (cards.value.isEmpty()) {
                             IconButton(

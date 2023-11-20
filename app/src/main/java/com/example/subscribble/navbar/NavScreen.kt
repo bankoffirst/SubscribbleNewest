@@ -21,6 +21,11 @@ sealed class NavScreen(
     object EditScreen : NavScreen(
         route = "EditScreen"
     )
+
+    object  EditCard : NavScreen(
+        route = "EditCard"
+    )
+
     object VideoDonut : NavScreen(
         route = "VideoDonut"
     )

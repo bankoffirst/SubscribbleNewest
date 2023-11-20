@@ -28,7 +28,7 @@ class Repository @Inject constructor(
 
     suspend fun deleteCard(cardList: CardList){
         withContext(Dispatchers.IO){
-            cardDao.delete(cardList)
+            cardDao.deleteCards(cardList)
         }
     }
 

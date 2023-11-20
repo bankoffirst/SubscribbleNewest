@@ -12,6 +12,7 @@ import com.example.subscribble.activities.AddPayment
 import com.example.subscribble.activities.AddScreen
 import com.example.subscribble.activities.AddSubscription
 import com.example.subscribble.activities.DataVisualizationScreen
+import com.example.subscribble.activities.EditCard
 import com.example.subscribble.activities.EditScreen
 import com.example.subscribble.activities.HomeScreen
 import com.example.subscribble.activities.ShowDetailScreen
@@ -69,6 +70,14 @@ fun NavGraphControl(navController: NavController){
         ){
             val subsId = it.arguments?.getInt("subsId") ?: -1
             EditScreen(navController = navController, subsId = subsId)
+        }
+
+        composable(
+            route = "${NavScreen.EditCard.route}/{cardsId}",
+            arguments = listOf(navArgument("cardsId") {type = NavType.IntType})
+        ){
+            val cardsId = it.arguments?.getInt("cardsId") ?: -1
+            EditCard(navController = navController, cardsId = cardsId)
         }
 
         composable(route = NavScreen.MusicDonut.route)

@@ -46,6 +46,19 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
+    fun deleteCard(cardList: CardList){
+        viewModelScope.launch {
+            repository.deleteCard(cardList)
+            _card.emit(repository.getAllCards())
+        }
+    }
+
+    fun updateCard(cardList: CardList){
+        viewModelScope.launch {
+            repository.updateCard(cardList)
+        }
+    }
+
     fun insertTest(testsList: TestsList){
         viewModelScope.launch {
             repository.insertTest(testsList)

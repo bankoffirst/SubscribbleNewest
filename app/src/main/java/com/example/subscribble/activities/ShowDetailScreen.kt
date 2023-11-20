@@ -23,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,6 +52,12 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
     //val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
     val subscription = subViewmodel.getSubscriptionById(subsId)
+    val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
+    LaunchedEffect(key1 = subViewmodel){
+        subViewmodel.loadSubs()
+        subViewmodel.loadCards()
+    }
 
 //    val app = "Netflix"
 //    val price = PriceFormat("199")
@@ -63,8 +71,8 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
         val plan = subs.planName
         val date = subs.date
         val note = subs.note
-
         var card = subs.cardName
+
         card = if (card == ""){
             "-"
         } else {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -307,12 +307,42 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         }
                     }
 
-                    Text(
-                        text = "Payment Method",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                    )
+                    Row (
+                        modifier = Modifier
+                        .fillMaxWidth()
+                    ){
+                        Text(
+                            text = "Payment Method",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                        )
+
+                        Spacer(modifier = Modifier.width(5.dp))
+
+                        if (cards.value.isNotEmpty()) {
+                            IconButton(
+                                onClick = {
+                                          selectedCard = ""
+                                },
+                                content = {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_cancel),
+                                        contentDescription = "Close icon",
+                                        tint = Color.Red,
+                                        modifier = Modifier
+                                            .size(50.dp)
+                                    )
+                                },
+                                modifier = Modifier
+                                    //.align(Alignment.CenterHorizontally)
+                                    .padding(top = 20.dp)
+                                    .background(Color.White)
+                                    .clip(CircleShape)
+                                    .size(20.dp)
+                            )
+                        }
+                    }
 
                     if (cards.value.isEmpty()) {
                         IconButton(
@@ -377,25 +407,46 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
                     IconButton(
                         onClick = {
-                                  if (selectedItem != "" && numPrice != "" && selectDate.value != ""){
-                                      subViewmodel.insertSub(
-                                          SubsList(
-                                              name = selectedItem,
-                                              //cardId = cardId,
-                                              planName = textPlan,
-                                              price = numPrice.toFloat(),
-                                              date = selectDate.value,
-                                              note = textNote,
-                                              type = classify(selectedItem),
-                                              cardName = selectedCard
-                                          )
-                                      ); navController.navigate(BottomBarScreen.Home.route)
-                                  //println("Item Name : $selectedItem. And expanded : $expanded, plan : $textPlan, Start Date : ${selectDate.value}")
-                                  } else {
-                                      println("Error!")
-                                      alert.value = "Please fill out the information completely."
-                                  }
-                            //navController.navigate(BottomBarScreen.Home.route)
+                            var isAdded = false
+                            subscriptions.value.forEach { subsList ->
+                                if (selectedItem == subsList.name) {
+                                    alert.value = "You already add ${subsList.name} on the application."
+                                    isAdded = true
+                                }
+                            }
+                            if (!isAdded) {
+                                if (selectedItem != "" && numPrice != "" && selectDate.value != "") {
+                                    subViewmodel.insertSub(
+                                        SubsList(
+                                            name = selectedItem,
+                                            //cardId = cardId,
+                                            planName = textPlan,
+                                            price = numPrice.toFloat(),
+                                            date = selectDate.value,
+                                            note = textNote,
+                                            type = classify(selectedItem),
+                                            cardName = selectedCard
+                                        )
+                                    ); navController.navigate(BottomBarScreen.Home.route)
+                                } else {
+                                    alert.value = "Please fill out the information completely."
+                                }
+                            }
+//                                      subViewmodel.insertSub(
+//                                          SubsList(
+//                                              name = selectedItem,
+//                                              //cardId = cardId,
+//                                              planName = textPlan,
+//                                              price = numPrice.toFloat(),
+//                                              date = selectDate.value,
+//                                              note = textNote,
+//                                              type = classify(selectedItem),
+//                                              cardName = selectedCard
+//                                          )
+//                                      ); navController.navigate(BottomBarScreen.Home.route)
+//                                  } else {
+//                                      alert.value = "Please fill out the information completely."
+//                                  }
                         },
                         content = {
                             Icon(

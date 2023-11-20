@@ -15,7 +15,7 @@ interface CardDao{
     suspend fun update(card: CardList)
 
     @Delete
-    suspend fun delete(card: CardList)
+    suspend fun deleteCards(card: CardList)
 
     @Query("SELECT * FROM card_list")
     fun getAllCards():List<CardList>

@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.subscribble.R
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.module.SubscriptionViewModel
+import com.example.subscribble.navbar.BottomBarScreen
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -272,7 +273,7 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
                                             name = textName,
                                             detail = textDetail,
                                         )
-                                    ); navController.popBackStack()
+                                    ); navController.navigate(BottomBarScreen.Home.route)
                                 } else {
                                     alert.value = "Please Fill Card Name"
                                 }
