@@ -23,9 +23,6 @@ import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
 import android.content.Context
-import android.app.AppOpsManager
-import android.provider.Settings
-import android.content.Intent
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -46,7 +43,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
 
 @Composable
@@ -178,8 +174,6 @@ fun LineChart1(
 @Composable
 fun TotalMocup(context: Context,navController: NavController) {
 
-    val hasUsagePermission = checkForUsagePermission(context)
-
     Scaffold(
         topBar = {
             Row(
@@ -214,26 +208,6 @@ fun TotalMocup(context: Context,navController: NavController) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
-            if (hasUsagePermission) {
-
-            }else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ){
-                    Text(
-                        text = "No usage permission granted.",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
-                }
-
-                requestUsagePermission(context)
-            }
             val xAxisLabels = listOf("1", "2", "3", "4", "5", "6", "7")
             val yAxisLabels = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12")
 
@@ -294,13 +268,3 @@ fun TotalMocup(context: Context,navController: NavController) {
     }
 }
 
-private fun checkForUsagePermission(context: Context): Boolean {
-    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.packageName)
-    return mode == AppOpsManager.MODE_ALLOWED
-}
-
-private fun requestUsagePermission(context: Context) {
-    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-    context.startActivity(intent)
-}

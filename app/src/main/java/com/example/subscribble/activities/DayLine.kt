@@ -1,6 +1,5 @@
 package com.example.subscribble.activities
 
-import android.app.AlertDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,9 +25,6 @@ import androidx.compose.ui.Alignment
 
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.app.AppOpsManager
-import android.provider.Settings
-import android.content.Intent
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -52,7 +48,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
@@ -61,7 +56,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
 import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
@@ -71,7 +65,7 @@ import com.example.subscribble.getDrawableResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalLine(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+fun DayLine(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
@@ -107,22 +101,22 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Usage per month",
+                text = "Usage per Days",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
-
             val nameYou = subViewmodel.getNameByName("Youtube")
             val nameDis = subViewmodel.getNameByName("DisneyPlus")
             val nameNet = subViewmodel.getNameByName("Netflix")
 
-            val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
-            val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
-            val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
 
-            val xAxisLabels = listOf("Week1", "Week2", "Week3", "Week4")
-            val yAxisLabels = listOf(" 10", " 20", " 30", " 40", " 50", " 60", " 70", " 80", " 90", "100", "110", "120", "130", "140", "150")
+            val youtubeDataPoints = getUsageStatsForDays(context, "com.google.android.youtube")
+            val disneyplusDataPoints = getUsageStatsForDays(context, "com.disney.disneyplus")
+            val netflixDataPoints = getUsageStatsForDays(context, "com.netflix.mediaclient")
 
+            val xAxisLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+            val yAxisLabels = listOf(" 2", " 4", " 6", " 8", " 10", "12", "14", "16", "18", "20", "22", "24")
+            val reorderedXAxisLabels = xAxisLabels.drop(getCurrentDayIndex()).plus(xAxisLabels.take(getCurrentDayIndex()))
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
             val totalnet =  String.format("%.2f", netflixDataPoints.sum()).toFloat()
@@ -132,8 +126,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(300.dp)
-                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(NavScreen.DayLine.route) },
+                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
 
@@ -146,7 +139,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                     horizontalAlignment = Alignment.CenterHorizontally
 
                 ) {
-                    if (checkForUsagePermission(context) && videoSub == null) {
+                    if (videoSub == null) {
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -156,19 +149,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp
                         )
-                    } else if(!checkForUsagePermission(context)) {
-                        Button(onClick = {
-                            navController.navigate(NavScreen.TotalLine.route)
-                            showPermissionDialog(context)
-                        }) {
-                            Text("Check access")
-                        }
-                    }else{
-                        Button(onClick = {
-                            showsaveData(context)
-                        }) {
-                            Text("Save Data")
-                        }
+                    } else {
                         Canvas(
                             modifier = Modifier
                                 .size(280.dp)
@@ -180,7 +161,6 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                     bottom = 20.dp
                                 )
                         ) {
-
                             val paint = Paint()
                             paint.color = android.graphics.Color.BLACK
                             val minValue = minOf(
@@ -188,8 +168,8 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                 disneyplusDataPoints.minOrNull() ?: 0.0f,
                                 netflixDataPoints.minOrNull() ?: 1.0f
                             )
-                            val xStep = size.width / (xAxisLabels.size - 1)
-                            val yStep = size.height / 15 / 720
+                            val xStep = size.width / (reorderedXAxisLabels.size - 1)
+                            val yStep = size.height / 12 / 140
 
                             val youtubePath = Path()
                             val disneyplusPath = Path()
@@ -197,15 +177,15 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
 
                             drawLine(
                                 color = Color.Black,
-                                start = Offset(0f, size.height + 10),
-                                end = Offset(size.width, size.height + 10),
+                                start = Offset(0f, size.height+10),
+                                end = Offset(size.width, size.height+10),
                                 strokeWidth = 2.dp.toPx()
                             )
 
                             drawLine(
                                 color = Color.Black,
                                 start = Offset(0f, 0f),
-                                end = Offset(0f, size.height + 10),
+                                end = Offset(0f, size.height+10),
                                 strokeWidth = 2.dp.toPx()
                             )
                             youtubePath.moveTo(0f, size.height - (youtubeDataPoints[0] - minValue) * yStep)
@@ -219,7 +199,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                     paint.textSize = 14f
                                     canvas.nativeCanvas.drawText(
                                         text,
-                                        0f - 30,
+                                        0f - 25,
                                         yPos +15,
                                         paint
                                     )
@@ -233,21 +213,27 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                             youtubeDataPoints.forEachIndexed { index, value ->
                                                 val x = index * xStep
                                                 val y = size.height - (value - minValue) * yStep
+                                                val timeSize = 15f
                                                 youtubePath.lineTo(x, y)
                                                 drawContext.canvas.nativeCanvas.drawText(
-                                                    xAxisLabels.getOrNull(index) ?: "",
+                                                    reorderedXAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                                 val hours = (value / 60).toInt()
                                                 val minutes = (value % 60).toInt()
                                                 val timeLabel = "%02d:%02d".format(hours, minutes)
+
                                                 drawContext.canvas.nativeCanvas.drawText(
                                                     timeLabel,
                                                     x,
-                                                    y - 5.dp.toPx(),
-                                                    paint
+                                                    y - 10.dp.toPx(),
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                             }
                                             drawPath(
@@ -260,16 +246,18 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                             )
                                         }
                                         nameDis -> {
-
                                             disneyplusDataPoints.forEachIndexed { index, value ->
                                                 val x = index * xStep
                                                 val y = size.height - (value - minValue) * yStep
+                                                val timeSize = 15f
                                                 disneyplusPath.lineTo(x, y)
                                                 drawContext.canvas.nativeCanvas.drawText(
-                                                    xAxisLabels.getOrNull(index) ?: "",
+                                                    reorderedXAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                                 val hours = (value / 60).toInt()
                                                 val minutes = (value % 60).toInt()
@@ -277,8 +265,10 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                 drawContext.canvas.nativeCanvas.drawText(
                                                     timeLabel,
                                                     x,
-                                                    y - 5.dp.toPx(),
-                                                    paint
+                                                    y - 10.dp.toPx(),
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                             }
                                             drawPath(
@@ -294,21 +284,28 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                             netflixDataPoints.forEachIndexed { index, value ->
                                                 val x = index * xStep
                                                 val y = size.height - (value - minValue) * yStep
+                                                val timeSize = 15f
                                                 netflixDataPath.lineTo(x, y)
+
                                                 drawContext.canvas.nativeCanvas.drawText(
-                                                    xAxisLabels.getOrNull(index) ?: "",
+                                                    reorderedXAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
+
                                                 val hours = (value / 60).toInt()
-                                                val minutes = (value % 60).toInt()
-                                                val timeLabel = "%02d.%02d".format(hours, minutes)
+                                                val minutes = (value / 60).toInt()
                                                 drawContext.canvas.nativeCanvas.drawText(
-                                                    timeLabel,
+                                                    "%02d:%02d".format(hours, minutes),
                                                     x,
-                                                    y - 5.dp.toPx(),
-                                                    paint
+                                                    y - 10.dp.toPx(),
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                             }
                                             drawPath(
@@ -399,8 +396,16 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                     fontSize = 18.sp,
                                                     color = colorResource(id = R.color.custom_text),
                                                 )
+
                                                 Spacer(modifier = Modifier.width(5.dp))
-                                                Box(modifier = Modifier.size(10.dp).background(colorSub, shape = CircleShape).align(Alignment.CenterVertically))
+
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(10.dp)
+                                                        .background(colorSub, shape = CircleShape)
+                                                        .align(Alignment.CenterVertically)
+                                                )
+
                                             }
                                         }
                                         when (subsList.name) {
@@ -410,25 +415,46 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
                                                     text = PriceFormat(price ="$totaltime hr"),
-                                                    modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
+                                                )
                                             }
                                             nameDis -> {
                                                 val hours = (totaldis / 60).toInt()
                                                 val minutes = (totaldis % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
-                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                                Text(
+                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
+                                                )
+
                                             }
                                             nameNet -> {
                                                 val hours = (totalnet / 60).toInt()
                                                 val minutes = (totalnet % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
-                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                                Text(
+                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
+                                                )
                                             }
                                         }
                                     }
                                 }
                             }
                         }
+
                     }
                 }
             }
@@ -437,63 +463,28 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
 }
 
 
-fun checkForUsagePermission(context: Context): Boolean {
-    val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-    val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.packageName)
-    return mode == AppOpsManager.MODE_ALLOWED
-}
-
-
-private fun showPermissionDialog(context: Context) {
-    val message = if (checkForUsagePermission(context)) {
-        "Access complete"
-    } else {
-        "This app requires access to your usage data in order to provide statistics and personal insights about your app usage"
-    }
-    AlertDialog.Builder(context)
-        .setTitle("Request Permission")
-        .setMessage(message)
-        .setPositiveButton("OK") { dialog, which ->
-            if(!checkForUsagePermission(context)){
-                val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                context.startActivity(intent)
-            }
-        }
-        .setNegativeButton("Cancel") { dialog, which ->
-        }
-        .show()
-}
-
-private fun showsaveData(context: Context) {
-    AlertDialog.Builder(context)
-        .setTitle("Save Data")
-        .setMessage("Save/update Data Completion")
-        .setPositiveButton("OK") { dialog, which ->
-        }
-        .show()
+fun getCurrentDayIndex(): Int {
+    val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+    return (currentDay - 1) % 7
 }
 
 @Composable
-fun getUsageStatsForWeeks(context: Context, packageName: String): List<Float> {
+fun getUsageStatsForDays(context: Context, packageName: String): List<Float> {
     val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
     val calendar = Calendar.getInstance()
+
     val dataPoints = mutableListOf<Float>()
-    val currentMonth = calendar.get(Calendar.MONTH)
 
-    for (weekIndex in 0 until 4) {
-        calendar.set(Calendar.MONTH, currentMonth)
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
+    for (dayIndex in 0 until 7) {
+        calendar.timeInMillis = System.currentTimeMillis()
 
-        calendar.add(Calendar.WEEK_OF_MONTH, weekIndex)
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+        calendar.add(Calendar.DAY_OF_WEEK, -dayIndex)
 
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         val startTime = calendar.timeInMillis
-
-        calendar.add(Calendar.DAY_OF_WEEK, 6)
 
         calendar.set(Calendar.HOUR_OF_DAY, 23)
         calendar.set(Calendar.MINUTE, 59)
@@ -506,15 +497,16 @@ fun getUsageStatsForWeeks(context: Context, packageName: String): List<Float> {
             startTime,
             endTime
         )
-        var weeklyUsage = 0f
+
+        var dailyUsage = 0f
 
         for (usageStats in appUsageData) {
             if (usageStats.packageName == packageName) {
-                weeklyUsage += usageStats.totalTimeInForeground / (1000 * 60).toFloat()
+                dailyUsage = usageStats.totalTimeInForeground / (1000 * 60).toFloat()
             }
         }
-        dataPoints.add(weeklyUsage)
+        dataPoints.add(dailyUsage)
     }
+
     return dataPoints.reversed()
 }
-

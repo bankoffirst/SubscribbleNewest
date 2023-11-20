@@ -12,6 +12,7 @@ import com.example.subscribble.activities.AddPayment
 import com.example.subscribble.activities.AddScreen
 import com.example.subscribble.activities.AddSubscription
 import com.example.subscribble.activities.DataVisualizationScreen
+import com.example.subscribble.activities.DayLine
 import com.example.subscribble.activities.EditCard
 import com.example.subscribble.activities.EditScreen
 import com.example.subscribble.activities.HomeScreen
@@ -99,6 +100,13 @@ fun NavGraphControl(navController: NavController){
             val context = LocalContext.current
             TotalMocup(context,navController = navController)
         }
+
+        composable(route = NavScreen.DayLine.route)
+        {
+            val context = LocalContext.current
+            DayLine(context,navController = navController)
+        }
+
     }
 
 }

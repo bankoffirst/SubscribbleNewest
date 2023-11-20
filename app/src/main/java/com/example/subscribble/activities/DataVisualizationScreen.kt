@@ -39,16 +39,22 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 
 @Composable
 fun doNut(
-    values: List<Float> = listOf(65f, 35f),
-    colors: List<Color> = listOf(
-        Color(0xFF0aa6ec),
-        Color(0xFF56bfee)
-    ),
+    subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
 ) {
-    val sumOfValues = values.sum()
+    val sumPriceMusic = subViewmodel.sumPriceByCategory("music")
+    val sumPriceVideo = subViewmodel.sumPriceByCategory("video")
 
+    val values = listOf(sumPriceMusic,sumPriceVideo)
+
+    val sumOfValues = values.sum()
+    val musicvideoPrice = String.format("%.2f", sumOfValues)
+
+    val colors = listOf(
+        Color(0xFF0aa6ec),
+        Color(0xFF56bfee)
+    )
     val proportions = values.map {
         it * 100 / sumOfValues
     }
@@ -56,6 +62,7 @@ fun doNut(
     val sweepAngles = proportions.map {
         360 * it / 100
     }
+
 
     Box(
         modifier = Modifier
@@ -69,7 +76,7 @@ fun doNut(
 
             for (i in values.indices) {
                 drawArc(
-                    color = colors[i],
+                    color = colors[i % colors.size],
                     startAngle = startAngle,
                     sweepAngle = sweepAngles[i],
                     useCenter = false,
@@ -79,7 +86,7 @@ fun doNut(
             }
         }
 
-        val text = "606/month"
+        val text = "$musicvideoPrice/month"
 
         Text(
             text = text,

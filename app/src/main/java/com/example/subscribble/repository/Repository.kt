@@ -4,8 +4,8 @@ import com.example.subscribble.database.CardDao
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.SubDao
 import com.example.subscribble.database.SubsList
-import com.example.subscribble.database.TestDao
-import com.example.subscribble.database.TestsList
+import com.example.subscribble.database.UsageDao
+import com.example.subscribble.database.UsageList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class Repository @Inject constructor(
     private val cardDao: CardDao,
     private val subDao: SubDao,
-    private val testDao: TestDao
+    private val testDao: UsageDao
 ) {
 
     fun getAllCards(): List<CardList>{
@@ -81,13 +81,20 @@ class Repository @Inject constructor(
         return subDao.getSubscriptionByCategory(category)
     }
 
-    fun getAllTests(): List<TestsList>{
+    fun getAllTests(): List<UsageList>{
         return testDao.getAllTests()
     }
 
-    suspend fun insertTest(testsList: TestsList){
+    suspend fun insertTest(usageList: UsageList){
         withContext(Dispatchers.IO){
-            testDao.insert(testsList)
+            testDao.insert(usageList)
         }
+    }
+
+    fun getPriceByMusic(name: String): Float {
+        return subDao.getPriceByMusic(name)
+    }
+    fun getNameByName(name: String): String {
+        return subDao.getNameByName(name)
     }
 }

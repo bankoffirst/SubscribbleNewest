@@ -45,6 +45,12 @@ interface SubDao{
     @Query("SELECT SUM(sub_price) FROM subscription WHERE sub_category = :category")
     fun sumPriceByCategory(category: String): Float
 
+    @Query("SELECT sub_price FROM subscription WHERE sub_name = :name")
+    fun getPriceByMusic(name: String): Float
+
+    @Query("SELECT sub_name FROM subscription WHERE sub_name = :name")
+    fun getNameByName(name: String): String
+
     @Query("SELECT * FROM subscription WHERE card_name =:name")
     fun getSubCardByName(name: String): SubsList?
 
@@ -54,11 +60,11 @@ interface SubDao{
 }
 
 @Dao
-interface TestDao{
+interface UsageDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(test: TestsList)
+    suspend fun insert(test: UsageList)
 
-    @Query("SELECT * FROM test")
-    fun getAllTests(): List<TestsList>
+    @Query("SELECT * FROM usage_table")
+    fun getAllTests(): List<UsageList>
 
 }

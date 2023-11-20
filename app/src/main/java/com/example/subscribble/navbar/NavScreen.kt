@@ -38,4 +38,8 @@ sealed class NavScreen(
     object TotalMocup : NavScreen(
         route = "TotalMocup"
     )
+
+    object DayLine : NavScreen(
+        route = "DayLine"
+    )
 }

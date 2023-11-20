@@ -81,7 +81,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
         subViewmodel.loadCards()
     }
 
-    val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleTV","AppleMusic")
+    val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleMusic")
 
     // state of menu
     var expanded by remember {

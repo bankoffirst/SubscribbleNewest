@@ -56,16 +56,21 @@ import com.example.subscribble.getDrawableResource
 
 @Composable
 fun doNut2(
-    values: List<Float> = listOf(55f, 20f,25f),
-    colors: List<Color> = listOf(
-        Color(0xFF00ff0d),
-        Color(0xFF00ffe1),
-        Color(0xFFc300ff)
-    ),
+    subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
 ) {
+
+    val priceApple = subViewmodel.getPriceByMusic("AppleMusic")
+    val priceSpo = subViewmodel.getPriceByMusic("Spotify")
+
+    val values = listOf(priceApple,priceSpo)
+
     val sumOfValues = values.sum()
+    val colors = listOf(
+        getApplicationColor("AppleMusic"),
+        getApplicationColor("Spotify"),
+    )
 
     val proportions = values.map {
         it * 100 / sumOfValues
@@ -96,7 +101,7 @@ fun doNut2(
                 startAngle += sweepAngles[i]
             }
         }
-        val text = "366/month"
+        val text = "$sumOfValues/month"
         Text(
             text = text,
             style = TextStyle(
@@ -178,7 +183,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                         .fillMaxWidth()
                         .padding(top = 20.dp),
                     textAlign = TextAlign.Center,
-                    text = "No Video Streaming",
+                    text = "No Music Streaming",
                     fontWeight = FontWeight.Bold,
                     fontSize = 15.sp
                 )
@@ -200,8 +205,6 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                                         elevation = 8.dp,
                                         shape = RoundedCornerShape(15.dp)
                                     )
-                                //.clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
-
                                 ,shape = RoundedCornerShape(20.dp),
                                 colors = CardDefaults.cardColors(containerColor = Color.White)
                             ) {
@@ -275,47 +278,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     }
                 }
             }
-
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(contentPadding)
-//            ) {
-//                Card(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding( start = 30.dp, end = 30.dp)
-//                        .height(80.dp)
-//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-//                    shape = RoundedCornerShape(20.dp),
-//                    colors = CardDefaults.cardColors(containerColor = Color.White)
-//                ) {
-//                    Text(
-//                        text = "App1",
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 15.sp,
-//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-//                    )
-//                }
-//                Card(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(top = 20.dp, start = 30.dp, end = 30.dp)
-//                        .height(80.dp)
-//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-//                    shape = RoundedCornerShape(20.dp),
-//                    colors = CardDefaults.cardColors(containerColor = Color.White)
-//                ) {
-//                    Text(
-//                        text = "App2",
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 15.sp,
-//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-//                    )
-//                }
-//            }
         }
-
     }
 }
 

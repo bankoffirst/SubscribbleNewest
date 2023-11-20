@@ -17,7 +17,7 @@ fun getDrawableResource(inputString: String): Int {
 fun classify(inputString: String): String {
     return when (inputString) {
         "Netflix" -> "video"
-        "AppleTV" -> "video"
+        //"AppleTV" -> "video"
         "Youtube" -> "video"
         "DisneyPlus" -> "video"
 
@@ -30,7 +30,7 @@ fun classify(inputString: String): String {
 fun getApplicationColor(inputString: String): Color {
     return when (inputString){
         "Netflix" -> Color(0xFFAB060F)
-        "AppleTV" -> Color(0xFF2D2D2D)
+        //"AppleTV" -> Color(0xFF2D2D2D)
         "Youtube" -> Color(0xFFF70000)
         "DisneyPlus" -> Color(0xFF0060DE)
 

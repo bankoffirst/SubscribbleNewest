@@ -57,17 +57,24 @@ import com.example.subscribble.getDrawableResource
 
 @Composable
 fun doNut1(
-    values: List<Float> = listOf(45f, 35f,20f),
-    colors: List<Color> = listOf(
-        Color(0xFF000000),
-        Color(0xFFaf0c19),
-        Color(0xFF143692)
-    ),
+    subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
 ) {
-    val sumOfValues = values.sum()
+    val priceNet = subViewmodel.getPriceByMusic("Netflix")
+    val priceApple = subViewmodel.getPriceByMusic("AppleTV")
+    val priceYou = subViewmodel.getPriceByMusic("Youtube")
+    val priceDis = subViewmodel.getPriceByMusic("DisneyPlus")
 
+    val values = listOf(priceNet,priceApple,priceYou,priceDis)
+
+    val sumOfValues = values.sum()
+    val colors = listOf(
+        getApplicationColor("Netflix"),
+        getApplicationColor("AppleTV"),
+        getApplicationColor("Youtube"),
+        getApplicationColor("DisneyPlus")
+    )
     val proportions = values.map {
         it * 100 / sumOfValues
     }
@@ -97,7 +104,7 @@ fun doNut1(
                 startAngle += sweepAngles[i]
             }
         }
-        val text = "467/month"
+        val text = "$sumOfValues/month"
 
         Text(
             text = text,
@@ -204,8 +211,6 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                                         elevation = 8.dp,
                                         shape = RoundedCornerShape(15.dp)
                                     )
-                                //.clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
-
                                 ,shape = RoundedCornerShape(20.dp),
                                 colors = CardDefaults.cardColors(containerColor = Color.White)
                             ) {
@@ -279,47 +284,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     }
                 }
             }
-
-//            Column(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(contentPadding)
-//            ) {
-//                Card(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(start = 30.dp, end = 30.dp)
-//                        .height(80.dp)
-//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-//                    shape = RoundedCornerShape(20.dp),
-//                    colors = CardDefaults.cardColors(containerColor = Color.White)
-//                ) {
-//                    Text(
-//                        text = "App1",
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 15.sp,
-//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-//                    )
-//                }
-//                Card(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(top = 20.dp, start = 30.dp, end = 30.dp)
-//                        .height(80.dp)
-//                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-//                    shape = RoundedCornerShape(20.dp),
-//                    colors = CardDefaults.cardColors(containerColor = Color.White)
-//                ) {
-//                    Text(
-//                        text = "App2",
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 15.sp,
-//                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-//                    )
-//                }
-//            }
         }
-
     }
 }
 
