@@ -23,6 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,6 +46,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
@@ -70,6 +74,10 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
     val subscription = subViewmodel.getSubscriptionById(subsId)
 
     val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
+    val planfocusRequester = remember { FocusRequester() }
+    val pricefocusRequester = remember { FocusRequester() }
+    val datefocusRequester = remember { FocusRequester() }
 
     subscription?.let { subs ->
         val app = subs.name
@@ -201,7 +209,8 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                             value = planText,
                             onValueChange = { planText = it },
                             modifier = Modifier
-                                .width(170.dp),
+                                .width(170.dp)
+                                .focusRequester(planfocusRequester),
                             placeholder = { Text(text = "Subscription Plan") },
                             shape = RectangleShape,
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -222,7 +231,8 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 value = priceText,
                                 onValueChange = { priceText = it },
                                 modifier = Modifier
-                                    .width(160.dp),
+                                    .width(170.dp)
+                                    .focusRequester(pricefocusRequester),
                                 placeholder = { Text(text = "Price per month") },
                                 shape = RectangleShape,
                                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -244,24 +254,32 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                             text = "Membership Start Date",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(top = 20.dp)
-
+                            modifier = Modifier.padding(top = 15.dp)
                         )
 
                         // button select date
-                        Row(modifier = Modifier.fillMaxWidth()) {
-                            OutlinedButton(
-                                onClick = { dateToday.show() },
+                        Row(modifier = Modifier.fillMaxWidth()){
+                            OutlinedButton(onClick = { dateToday.show() },
                                 Modifier
                                     .background(Color.White)
+                                    .focusRequester(datefocusRequester)
                                     .padding(top = 10.dp)
 
                             ) {
-                                Text(
-                                    text = "${selectDate.value}",
-                                    fontSize = 18.sp,
-                                    color = Color.Black
-                                )
+                                if (selectDate.value.isNotEmpty()){
+                                    Text(
+                                        text = "${selectDate.value}",
+                                        fontSize = 18.sp,
+                                        color = Color.Black
+                                    )
+                                } else {
+                                    Icon(
+                                        imageVector = Icons.Default.DateRange,
+                                        contentDescription = null,
+                                        tint = Color.Black
+                                    )
+
+                                }
                             }
                         }
 
@@ -273,7 +291,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 text = "Payment Method",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
-                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                                modifier = Modifier.padding(top = 15.dp)
                             )
 
                             Spacer(modifier = Modifier.width(5.dp))
@@ -294,7 +312,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     },
                                     modifier = Modifier
                                         //.align(Alignment.CenterHorizontally)
-                                        .padding(top = 20.dp)
+                                        .padding(top = 15.dp)
                                         .background(Color.White)
                                         .clip(CircleShape)
                                         .size(20.dp)
@@ -315,13 +333,12 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     )
                                 },
                                 modifier = Modifier
-                                    .padding(start = 26.dp, top = 10.dp)
+                                    .padding(top = 10.dp)
                                     .clip(CircleShape)
                                     .size(35.dp)
                             )
                         } else {
-                            LazyRow(modifier = Modifier
-                                .padding(top = 10.dp)
+                            LazyRow(
                                 //.fillMaxWidth()
                             ){
                                 items(cards.value){cardsList ->
@@ -349,7 +366,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 .fillMaxWidth(),
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                             textStyle = TextStyle(fontSize = 18.sp),
-                            maxLines = 5
+                            maxLines = 3
                         )
 
                         Text(
@@ -395,14 +412,16 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
 @Composable
 fun CustomRadioButtonsEdit(text: String, isSelected: Boolean, onSelect: () -> Unit) {
 
-    val backgroundColor = if (isSelected) Color.Gray else Color.White
+    val backgroundColor = if (isSelected) Color(0xFF333333) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
 
     OutlinedButton(
         onClick = { onSelect() },
         modifier = Modifier
-            .padding(end = 8.dp)
-            .background(backgroundColor),
+            .padding(top = 8.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor
+        )
     ) {
         Text(
             text = text,

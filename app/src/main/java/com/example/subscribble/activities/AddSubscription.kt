@@ -263,7 +263,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                             onValueChange = { numPrice = it },
                             modifier = Modifier
                                 .padding(start = 26.dp)
-                                .width(160.dp)
+                                .width(170.dp)
                                 .focusRequester(pricefocusRequester),
                             placeholder = { Text(text = "Price per month") },
                             shape = RectangleShape,
@@ -281,8 +281,6 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         )
                     }
 
-
-
                     Text(
                         text = "Membership Start Date",
                         fontWeight = FontWeight.Bold,
@@ -294,7 +292,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                     Row(modifier = Modifier.fillMaxWidth()){
                         OutlinedButton(onClick = { dateToday.show() },
                             Modifier
-                                .padding(start = 26.dp)
+                                .padding(start = 26.dp, top = 10.dp)
                                 .background(Color.White)
                                 .focusRequester(datefocusRequester)
 
@@ -345,7 +343,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 },
                                 modifier = Modifier
                                     //.align(Alignment.CenterHorizontally)
-                                    .padding(top = 20.dp)
+                                    .padding(top = 15.dp)
                                     .background(Color.White)
                                     .clip(CircleShape)
                                     .size(20.dp)
@@ -478,14 +476,13 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 @Composable
 fun CustomRadioButtons(text: String, isSelected: Boolean, onSelect: () -> Unit) {
 
-    val backgroundColor = if (isSelected) Color(0xFF0AA6EC) else Color.White
+    val backgroundColor = if (isSelected) Color(0xFF333333) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
 
     OutlinedButton(
         onClick = { onSelect() },
         modifier = Modifier
             .padding(8.dp),
-            //.background(backgroundColor),
         colors = ButtonDefaults.outlinedButtonColors(
             backgroundColor
         )

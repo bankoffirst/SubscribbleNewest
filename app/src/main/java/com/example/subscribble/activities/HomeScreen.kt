@@ -225,12 +225,9 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
                         val nameDis = subViewmodel.getNameByName("DisneyPlus")
                         val nameNet = subViewmodel.getNameByName("Netflix")
 
-                        val youtubeDataPoints =
-                            getUsageStatsForWeeks(context, "com.google.android.youtube")
-                        val disneyplusDataPoints =
-                            getUsageStatsForWeeks(context, "com.discord")
-                        val netflixDataPoints =
-                            getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
+                        val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
+                        val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
+                        val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
 
                         val totalyou =
                             String.format("%.2f", youtubeDataPoints.sum()).toFloat()
@@ -323,12 +320,9 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
                     val nameDis = subViewmodel.getNameByName("DisneyPlus")
                     val nameNet = subViewmodel.getNameByName("Netflix")
 
-                    val youtubeDataPoints =
-                        getUsageStatsForWeeks(context, "com.google.android.youtube")
-                    val disneyplusDataPoints =
-                        getUsageStatsForWeeks(context, "com.discord")
-                    val netflixDataPoints =
-                        getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
+                    val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
+                    val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
+                    val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
 
                     val totalyou =
                         String.format("%.2f", youtubeDataPoints.sum()).toFloat()

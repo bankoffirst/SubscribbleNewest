@@ -130,7 +130,7 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                                 )
                                 .height(200.dp),
                             shape = RoundedCornerShape(20.dp),
-                            colors = CardDefaults.cardColors(containerColor = Color.Black)
+                            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
                         ) {
 
                             Row(
@@ -158,13 +158,13 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                    .padding(top = 4.dp, start = 26.dp, end = 26.dp)
                                     .weight(1f)
                             ) {
                                 Text(
                                     text = textDetail, // credit card number
                                     fontWeight = FontWeight.Bold,
-                                    fontSize = 20.sp,
+                                    fontSize = 16.sp,
                                     color = Color.White
                                 )
                             }

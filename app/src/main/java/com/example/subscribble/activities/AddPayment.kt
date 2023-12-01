@@ -133,7 +133,7 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
                             )
                             .height(200.dp),
                         shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = Color.Black)
+                        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
                     ) {
 
                         Row(
