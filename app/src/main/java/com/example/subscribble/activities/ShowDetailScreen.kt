@@ -273,7 +273,7 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
                                                 color = colorResource(id = R.color.custom_text_light)
                                             )
                                             Text(
-                                                text = usageList.usage,
+                                                text = usageList.usage+"hr",
                                                 fontSize = 16.sp,
                                                 color = colorResource(id = R.color.custom_text_light),
                                                 textAlign = TextAlign.Right,

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.subscribble.activities.testScreen
 import com.example.subscribble.navbar.NavControl
 import com.example.subscribble.ui.theme.SubscribbleTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
                     //Greeting("Android")
                     checkNoti = true
                     NavControl()
-                    testScreen()
                 }
             }
         }

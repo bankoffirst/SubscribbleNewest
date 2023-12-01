@@ -4,7 +4,6 @@ package com.example.subscribble.activities
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,7 +32,6 @@ import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
-import com.example.subscribble.navbar.NavScreen
 import java.sql.Date
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -103,7 +101,8 @@ fun UpcomingBillsScreen(navController: NavController, subViewmodel: Subscription
                             .height(100.dp)
                             .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
                             .shadow(elevation = 8.dp, shape = RoundedCornerShape(15.dp))
-                            .clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") },
+                            //.clickable { navController.navigate(NavScreen.ShowDetailScreen.route + "/${subsList.id}") }
+                        ,
 
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(containerColor = Color.White)

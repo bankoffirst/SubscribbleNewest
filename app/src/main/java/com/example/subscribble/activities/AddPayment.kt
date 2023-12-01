@@ -241,21 +241,6 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
                     )
 
-//                    TextField(
-//                        value = textPlan,
-//                        onValueChange = { textPlan = it },
-//                        modifier = Modifier
-//                            .padding(start = 26.dp)
-//                            .width(170.dp)
-//                            .focusRequester(planfocusRequester),
-//                        placeholder = { Text(text = "Subscription Plan")},
-//                        shape = RectangleShape,
-//                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-//                        maxLines = 1,
-//                        singleLine = true,
-//                        textStyle = TextStyle(fontSize = 18.sp)
-//                    )
-
                     Text(
                         text = "Details",
                         fontWeight = FontWeight.Bold,

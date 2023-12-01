@@ -24,7 +24,6 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -221,91 +220,85 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
 
                         Spacer(modifier = Modifier.weight(1f))
 
-                        Button(
-                            onClick = {
-                                ShowsaveData(context)
-                                val nameYou = subViewmodel.getNameByName("Youtube")
-                                val nameDis = subViewmodel.getNameByName("DisneyPlus")
-                                val nameNet = subViewmodel.getNameByName("Netflix")
+                        //ShowsaveData(context)
+                        val nameYou = subViewmodel.getNameByName("Youtube")
+                        val nameDis = subViewmodel.getNameByName("DisneyPlus")
+                        val nameNet = subViewmodel.getNameByName("Netflix")
 
-                                val youtubeDataPoints =
-                                    getUsageStatsForWeeks(context, "com.google.android.youtube")
-                                val disneyplusDataPoints =
-                                    getUsageStatsForWeeks(context, "com.discord")
-                                val netflixDataPoints =
-                                    getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
+                        val youtubeDataPoints =
+                            getUsageStatsForWeeks(context, "com.google.android.youtube")
+                        val disneyplusDataPoints =
+                            getUsageStatsForWeeks(context, "com.discord")
+                        val netflixDataPoints =
+                            getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
 
-                                val totalyou =
-                                    String.format("%.2f", youtubeDataPoints.sum()).toFloat()
-                                val totaldis =
-                                    String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
-                                val totalnet =
-                                    String.format("%.2f", netflixDataPoints.sum()).toFloat()
+                        val totalyou =
+                            String.format("%.2f", youtubeDataPoints.sum()).toFloat()
+                        val totaldis =
+                            String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
+                        val totalnet =
+                            String.format("%.2f", netflixDataPoints.sum()).toFloat()
 
-                                val subscriptions = subscription.value
-                                val usagetable = usage_table.value
+                        val subscriptions = subscription.value
+                        val usagetable = usage_table.value
 
 
-                                for (subsList in subscriptions) {
-                                    val dateSubs = subsList.date
-                                    val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-                                    val date = dateFormat.parse(dateSubs)
-                                    val calendar = Calendar.getInstance()
-                                    calendar.time = date
-                                    val formattedDate =
-                                        (calendar.get(Calendar.MONTH) + 1).toString()
-                                    val formattedName = SimpleDateFormat("MMM").format(date)
-                                    val allUsage =
-                                        usagetable.firstOrNull { it.name == subsList.name && it.month == formattedName }
+                        for (subsList in subscriptions) {
+                            val dateSubs = subsList.date
+                            val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+                            val date = dateFormat.parse(dateSubs)
+                            val calendar = Calendar.getInstance()
+                            calendar.time = date
+                            val formattedDate =
+                                (calendar.get(Calendar.MONTH) + 1).toString()
+                            val formattedName = SimpleDateFormat("MMM").format(date)
+                            val allUsage =
+                                usagetable.firstOrNull { it.name == subsList.name && it.month == formattedName }
 
-                                    if (subsList.type == "video"){
-                                        if (allUsage != null) {
-                                            val total = when (subsList.name) {
-                                                nameYou -> totalyou
-                                                nameDis -> totaldis
-                                                nameNet -> totalnet
-                                                else -> 0f
-                                            }
-
-                                            val hours = (total / 60).toInt()
-                                            val minutes = (total % 60).toInt()
-                                            val totaltime = "%02d.%02d".format(hours, minutes)
-
-                                            val updateUsage = allUsage.copy(
-                                                usage = totaltime
-                                            )
-                                            subViewmodel.updateUsage(updateUsage)
-                                        } else {
-                                            val total = when (subsList.name) {
-                                                nameYou -> totalyou
-                                                nameDis -> totaldis
-                                                nameNet -> totalnet
-                                                else -> 0f
-                                            }
-
-                                            val hours = (total / 60).toInt()
-                                            val minutes = (total % 60).toInt()
-                                            val totaltime = "%02d.%02d".format(hours, minutes)
-                                            val alltime = hours + minutes / 100.0f
-                                            val priceusage = subsList.price
-                                            val sumtime = alltime / priceusage
-                                            val formattedSumTime = String.format("%.2f", sumtime)
-                                            subViewmodel.insertTest(
-                                                UsageList(
-                                                    name = subsList.name,
-                                                    month = formattedName,
-                                                    usage = totaltime,
-                                                    appprice = subsList.price,
-                                                    usageprice = formattedSumTime
-                                                )
-                                            )
-                                        }
+                            if (subsList.type == "video"){
+                                if (allUsage != null) {
+                                    val total = when (subsList.name) {
+                                        nameYou -> totalyou
+                                        nameDis -> totaldis
+                                        nameNet -> totalnet
+                                        else -> 0f
                                     }
+
+                                    val hours = (total / 60).toInt()
+                                    val minutes = (total % 60).toInt()
+                                    val totaltime = "%02d.%02d".format(hours, minutes)
+
+                                    val updateUsage = allUsage.copy(
+                                        usage = totaltime
+                                    )
+                                    subViewmodel.updateUsage(updateUsage)
+                                } else {
+                                    val total = when (subsList.name) {
+                                        nameYou -> totalyou
+                                        nameDis -> totaldis
+                                        nameNet -> totalnet
+                                        else -> 0f
+                                    }
+
+                                    val hours = (total / 60).toInt()
+                                    val minutes = (total % 60).toInt()
+                                    val totaltime = "%02d.%02d".format(hours, minutes)
+                                    val alltime = hours + minutes / 100.0f
+                                    val priceusage = subsList.price
+                                    val sumtime = alltime / priceusage
+                                    val formattedSumTime = String.format("%.2f", sumtime)
+                                    subViewmodel.insertTest(
+                                        UsageList(
+                                            name = subsList.name,
+                                            month = formattedName,
+                                            usage = totaltime,
+                                            appprice = subsList.price,
+                                            usageprice = formattedSumTime
+                                        )
+                                    )
                                 }
-                            },
-                            content = { Text("Save Data") },
-                            modifier = Modifier.padding(end = 26.dp)
-                        )
+                            }
+                        }
                     }
                 }
             }
@@ -325,90 +318,87 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
 
                     Spacer(modifier = Modifier.weight(1f))
 
-                    Button(
-                        onClick = {
-                            ShowsaveData(context)
-                            val nameYou = subViewmodel.getNameByName("Youtube")
-                            val nameDis = subViewmodel.getNameByName("DisneyPlus")
-                            val nameNet = subViewmodel.getNameByName("Netflix")
+                    //ShowsaveData(context)
+                    val nameYou = subViewmodel.getNameByName("Youtube")
+                    val nameDis = subViewmodel.getNameByName("DisneyPlus")
+                    val nameNet = subViewmodel.getNameByName("Netflix")
 
-                            val youtubeDataPoints =
-                                getUsageStatsForWeeks(context, "com.google.android.youtube")
-                            val disneyplusDataPoints =
-                                getUsageStatsForWeeks(context, "com.discord")
-                            val netflixDataPoints =
-                                getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
+                    val youtubeDataPoints =
+                        getUsageStatsForWeeks(context, "com.google.android.youtube")
+                    val disneyplusDataPoints =
+                        getUsageStatsForWeeks(context, "com.discord")
+                    val netflixDataPoints =
+                        getUsageStatsForWeeks(context, "com.elex.twdsaw.gp")
 
-                            val totalyou =
-                                String.format("%.2f", youtubeDataPoints.sum()).toFloat()
-                            val totaldis =
-                                String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
-                            val totalnet =
-                                String.format("%.2f", netflixDataPoints.sum()).toFloat()
+                    val totalyou =
+                        String.format("%.2f", youtubeDataPoints.sum()).toFloat()
+                    val totaldis =
+                        String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
+                    val totalnet =
+                        String.format("%.2f", netflixDataPoints.sum()).toFloat()
 
-                            val subscriptions = subscription.value
-                            val usagetable = usage_table.value
+                    val subscriptions = subscription.value
+                    val usagetable = usage_table.value
 
-                            for (subsList in subscriptions) {
-                                val dateSubs = subsList.date
-                                val dateFormat = SimpleDateFormat("dd/MM/yyyy")
-                                val date = dateFormat.parse(dateSubs)
-                                val calendar = Calendar.getInstance()
-                                calendar.time = date
-                                val formattedDate =
-                                    (calendar.get(Calendar.MONTH) + 1).toString()
-                                val formattedName = SimpleDateFormat("MMM").format(date)
-                                val allUsage =
-                                    usagetable.firstOrNull { it.name == subsList.name && it.month == formattedName }
 
-                                if (subsList.type == "video"){
-                                    if (allUsage != null) {
-                                        val total = when (subsList.name) {
-                                            nameYou -> totalyou
-                                            nameDis -> totaldis
-                                            nameNet -> totalnet
-                                            else -> 0f
-                                        }
+                    for (subsList in subscriptions) {
+                        val dateSubs = subsList.date
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy")
+                        val date = dateFormat.parse(dateSubs)
+                        val calendar = Calendar.getInstance()
+                        calendar.time = date
+                        val formattedDate =
+                            (calendar.get(Calendar.MONTH) + 1).toString()
+                        val formattedName = SimpleDateFormat("MMM").format(date)
+                        val allUsage =
+                            usagetable.firstOrNull { it.name == subsList.name && it.month == formattedName }
 
-                                        val hours = (total / 60).toInt()
-                                        val minutes = (total % 60).toInt()
-                                        val totaltime = "%02d.%02d".format(hours, minutes)
-
-                                        val updateUsage = allUsage.copy(
-                                            usage = totaltime
-                                        )
-                                        subViewmodel.updateUsage(updateUsage)
-                                    } else {
-                                        val total = when (subsList.name) {
-                                            nameYou -> totalyou
-                                            nameDis -> totaldis
-                                            nameNet -> totalnet
-                                            else -> 0f
-                                        }
-
-                                        val hours = (total / 60).toInt()
-                                        val minutes = (total % 60).toInt()
-                                        val totaltime = "%02d.%02d".format(hours, minutes)
-                                        val alltime = hours + minutes / 100.0f
-                                        val priceusage = subsList.price
-                                        val sumtime = alltime / priceusage
-                                        val formattedSumTime = String.format("%.2f", sumtime)
-                                        subViewmodel.insertTest(
-                                            UsageList(
-                                                name = subsList.name,
-                                                month = formattedName,
-                                                usage = totaltime,
-                                                appprice = subsList.price,
-                                                usageprice = formattedSumTime
-                                            )
-                                        )
-                                    }
+                        if (subsList.type == "video"){
+                            if (allUsage != null) {
+                                val total = when (subsList.name) {
+                                    nameYou -> totalyou
+                                    nameDis -> totaldis
+                                    nameNet -> totalnet
+                                    else -> 0f
                                 }
+
+                                val hours = (total / 60).toInt()
+                                val minutes = (total % 60).toInt()
+                                val totaltime = "%02d.%02d".format(hours, minutes)
+
+                                val updateUsage = allUsage.copy(
+                                    usage = totaltime
+                                )
+                                subViewmodel.updateUsage(updateUsage)
+                            } else {
+                                val total = when (subsList.name) {
+                                    nameYou -> totalyou
+                                    nameDis -> totaldis
+                                    nameNet -> totalnet
+                                    else -> 0f
+                                }
+
+                                val hours = (total / 60).toInt()
+                                val minutes = (total % 60).toInt()
+                                val totaltime = "%02d.%02d".format(hours, minutes)
+                                val alltime = hours + minutes / 100.0f
+                                val priceusage = subsList.price
+                                val sumtime = alltime / priceusage
+                                val formattedSumTime = String.format("%.2f", sumtime)
+                                subViewmodel.insertTest(
+                                    UsageList(
+                                        name = subsList.name,
+                                        month = formattedName,
+                                        usage = totaltime,
+                                        appprice = subsList.price,
+                                        usageprice = formattedSumTime
+                                    )
+                                )
                             }
-                        },
-                        content = { Text("Save Data") },
-                        modifier = Modifier.padding(end = 26.dp)
-                    )
+                        }
+                    }
+
+
                 }
             }
         }

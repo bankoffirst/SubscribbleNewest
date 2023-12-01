@@ -343,12 +343,13 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
 
                         OutlinedTextField(
                             value = noteText,
-                            onValueChange = { noteText = it },
+                            onValueChange = { noteText = it.take(100) },
                             modifier = Modifier
                                 .padding(top = 10.dp)
                                 .fillMaxWidth(),
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                            textStyle = TextStyle(fontSize = 18.sp)
+                            textStyle = TextStyle(fontSize = 18.sp),
+                            maxLines = 5
                         )
 
                         Text(

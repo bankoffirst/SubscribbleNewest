@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -157,7 +157,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(750.dp)
+                        //.height(750.dp)
                         .padding(start = 20.dp, end = 20.dp, top = 0.dp)
                         .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                     shape = RoundedCornerShape(20.dp),
@@ -394,12 +394,13 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
                     OutlinedTextField(
                         value = textNote,
-                        onValueChange = { textNote = it },
+                        onValueChange = { textNote = it.take(50) },
                         modifier = Modifier
                             .padding(start = 26.dp, top = 10.dp, end = 26.dp)
                             .fillMaxWidth(),
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                        textStyle = TextStyle(fontSize = 18.sp)
+                        textStyle = TextStyle(fontSize = 18.sp),
+                        maxLines = 3
 
                     )
 
@@ -409,7 +410,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 25.dp)
+                            .padding(top = 20.dp)
                     )
 
                     //Icon Add
@@ -461,7 +462,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         },
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(top = 40.dp)
+                            .padding(top = 30.dp, bottom = 30.dp)
                             .clip(CircleShape)
                             .size(50.dp)
                     )
@@ -477,14 +478,17 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 @Composable
 fun CustomRadioButtons(text: String, isSelected: Boolean, onSelect: () -> Unit) {
 
-    val backgroundColor = if (isSelected) Color.Gray else Color.White
+    val backgroundColor = if (isSelected) Color(0xFF0AA6EC) else Color.White
     val textColor = if (isSelected) Color.White else Color.Black
 
     OutlinedButton(
         onClick = { onSelect() },
         modifier = Modifier
-            .padding(8.dp)
-            .background(backgroundColor),
+            .padding(8.dp),
+            //.background(backgroundColor),
+        colors = ButtonDefaults.outlinedButtonColors(
+            backgroundColor
+        )
     ) {
         Text(
             text = text,

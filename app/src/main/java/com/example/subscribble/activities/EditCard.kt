@@ -1,5 +1,7 @@
 package com.example.subscribble.activities
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.draw.shadow
@@ -34,6 +37,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -51,6 +56,8 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
     val subscription = cardViewmodel.subs.collectAsState(initial = emptyList())
 
     val card = cardViewmodel.getCardById(cardsId)
+
+    val focusRequester = remember { FocusRequester() }
 
     card?.let { cards ->
         var name = cards.name
@@ -85,7 +92,7 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                         )
                     }
                     Text(
-                        text = "AddPayment",
+                        text = "Edit Card",
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                         color = colorResource(id = R.color.custom_text),
@@ -219,8 +226,10 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
 
                         TextField(
                             value = textName,
-                            onValueChange = { textName = it },
-                            modifier = Modifier.padding(start = 26.dp, top = 10.dp),
+                            onValueChange = { textName = it.take(10) },
+                            modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                                .width(200.dp)
+                                .focusRequester(focusRequester),
                             placeholder = { Text(text = "Credit or Debit Name") },
                             shape = RectangleShape,
                             singleLine = true,
@@ -239,8 +248,9 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
 
                         TextField(
                             value = textDetail,
-                            onValueChange = { textDetail = it },
-                            modifier = Modifier.padding(start = 26.dp, top = 10.dp),
+                            onValueChange = { textDetail = it.take(20) },
+                            modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                                .width(200.dp),
                             placeholder = { Text(text = "Details of Card") },
                             shape = RectangleShape,
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -258,11 +268,11 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                                 .padding(top = 25.dp)
                         )
 
-
-                        //Icon Add
-
-                        IconButton(
-                            onClick = {
+                        Row(modifier = Modifier
+                            .fillMaxSize()
+                            .padding(bottom = 20.dp, top = 40.dp)
+                            , horizontalArrangement = Arrangement.Center) {
+                            IconButton(onClick = {
                                 if (textName != "") {
                                     val updateCard = cards.copy(name = textName, detail = textDetail)
                                     cardViewmodel.updateCard(updateCard)
@@ -276,24 +286,17 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
 
                                 } else {
                                     alert.value = "Please Fill Card Name"
-                                }
-                                //println("Card Name : $textName. And Details : $textDetail")
-                            },
-                            content = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_save),
-                                    contentDescription = "Add icon",
-                                    tint = Color.Black,
-                                    modifier = Modifier
-                                        .size(50.dp)
-                                )
-                            },
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 65.dp)
-                                .clip(CircleShape)
-                                .size(50.dp)
-                        )
+                                } },
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .background(Color(0xFF333333))
+                                    .size(50.dp)
+                            ) {
+                                Icon(painter = painterResource(id = R.drawable.ic_save),
+                                    contentDescription = "save", tint = Color.White,
+                                    modifier = Modifier.size(30.dp))
+                            }
+                        }
 
 
                     }
