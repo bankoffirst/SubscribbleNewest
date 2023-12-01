@@ -66,7 +66,8 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
-
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TotalLine(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
@@ -94,7 +95,8 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                 Text(
                     text = "Video Streaming",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text)
                 )
             }
         }
@@ -107,7 +109,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Usage per month",
+                text = "Usage per Month",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
@@ -133,7 +135,15 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(300.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(NavScreen.DayLine.route) },
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = {
+                                navController.navigate(NavScreen.VideoDonut.route)
+                            }, onDoubleTap = {
+                                navController.navigate(NavScreen.DayLine.route)
+                            }
+                        )
+                    },
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
 

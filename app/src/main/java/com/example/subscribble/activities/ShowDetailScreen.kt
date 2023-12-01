@@ -1,5 +1,6 @@
 package com.example.subscribble.activities
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +50,7 @@ import com.example.subscribble.navbar.NavScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
     //val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
     val usage_table = subViewmodel.tests.collectAsState(initial = emptyList())
@@ -251,107 +252,144 @@ fun ShowDetailScreen(navController: NavController, subsId: Int, subViewmodel: Su
                             )
                         }
 
-                        if (subs.type == "video"){
-                            Row(
-                                modifier = Modifier.padding(top = 12.dp)
-                            ) {
-                                Text(
-                                    text = "Usage",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                    color = colorResource(id = R.color.custom_text)
-                                )
-                            }
+                        if(!checkForUsagePermission(context)){
 
-                            LazyColumn() {
-                                items(usage_table.value) { usageList ->
-                                    if (usageList.name == app) {
-                                        Row(modifier = Modifier.padding(top = 4.dp)) {
-                                            Text(
-                                                text = usageList.month,
-                                                fontSize = 16.sp,
-                                                color = colorResource(id = R.color.custom_text_light)
-                                            )
-                                            Text(
-                                                text = usageList.usage+"hr",
-                                                fontSize = 16.sp,
-                                                color = colorResource(id = R.color.custom_text_light),
-                                                textAlign = TextAlign.Right,
-                                                modifier = Modifier.fillMaxWidth()
-                                            )
-                                        }
-                                    }
-                                }
-                            }
+                            Text(
+                                text = "Note", fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = colorResource(id = R.color.custom_text),
+                                modifier = Modifier.padding(top = 22.dp)
+                            )
+
+                            Text(text = note)
 
                             Row(
-                                modifier = Modifier.padding(top = 12.dp)
-                            ) {
-                                Text(
-                                    text = "Price per usage",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                    color = colorResource(id = R.color.custom_text)
-                                )
-                                Text(
-                                    text = "THB/hr",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp,
-                                    color = colorResource(id = R.color.custom_text),
-                                    textAlign = TextAlign.Right,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-
-                            LazyColumn() {
-                                items(usage_table.value) { usageList ->
-                                    if (usageList.name == app) {
-                                        Row(modifier = Modifier.padding(top = 4.dp)) {
-                                            Text(
-                                                text = usageList.month,
-                                                fontSize = 16.sp,
-                                                color = colorResource(id = R.color.custom_text_light)
-                                            )
-                                            Text(
-                                                text = usageList.usageprice,
-                                                fontSize = 16.sp,
-                                                color = colorResource(id = R.color.custom_text_light),
-                                                textAlign = TextAlign.Right,
-                                                modifier = Modifier.fillMaxWidth()
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        Text(
-                            text = "Note", fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = colorResource(id = R.color.custom_text),
-                            modifier = Modifier.padding(top = 22.dp)
-                        )
-
-                        Text(text = note)
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(bottom = 20.dp),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.Bottom
-                        ) {
-                            IconButton(
-                                onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
                                 modifier = Modifier
-                                    .clip(CircleShape)
-                                    .background(Color(0xFF333333))
-                                    .size(46.dp)
+                                    .fillMaxSize()
+                                    .padding(bottom = 20.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.Bottom
                             ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_edit),
-                                    contentDescription = "edit", tint = Color.White,
-                                    modifier = Modifier.size(24.dp)
-                                )
+                                IconButton(
+                                    onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF333333))
+                                        .size(46.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_edit),
+                                        contentDescription = "edit", tint = Color.White,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                            }
+
+
+                        } else {
+                            if (subs.type == "video") {
+
+                                Row(
+                                    modifier = Modifier.padding(top = 12.dp)
+                                ) {
+                                    Text(
+                                        text = "Usage",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text)
+                                    )
+                                }
+
+                                LazyColumn() {
+                                    items(usage_table.value) { usageList ->
+                                        if (usageList.name == app) {
+                                            Row(modifier = Modifier.padding(top = 4.dp)) {
+                                                Text(
+                                                    text = usageList.month,
+                                                    fontSize = 16.sp,
+                                                    color = colorResource(id = R.color.custom_text_light)
+                                                )
+                                                Text(
+                                                    text = usageList.usage + "hr",
+                                                    fontSize = 16.sp,
+                                                    color = colorResource(id = R.color.custom_text_light),
+                                                    textAlign = TextAlign.Right,
+                                                    modifier = Modifier.fillMaxWidth()
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+                                Row(
+                                    modifier = Modifier.padding(top = 12.dp)
+                                ) {
+                                    Text(
+                                        text = "Price per usage",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text)
+                                    )
+                                    Text(
+                                        text = "THB/hr",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                        color = colorResource(id = R.color.custom_text),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                LazyColumn() {
+                                    items(usage_table.value) { usageList ->
+                                        if (usageList.name == app) {
+                                            Row(modifier = Modifier.padding(top = 4.dp)) {
+                                                Text(
+                                                    text = usageList.month,
+                                                    fontSize = 16.sp,
+                                                    color = colorResource(id = R.color.custom_text_light)
+                                                )
+                                                Text(
+                                                    text = usageList.usageprice,
+                                                    fontSize = 16.sp,
+                                                    color = colorResource(id = R.color.custom_text_light),
+                                                    textAlign = TextAlign.Right,
+                                                    modifier = Modifier.fillMaxWidth()
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            Text(
+                                text = "Note", fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = colorResource(id = R.color.custom_text),
+                                modifier = Modifier.padding(top = 22.dp)
+                            )
+
+                            Text(text = note)
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(bottom = 20.dp),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.Bottom
+                            ) {
+                                IconButton(
+                                    onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF333333))
+                                        .size(46.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_edit),
+                                        contentDescription = "edit", tint = Color.White,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
                             }
                         }
                     }

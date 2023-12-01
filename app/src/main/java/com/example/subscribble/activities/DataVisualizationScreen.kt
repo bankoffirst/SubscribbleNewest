@@ -33,8 +33,10 @@ import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.res.colorResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.subscribble.PriceFormat
+import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 
 @Composable
@@ -118,7 +120,8 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                 text = "Data Visualization",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
+                modifier = Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp),
+                color = colorResource(id = R.color.custom_text)
             )
         }
     ) { contentPadding ->

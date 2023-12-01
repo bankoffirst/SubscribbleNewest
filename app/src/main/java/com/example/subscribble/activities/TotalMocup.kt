@@ -43,7 +43,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavController
+import com.example.subscribble.R
 
 @Composable
 fun LineChart1(
@@ -191,7 +193,8 @@ fun TotalMocup(context: Context,navController: NavController) {
                 Text(
                     text = "Video Streaming",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text)
                 )
             }
         }

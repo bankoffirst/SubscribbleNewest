@@ -32,7 +32,6 @@ import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
-import java.sql.Date
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,7 +59,8 @@ fun UpcomingBillsScreen(navController: NavController, subViewmodel: Subscription
                 Text(
                     text = "Upcoming Bills",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text)
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -190,21 +190,24 @@ fun UpcomingBillsScreen(navController: NavController, subViewmodel: Subscription
 
 fun getDueDateCountDown(dueDate: String): String {
 
-    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+    val formatter = SimpleDateFormat("dd", Locale.getDefault())
 
     try {
         val dueDateParsed = formatter.parse(dueDate)
-        val currentDate = Date(System.currentTimeMillis())
-        var daysUntilDueDate = TimeUnit.MILLISECONDS.toDays(dueDateParsed.time - currentDate.time)
+        val calendar = Calendar.getInstance()
+        val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val dueDateTest = formatter.parse(currentDay.toString())
+        //val currentDate = Date(System.currentTimeMillis())
+        var daysUntilDueDate = TimeUnit.MILLISECONDS.toDays(dueDateParsed.time - dueDateTest.time)
 
         if (daysUntilDueDate < 0) {
 
             val nextDueDate = Calendar.getInstance()
             nextDueDate.time = dueDateParsed
-            while (nextDueDate.time.before(currentDate)) {
+            while (nextDueDate.time.before(dueDateTest)) {
                 nextDueDate.add(Calendar.MONTH, 1)
             }
-            daysUntilDueDate = TimeUnit.MILLISECONDS.toDays(nextDueDate.time.time - currentDate.time)
+            daysUntilDueDate = TimeUnit.MILLISECONDS.toDays(nextDueDate.time.time - dueDateTest.time)
         }
 
         return if (daysUntilDueDate.toInt() == 0) {
@@ -216,4 +219,3 @@ fun getDueDateCountDown(dueDate: String): String {
         return "Invalid due date format: ${e.message}"
     }
 }
-

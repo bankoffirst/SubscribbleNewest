@@ -63,7 +63,8 @@ fun NavGraphControl(navController: NavController){
             arguments = listOf(navArgument("subsId") {type = NavType.IntType})
         ){
             val subsId = it.arguments?.getInt("subsId") ?: -1
-            ShowDetailScreen(navController = navController, subsId = subsId)
+            val context = LocalContext.current
+            ShowDetailScreen(context,navController = navController, subsId = subsId)
         }
 
         composable(

@@ -145,7 +145,8 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                 Text(
                     text = "Video Streaming",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
+                    fontSize = 24.sp,
+                    color = colorResource(id = R.color.custom_text)
                 )
             }
         }
