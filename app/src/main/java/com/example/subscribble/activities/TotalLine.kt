@@ -24,7 +24,6 @@ import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
 
-import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.app.AppOpsManager
 import android.provider.Settings
@@ -36,7 +35,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import java.util.Calendar
 import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -76,6 +74,8 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
     val videoSub = subViewmodel.getSubscriptionByCategory("video")
+
+
 
     Scaffold(
         topBar = {
@@ -120,12 +120,12 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
             val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
 
-            val xAxisLabels = listOf("Week1", "Week2", "Week3", "Week4")
-            val yAxisLabels = listOf(" 10", " 20", " 30", " 40", " 50", " 60", " 70", " 80", " 90", "100", "110", "120", "130", "140", "150")
-
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
             val totalnet =  String.format("%.2f", netflixDataPoints.sum()).toFloat()
+
+            val xAxisLabels = listOf("Week1", "Week2", "Week3", "Week4")
+            val yAxisLabels = listOf(" 10", " 20", " 30", " 40", " 50", " 60", " 70", " 80", " 90", "100", "110", "120", "130", "140", "150")
 
             Card(
                 modifier = Modifier
@@ -164,11 +164,6 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                             Text("Check access")
                         }
                     }else{
-                        Button(onClick = {
-                            showsaveData(context)
-                        }) {
-                            Text("Save Data")
-                        }
                         Canvas(
                             modifier = Modifier
                                 .size(280.dp)
@@ -463,58 +458,3 @@ private fun showPermissionDialog(context: Context) {
         }
         .show()
 }
-
-private fun showsaveData(context: Context) {
-    AlertDialog.Builder(context)
-        .setTitle("Save Data")
-        .setMessage("Save/update Data Completion")
-        .setPositiveButton("OK") { dialog, which ->
-        }
-        .show()
-}
-
-@Composable
-fun getUsageStatsForWeeks(context: Context, packageName: String): List<Float> {
-    val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-    val calendar = Calendar.getInstance()
-    val dataPoints = mutableListOf<Float>()
-    val currentMonth = calendar.get(Calendar.MONTH)
-
-    for (weekIndex in 0 until 4) {
-        calendar.set(Calendar.MONTH, currentMonth)
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-
-        calendar.add(Calendar.WEEK_OF_MONTH, weekIndex)
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val startTime = calendar.timeInMillis
-
-        calendar.add(Calendar.DAY_OF_WEEK, 6)
-
-        calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 59)
-        calendar.set(Calendar.SECOND, 59)
-        calendar.set(Calendar.MILLISECOND, 999)
-        val endTime = calendar.timeInMillis
-
-        val appUsageData = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY,
-            startTime,
-            endTime
-        )
-        var weeklyUsage = 0f
-
-        for (usageStats in appUsageData) {
-            if (usageStats.packageName == packageName) {
-                weeklyUsage += usageStats.totalTimeInForeground / (1000 * 60).toFloat()
-            }
-        }
-        dataPoints.add(weeklyUsage)
-    }
-    return dataPoints.reversed()
-}
-

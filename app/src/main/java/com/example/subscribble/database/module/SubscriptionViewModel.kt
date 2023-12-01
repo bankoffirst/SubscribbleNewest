@@ -66,6 +66,12 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
+    fun updateUsage(usageList: UsageList){
+        viewModelScope.launch {
+            repository.updateUsage(usageList)
+        }
+    }
+
     fun getCardById(id: Int): CardList?{
         return repository.getCardById(id)
     }

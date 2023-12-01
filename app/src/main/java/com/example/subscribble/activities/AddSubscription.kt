@@ -48,6 +48,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
@@ -82,6 +84,10 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
     }
 
     val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleMusic")
+
+    val planfocusRequester = remember { FocusRequester() }
+    val pricefocusRequester = remember { FocusRequester() }
+    val datefocusRequester = remember { FocusRequester() }
 
     // state of menu
     var expanded by remember {
@@ -234,7 +240,8 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         onValueChange = { textPlan = it },
                         modifier = Modifier
                             .padding(start = 26.dp)
-                            .width(170.dp),
+                            .width(170.dp)
+                            .focusRequester(planfocusRequester),
                         placeholder = { Text(text = "Subscription Plan")},
                         shape = RectangleShape,
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -256,7 +263,8 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                             onValueChange = { numPrice = it },
                             modifier = Modifier
                                 .padding(start = 26.dp)
-                                .width(160.dp),
+                                .width(160.dp)
+                                .focusRequester(pricefocusRequester),
                             placeholder = { Text(text = "Price per month") },
                             shape = RectangleShape,
                             colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -288,6 +296,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                             Modifier
                                 .padding(start = 26.dp)
                                 .background(Color.White)
+                                .focusRequester(datefocusRequester)
 
                         ) {
                             if (selectDate.value.isNotEmpty()){
@@ -415,7 +424,16 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 }
                             }
                             if (!isAdded) {
-                                if (selectedItem != "" && numPrice != "" && selectDate.value != "") {
+                                if (textPlan.isEmpty()) {
+                                    alert.value = "Please fill the Plan."
+                                    planfocusRequester.requestFocus()
+                                } else if (numPrice.isEmpty()){
+                                    alert.value = "Please fill the Price."
+                                    pricefocusRequester.requestFocus()
+                                } else if (selectDate.value.isEmpty()){
+                                    alert.value = "Please select Date"
+                                    datefocusRequester.requestFocus()
+                                } else {
                                     subViewmodel.insertSub(
                                         SubsList(
                                             name = selectedItem,
@@ -428,25 +446,9 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                             cardName = selectedCard
                                         )
                                     ); navController.navigate(BottomBarScreen.Home.route)
-                                } else {
-                                    alert.value = "Please fill out the information completely."
                                 }
                             }
-//                                      subViewmodel.insertSub(
-//                                          SubsList(
-//                                              name = selectedItem,
-//                                              //cardId = cardId,
-//                                              planName = textPlan,
-//                                              price = numPrice.toFloat(),
-//                                              date = selectDate.value,
-//                                              note = textNote,
-//                                              type = classify(selectedItem),
-//                                              cardName = selectedCard
-//                                          )
-//                                      ); navController.navigate(BottomBarScreen.Home.route)
-//                                  } else {
-//                                      alert.value = "Please fill out the information completely."
-//                                  }
+//
                         },
                         content = {
                             Icon(

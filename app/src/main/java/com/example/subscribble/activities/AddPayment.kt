@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.IconButton
@@ -36,6 +37,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -45,6 +48,7 @@ import com.example.subscribble.R
 import com.example.subscribble.database.CardList
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.navbar.BottomBarScreen
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +68,8 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
     val alert = remember {
         mutableStateOf("")
     }
+
+    val focusRequester = remember { FocusRequester() }
 
     val total = 0f
     val formattedTotal = String.format("%.2f", total)
@@ -155,13 +161,13 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                .padding(top = 4.dp, start = 26.dp, end = 26.dp)
                                 .weight(1f)
                         ) {
                             Text(
                                 text = textDetail, // credit card number
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 16.sp,
                                 color = Color.White
                             )
                         }
@@ -223,14 +229,32 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
                     TextField(
                         value = textName,
-                        onValueChange = { textName = it },
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp),
+                        onValueChange = { textName = it.take(10) },
+                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                            .width(200.dp)
+                            .focusRequester(focusRequester),
                         placeholder = { Text(text = "Credit or Debit Name") },
                         shape = RectangleShape,
                         singleLine = true,
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
                         maxLines = 1
+
                     )
+
+//                    TextField(
+//                        value = textPlan,
+//                        onValueChange = { textPlan = it },
+//                        modifier = Modifier
+//                            .padding(start = 26.dp)
+//                            .width(170.dp)
+//                            .focusRequester(planfocusRequester),
+//                        placeholder = { Text(text = "Subscription Plan")},
+//                        shape = RectangleShape,
+//                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+//                        maxLines = 1,
+//                        singleLine = true,
+//                        textStyle = TextStyle(fontSize = 18.sp)
+//                    )
 
                     Text(
                         text = "Details",
@@ -243,8 +267,9 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
                     TextField(
                         value = textDetail,
-                        onValueChange = { textDetail = it },
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp),
+                        onValueChange = { textDetail = it.take(20) },
+                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
+                            .width(200.dp),
                         placeholder = { Text(text = "Details of Card") },
                         shape = RectangleShape,
                         colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -267,15 +292,16 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
                     IconButton(
                             onClick = {
-                                if (textName != "") {
+                                if (textName.isEmpty()) {
+                                    alert.value = "Please Fill Card Name"
+                                    focusRequester.requestFocus()
+                                } else {
                                     cardViewmodel.insertCard(
                                         CardList(
                                             name = textName,
                                             detail = textDetail,
                                         )
                                     ); navController.navigate(BottomBarScreen.Home.route)
-                                } else {
-                                    alert.value = "Please Fill Card Name"
                                 }
                                 //println("Card Name : $textName. And Details : $textDetail")
                             },

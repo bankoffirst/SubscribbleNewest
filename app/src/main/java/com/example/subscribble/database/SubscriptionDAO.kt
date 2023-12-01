@@ -67,4 +67,7 @@ interface UsageDao{
     @Query("SELECT * FROM usage_table")
     fun getAllTests(): List<UsageList>
 
+    @Update
+    suspend fun update(test: UsageList)
+
 }

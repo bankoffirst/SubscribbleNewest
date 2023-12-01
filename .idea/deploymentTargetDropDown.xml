@@ -7,11 +7,11 @@
         <deviceKey>
           <Key>
             <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\neo_c\.android\avd\NOTE_20_ULTRA_5G_API_33.avd" />
+            <value value="C:\Users\neo_c\.android\avd\NOTE_20_ULTRA_5G_API_33_2.avd" />
           </Key>
         </deviceKey>
       </Target>
     </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2023-10-16T05:24:25.062613600Z" />
+    <timeTargetWasSelectedWithDropDown value="2023-11-06T14:05:53.109643300Z" />
   </component>
 </project>

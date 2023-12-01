@@ -30,7 +30,8 @@ fun NavGraphControl(navController: NavController){
     ){
         composable(route = BottomBarScreen.Home.route)
         {
-            HomeScreen(navController = navController)
+            val context = LocalContext.current
+            HomeScreen(context,navController = navController)
         }
         composable(route = BottomBarScreen.Add.route)
         {

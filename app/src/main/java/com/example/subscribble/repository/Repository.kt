@@ -46,7 +46,6 @@ class Repository @Inject constructor(
         return subDao.getAllSubs()
     }
 
-
     suspend fun insertSubscription(subsList: SubsList){
         withContext(Dispatchers.IO){
             subDao.insert(subsList)
@@ -88,6 +87,12 @@ class Repository @Inject constructor(
     suspend fun insertTest(usageList: UsageList){
         withContext(Dispatchers.IO){
             testDao.insert(usageList)
+        }
+    }
+
+    suspend fun updateUsage(usageList: UsageList){
+        withContext(Dispatchers.IO){
+            testDao.update(usageList)
         }
     }
 
