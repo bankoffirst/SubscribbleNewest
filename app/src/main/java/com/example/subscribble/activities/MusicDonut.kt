@@ -64,7 +64,9 @@ fun doNut2(
     val priceApple = subViewmodel.getPriceByMusic("AppleMusic")
     val priceSpo = subViewmodel.getPriceByMusic("Spotify")
 
-    val values = listOf(priceApple,priceSpo)
+    val musicSub = subViewmodel.getSubscriptionByCategory("music")
+
+    val values = mutableListOf(priceApple,priceSpo)
 
     val sumOfValues = values.sum()
     val colors = listOf(
@@ -90,15 +92,25 @@ fun doNut2(
         ) {
             var startAngle = -90f
 
-            for (i in values.indices) {
+            if (musicSub == null) {
                 drawArc(
-                    color = colors[i],
+                    color = Color.LightGray,
                     startAngle = startAngle,
-                    sweepAngle = sweepAngles[i],
+                    sweepAngle = 360f,
                     useCenter = false,
                     style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
                 )
-                startAngle += sweepAngles[i]
+            } else {
+                for (i in values.indices) {
+                    drawArc(
+                        color = colors[i],
+                        startAngle = startAngle,
+                        sweepAngle = sweepAngles[i],
+                        useCenter = false,
+                        style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
+                    )
+                    startAngle += sweepAngles[i]
+                }
             }
         }
         val text = "$sumOfValues/month"

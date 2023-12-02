@@ -56,7 +56,7 @@ fun doNut(
     val sumPriceMusic = subViewmodel.sumPriceByCategory("music")
     val sumPriceVideo = subViewmodel.sumPriceByCategory("video")
 
-    val values = listOf(sumPriceMusic,sumPriceVideo)
+    val values = mutableListOf(sumPriceMusic,sumPriceVideo)
 
     val sumOfValues = values.sum()
     val musicvideoPrice = String.format("%.2f", sumOfValues)
@@ -84,15 +84,25 @@ fun doNut(
         ) {
             var startAngle = -90f
 
-            for (i in values.indices) {
+            if (sumPriceMusic == 0.0f && sumPriceVideo == 0.0f) {
                 drawArc(
-                    color = colors[i % colors.size],
+                    color = Color.LightGray,
                     startAngle = startAngle,
-                    sweepAngle = sweepAngles[i],
+                    sweepAngle = 360f,
                     useCenter = false,
                     style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
                 )
-                startAngle += sweepAngles[i]
+            } else {
+                for (i in values.indices) {
+                    drawArc(
+                        color = colors[i],
+                        startAngle = startAngle,
+                        sweepAngle = sweepAngles[i],
+                        useCenter = false,
+                        style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
+                    )
+                    startAngle += sweepAngles[i]
+                }
             }
         }
 
@@ -187,7 +197,12 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                     ){
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFF56bfee), shape = RoundedCornerShape(16.dp) )
+                                .background(
+                                    if (sumPriceVideo == 0.0f){
+                                        Color.LightGray
+                                    } else {
+                                        Color(0xFF56bfee)
+                                    }, shape = RoundedCornerShape(16.dp) )
                                 .size(50.dp),
                         ) {
                             Image(painter = painterResource(id = R.drawable.ic_video),
@@ -252,7 +267,12 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                     ){
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFF0aa6ec), shape = RoundedCornerShape(16.dp) )
+                                .background(
+                                    if (sumPriceMusic == 0.0f){
+                                        Color.LightGray
+                                    } else {
+                                        Color(0xFF0aa6ec)
+                                    }, shape = RoundedCornerShape(16.dp) )
                                 .size(50.dp),
                         ) {
                             Image(painter = painterResource(id = R.drawable.ic_music),

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -59,17 +59,22 @@ fun BottomBar(navController: NavController)
     val navStackBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navStackBackStackEntry?.destination
 
+    val iconSizes = mapOf(
+        BottomBarScreen.Data_visual to 26.dp,
+        BottomBarScreen.Bills to 25.dp
+    )
+
     Row(
         modifier = Modifier
             .padding(top = 8.dp)
             .fillMaxWidth()
-            .height(50.dp)
+            .height(46.dp)
             .background(color = colorResource(id = R.color.default_screen))
             //.background(Color.Red)
     ) {
         screens.forEach {screen ->
             if (currentDestination != null) {
-                AddItem(screen = screen, currentDestination = currentDestination, navController = navController)
+                AddItem(screen = screen, currentDestination = currentDestination, navController = navController, iconSizes = iconSizes)
             }
         }
     }
@@ -79,15 +84,18 @@ fun BottomBar(navController: NavController)
 fun RowScope.AddItem(
     screen: BottomBarScreen,
     currentDestination: NavDestination,
-    navController: NavController
+    navController: NavController,
+    iconSizes: Map<BottomBarScreen, Dp>
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+    val iconSize = iconSizes[screen] ?: 40.dp // default icon 40
 
     Row(
         modifier = Modifier
             .padding(8.dp)
             .weight(1f)
             //.background(Color.Blue)
+            .align(Alignment.CenterVertically)
             .clickable {
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id) {
@@ -103,14 +111,8 @@ fun RowScope.AddItem(
             painter = painterResource(id = if (selected) screen.icon else screen.icon),
             contentDescription = screen.title,
             tint = if (selected) Color(0xFF0AA6EC) else Color(0xFFD808080),
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(iconSize)
         )
     }
 
-}
-
-@Composable
-@Preview
-fun NavControlReview() {
-    NavControl()
 }

@@ -62,19 +62,20 @@ fun doNut1(
     thickness: Dp = 60.dp
 ) {
     val priceNet = subViewmodel.getPriceByMusic("Netflix")
-    val priceApple = subViewmodel.getPriceByMusic("AppleTV")
     val priceYou = subViewmodel.getPriceByMusic("Youtube")
     val priceDis = subViewmodel.getPriceByMusic("DisneyPlus")
 
-    val values = listOf(priceNet,priceApple,priceYou,priceDis)
+    val videoSub = subViewmodel.getSubscriptionByCategory("video")
+
+    val values = mutableListOf(priceNet, priceYou, priceDis)
 
     val sumOfValues = values.sum()
     val colors = listOf(
         getApplicationColor("Netflix"),
-        getApplicationColor("AppleTV"),
         getApplicationColor("Youtube"),
         getApplicationColor("DisneyPlus")
     )
+
     val proportions = values.map {
         it * 100 / sumOfValues
     }
@@ -82,7 +83,6 @@ fun doNut1(
     val sweepAngles = proportions.map {
         360 * it / 100
     }
-
     Box(
         modifier = Modifier
             .size(size = size)
@@ -93,15 +93,25 @@ fun doNut1(
         ) {
             var startAngle = -90f
 
-            for (i in values.indices) {
+            if (videoSub == null) {
                 drawArc(
-                    color = colors[i],
+                    color = Color.LightGray,
                     startAngle = startAngle,
-                    sweepAngle = sweepAngles[i],
+                    sweepAngle = 360f,
                     useCenter = false,
                     style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
                 )
-                startAngle += sweepAngles[i]
+            } else {
+                for (i in values.indices) {
+                    drawArc(
+                        color = colors[i],
+                        startAngle = startAngle,
+                        sweepAngle = sweepAngles[i],
+                        useCenter = false,
+                        style = Stroke(width = thickness.toPx(), cap = StrokeCap.Butt)
+                    )
+                    startAngle += sweepAngles[i]
+                }
             }
         }
         val text = "$sumOfValues/month"
