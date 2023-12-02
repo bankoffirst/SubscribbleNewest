@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [CardList::class,SubsList::class,UsageList::class],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 abstract class SubscriptionDatabase:RoomDatabase() {

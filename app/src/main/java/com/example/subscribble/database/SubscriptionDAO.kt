@@ -70,4 +70,13 @@ interface UsageDao{
     @Update
     suspend fun update(test: UsageList)
 
+    @Query("DELETE FROM usage_table WHERE Usage_name = :name")
+    suspend fun delete(name: String)
+
+    @Query("SELECT * FROM usage_table WHERE Usage_name =:name")
+    fun getUsageByName(name: String): List<UsageList>
+
+//    @Query("SELECT * FROM usage_table ORDER BY Usage_month_name DESC")
+//    fun getRecentMonths(name: String): List<UsageList>
+
 }

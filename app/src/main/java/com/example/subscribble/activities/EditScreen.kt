@@ -65,6 +65,7 @@ import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
+import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -387,7 +388,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 if (priceText != ""){
                                     val updateSubs = subs.copy(planName = planText, price = priceText.toFloat(), date = selectDate.value, cardName = selectedCard, note = noteText)
                                     subViewmodel.updateSubscription(updateSubs)
-                                    navController.popBackStack()
+                                    navController.navigate(BottomBarScreen.Home.route)
                                 } else {
                                     alert.value = "Please fill out the price"
                                 } },

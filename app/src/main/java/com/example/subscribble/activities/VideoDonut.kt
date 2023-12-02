@@ -268,7 +268,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                                             }
                                         }
                                         Text(
-                                            text = PriceFormat(price = subsList.price.toString()),
+                                            text = PriceFormat(price = String.format("%.2f", subsList.price)),
                                             modifier = Modifier
                                                 .fillMaxSize()
                                                 .weight(1f),

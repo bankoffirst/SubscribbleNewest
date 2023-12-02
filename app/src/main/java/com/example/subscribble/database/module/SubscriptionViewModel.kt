@@ -72,6 +72,13 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
         }
     }
 
+    fun deleteUsage(name: String){
+        viewModelScope.launch {
+            repository.deleteUsage(name)
+            _test.emit(repository.getAllTests())
+        }
+    }
+
     fun getCardById(id: Int): CardList?{
         return repository.getCardById(id)
     }
@@ -129,6 +136,10 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
     }
     fun getNameByName(name: String): String {
         return repository.getNameByName(name)
+    }
+
+    fun getUsageByName(name: String): List<UsageList> {
+        return repository.getUsageByName(name)
     }
 
 }

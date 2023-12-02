@@ -76,11 +76,14 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
         val note = subs.note
         var card = subs.cardName
 
+        val getUsage = subViewmodel.getUsageByName(app)
+
         card = if (card == "") {
             "-"
         } else {
             subs.cardName
         }
+
 
         Scaffold(
             topBar = {
@@ -188,6 +191,7 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                             ) {
                                 IconButton(onClick = {
                                     subViewmodel.deleteSubscription(subs)
+                                    subViewmodel.deleteUsage(subs.name)
                                     navController.popBackStack()
                                 })
                                 {
@@ -253,7 +257,6 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                         }
 
                         if(!checkForUsagePermission(context)){
-
                             Text(
                                 text = "Note", fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
@@ -285,7 +288,6 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                 }
                             }
 
-
                         } else {
                             if (subs.type == "video") {
 
@@ -301,7 +303,8 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                 }
 
                                 LazyColumn() {
-                                    items(usage_table.value) { usageList ->
+                                    items(getUsage.takeLast(3)) { usageList ->
+
                                         if (usageList.name == app) {
                                             Row(modifier = Modifier.padding(top = 4.dp)) {
                                                 Text(
@@ -341,7 +344,7 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                 }
 
                                 LazyColumn() {
-                                    items(usage_table.value) { usageList ->
+                                    items(getUsage.takeLast(3)) { usageList ->
                                         if (usageList.name == app) {
                                             Row(modifier = Modifier.padding(top = 4.dp)) {
                                                 Text(

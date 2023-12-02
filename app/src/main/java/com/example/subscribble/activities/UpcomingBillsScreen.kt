@@ -168,7 +168,7 @@ fun UpcomingBillsScreen(navController: NavController, subViewmodel: Subscription
                                 ,contentAlignment = Alignment.CenterEnd
                             ){
                                 
-                                if (daysLeft == "payment due date" || daysLeft.toInt() <= 7){
+                                if (daysLeft == "payment due date" || daysLeft.toInt() <= 3){
                                     Text(text = daysLeft, fontSize = 16.sp, fontWeight = FontWeight.Medium,
                                         color = colorResource(id = R.color.custom_alert)
                                     )

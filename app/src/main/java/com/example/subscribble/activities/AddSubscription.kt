@@ -447,7 +447,6 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                     ); navController.navigate(BottomBarScreen.Home.route)
                                 }
                             }
-//
                         },
                         content = {
                             Icon(

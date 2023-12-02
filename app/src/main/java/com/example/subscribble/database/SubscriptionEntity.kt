@@ -75,7 +75,10 @@ data class UsageList(
     val appprice: Float,
 
     @ColumnInfo(name = "Usage_per_price")
-    val usageprice: String
+    val usageprice: String,
+
+    @ColumnInfo(name = "Usage_per_year")
+    val usageyear: String
 )
 
 

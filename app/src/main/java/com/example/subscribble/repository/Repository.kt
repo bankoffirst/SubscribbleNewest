@@ -96,6 +96,16 @@ class Repository @Inject constructor(
         }
     }
 
+    suspend fun deleteUsage(name: String){
+        withContext(Dispatchers.IO){
+            testDao.delete(name)
+        }
+    }
+
+    fun getUsageByName(name: String): List<UsageList>{
+        return testDao.getUsageByName(name)
+    }
+
     fun getPriceByMusic(name: String): Float {
         return subDao.getPriceByMusic(name)
     }

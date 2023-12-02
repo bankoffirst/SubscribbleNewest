@@ -1,6 +1,8 @@
 package com.example.subscribble.activities
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,11 +35,17 @@ import com.example.subscribble.navbar.NavScreen
 import androidx.navigation.NavController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
+import androidx.compose.ui.graphics.ColorFilter
 
 @Composable
 fun doNut(
@@ -171,18 +179,60 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
-                    Text(
-                        text = "Video Streaming",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
-                    Text(
-                        text = PriceFormat(price = formattedvideoPrice),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Box(
+                            modifier = Modifier
+                                .background(Color(0xFF56bfee), shape = RoundedCornerShape(16.dp) )
+                                .size(50.dp),
+                        ) {
+                            Image(painter = painterResource(id = R.drawable.ic_video),
+                                contentDescription = "video streaming",
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .align(Alignment.Center),
+                                colorFilter = ColorFilter.tint(color = Color.White)
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .width(150.dp)
+                                .padding(start = 10.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                contentAlignment = Alignment.BottomStart,
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Video Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp,
+                                        color = colorResource(id = R.color.custom_text),
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                }
+                            }
+                            Text(
+                                text = PriceFormat(price = formattedvideoPrice),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp
+                            )
+                        }
+                    }
                 }
                 Card(
                     modifier = Modifier
@@ -194,22 +244,63 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                     shape = RoundedCornerShape(20.dp),
                     colors = CardDefaults.cardColors(containerColor = Color.White)
                 ) {
-                    Text(
-                        text = "Music Streaming",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
-                    Text(
-                        text = PriceFormat(price = formattedmusicPrice),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Box(
+                            modifier = Modifier
+                                .background(Color(0xFF0aa6ec), shape = RoundedCornerShape(16.dp) )
+                                .size(50.dp),
+                        ) {
+                            Image(painter = painterResource(id = R.drawable.ic_music),
+                                contentDescription = "music streaming",
+                                modifier = Modifier
+                                    .size(30.dp)
+                                    .clip(RoundedCornerShape(20.dp))
+                                    .align(Alignment.Center),
+                                colorFilter = ColorFilter.tint(color = Color.White)
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .width(150.dp)
+                                .padding(start = 10.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                contentAlignment = Alignment.BottomStart,
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = "Music Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp,
+                                        color = colorResource(id = R.color.custom_text),
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                }
+                            }
+                            Text(
+                                text = PriceFormat(price = formattedmusicPrice),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .weight(1f),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp
+                            )
+                        }
+                    }
                 }
             }
         }
-
     }
 }
 
