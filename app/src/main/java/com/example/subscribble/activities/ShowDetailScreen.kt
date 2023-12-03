@@ -353,7 +353,7 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                                         color = colorResource(id = R.color.custom_text_light)
                                                     )
                                                     Text(
-                                                        text = usageList.usage + "hr",
+                                                        text = usageList.usageprice,
                                                         fontSize = 16.sp,
                                                         color = colorResource(id = R.color.custom_text_light),
                                                         textAlign = TextAlign.Right,

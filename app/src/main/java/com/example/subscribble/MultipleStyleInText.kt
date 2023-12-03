@@ -20,3 +20,17 @@ fun PriceFormat(price: String): AnnotatedString {
 
     return text
 }
+
+@Composable
+fun PriceFormatWeek(price: String): AnnotatedString {
+    val text = buildAnnotatedString {
+        withStyle(SpanStyle(color = colorResource(id = R.color.custom_text))) {
+            append(price)
+        }
+        withStyle(SpanStyle(color = colorResource(id = R.color.custom_text_light))) {
+            append("/week")
+        }
+    }
+
+    return text
+}

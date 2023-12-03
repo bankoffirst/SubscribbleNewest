@@ -59,7 +59,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.subscribble.PriceFormat
+import com.example.subscribble.PriceFormatWeek
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
@@ -429,7 +429,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                                                 val minutes = (totalyou % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
-                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    text = PriceFormatWeek(price ="$totaltime hr"),
                                                     modifier = Modifier
                                                         .fillMaxSize()
                                                         .weight(1f),
@@ -442,7 +442,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                                                 val minutes = (totaldis % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
-                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    text = PriceFormatWeek(price ="$totaltime hr"),
                                                     modifier = Modifier
                                                         .fillMaxSize()
                                                         .weight(1f),
@@ -456,7 +456,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                                                 val minutes = (totalnet % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
-                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    text = PriceFormatWeek(price ="$totaltime hr"),
                                                     modifier = Modifier
                                                         .fillMaxSize()
                                                         .weight(1f),

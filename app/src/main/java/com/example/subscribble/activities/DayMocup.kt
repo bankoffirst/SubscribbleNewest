@@ -56,7 +56,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.subscribble.PriceFormat
+import com.example.subscribble.PriceFormatWeek
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
@@ -332,20 +332,20 @@ fun DayMocup(context: Context,navController: NavController, subViewmodel: Subscr
                                                 val minutes = (599 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
-                                                    text = PriceFormat(price ="$totaltime hr"),
+                                                    text = PriceFormatWeek(price ="$totaltime hr"),
                                                     modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameDis -> {
                                                 val hours = (546 / 60).toInt()
                                                 val minutes = (333 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
-                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                                Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
                                                 val hours = (343 / 60).toInt()
                                                 val minutes = (565 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
-                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                                Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                         }
                                     }

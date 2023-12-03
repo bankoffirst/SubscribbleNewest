@@ -282,9 +282,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                                                 .weight(1f),
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 16.sp
-
                                         )
-
                                     }
                                 }
                             }

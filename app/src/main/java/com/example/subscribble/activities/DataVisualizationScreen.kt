@@ -62,8 +62,8 @@ fun doNut(
     val musicvideoPrice = String.format("%.2f", sumOfValues)
 
     val colors = listOf(
-        Color(0xFF0aa6ec),
-        Color(0xFF56bfee)
+        Color(0xFF56bfee ),
+        Color(0xFF0aa6ec )
     )
     val proportions = values.map {
         it * 100 / sumOfValues
@@ -200,7 +200,7 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                                     if (sumPriceVideo == 0.0f){
                                         Color.LightGray
                                     } else {
-                                        Color(0xFF56bfee)
+                                        Color(0xFF0aa6ec)
                                     }, shape = RoundedCornerShape(16.dp) )
                                 .size(50.dp),
                         ) {
@@ -270,7 +270,7 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                                     if (sumPriceMusic == 0.0f){
                                         Color.LightGray
                                     } else {
-                                        Color(0xFF0aa6ec)
+                                        Color(0xFF56bfee)
                                     }, shape = RoundedCornerShape(16.dp) )
                                 .size(50.dp),
                         ) {

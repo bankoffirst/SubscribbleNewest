@@ -119,7 +119,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             val nameNet = subViewmodel.getNameByName("Netflix")
 
             val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
-            val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.discord")
+            val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
             val netflixDataPoints = getUsageStatsForWeeks(context, "com.spotify.music")
 
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
