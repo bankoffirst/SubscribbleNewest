@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.IconButton
@@ -105,214 +105,214 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
         }
     ) { contentPadding ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
-            Column(modifier = Modifier.fillMaxHeight()) {
+        LazyColumn(){
+            item {
 
-                Card(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(750.dp)
-                        .padding(start = 20.dp, end = 20.dp, top = 0.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                        .fillMaxSize()
+                        .padding(contentPadding)
                 ) {
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            //.padding(start = 20.dp, end = 20.dp)
-                            .shadow(
-                                elevation = 8.dp,
+                        Card(
+                            modifier = Modifier
+                                //.fillMaxWidth()
+                                .height(850.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White)
+                        ) {
+
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    //.padding(start = 20.dp, end = 20.dp)
+                                    .shadow(
+                                        elevation = 8.dp,
+                                        shape = RoundedCornerShape(20.dp),
+                                        spotColor = Color.LightGray
+                                    )
+                                    .height(200.dp),
                                 shape = RoundedCornerShape(20.dp),
-                                spotColor = Color.LightGray
-                            )
-                            .height(200.dp),
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
-                    ) {
+                                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
+                            ) {
 
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 22.dp, start = 26.dp, end = 26.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = textName, //card name
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                color = Color.White
-                            )
-                            Text(
-                                text = "$formattedTotal THB",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp,
-                                color = Color(0xFF0AA6EC),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 4.dp, start = 26.dp, end = 26.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = textDetail, // credit card number
-                                fontWeight = FontWeight.Normal,
-                                fontSize = 16.sp,
-                                color = Color.White
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 22.dp, start = 26.dp, end = 26.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "Video Streaming",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color(0xFF808080)
-                            )
-                            Text(
-                                text = "$formattedvideoPrice THB",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color(0xFF808080),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 26.dp, end = 26.dp)
-                                .weight(1f)
-                        ) {
-                            Text(
-                                text = "Music Streaming",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color(0xFF808080)
-                            )
-                            Text(
-                                text = "$formattedmusicPrice THB",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp,
-                                color = Color(0xFF808080),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                    }
-
-                    Text(
-                        text = "Credit or Debit Name",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 60.dp)
-                    )
-
-                    //textName
-
-                    TextField(
-                        value = textName,
-                        onValueChange = { textName = it.take(10) },
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                            .width(200.dp)
-                            .focusRequester(focusRequester),
-                        placeholder = { Text(text = "Credit or Debit Name") },
-                        shape = RectangleShape,
-                        singleLine = true,
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                        maxLines = 1
-
-                    )
-
-                    Text(
-                        text = "Details",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 50.dp)
-                    )
-
-                    //textDetail
-
-                    TextField(
-                        value = textDetail,
-                        onValueChange = { textDetail = it.take(20) },
-                        modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                            .width(200.dp),
-                        placeholder = { Text(text = "Details of Card") },
-                        shape = RectangleShape,
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                        maxLines = 1,
-                        singleLine = true
-                    )
-
-
-                    Text(
-                            text = alert.value,
-                            color = Color.Red,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 25.dp)
-                    )
-
-
-                        //Icon Add
-
-                    IconButton(
-                            onClick = {
-                                if (textName.isEmpty()) {
-                                    alert.value = "Please Fill Card Name"
-                                    focusRequester.requestFocus()
-                                } else {
-                                    cardViewmodel.insertCard(
-                                        CardList(
-                                            name = textName,
-                                            detail = textDetail,
-                                        )
-                                    ); navController.navigate(BottomBarScreen.Home.route)
-                                }
-                                //println("Card Name : $textName. And Details : $textDetail")
-                            },
-                            content = {
-                                Icon(
-                                    imageVector = Icons.Default.AddCircle,
-                                    contentDescription = "Add icon",
-                                    tint = Color.Black,
+                                Row(
                                     modifier = Modifier
-                                        .size(50.dp)
-                                )
-                            },
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 65.dp)
-                                .clip(CircleShape)
-                                .size(50.dp)
-                    )
+                                        .fillMaxWidth()
+                                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = textName, //card name
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        text = "$formattedTotal THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = Color(0xFF0AA6EC),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 4.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = textDetail, // credit card number
+                                        fontWeight = FontWeight.Normal,
+                                        fontSize = 16.sp,
+                                        color = Color.White
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Video Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080)
+                                    )
+                                    Text(
+                                        text = "$formattedvideoPrice THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Music Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080)
+                                    )
+                                    Text(
+                                        text = "$formattedmusicPrice THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                            }
+
+                            Text(
+                                text = "Credit or Debit Name",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 60.dp)
+                            )
+
+                            //textName
+
+                            TextField(
+                                value = textName,
+                                onValueChange = { textName = it.take(10) },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp)
+                                    .width(200.dp)
+                                    .focusRequester(focusRequester),
+                                placeholder = { Text(text = "Credit or Debit Name") },
+                                shape = RectangleShape,
+                                singleLine = true,
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                maxLines = 1
+
+                            )
+
+                            Text(
+                                text = "Details",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 50.dp)
+                            )
+
+                            //textDetail
+
+                            TextField(
+                                value = textDetail,
+                                onValueChange = { textDetail = it.take(20) },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp)
+                                    .width(200.dp),
+                                placeholder = { Text(text = "Details of Card") },
+                                shape = RectangleShape,
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                maxLines = 1,
+                                singleLine = true
+                            )
 
 
+                            Text(
+                                text = alert.value,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 25.dp)
+                            )
+
+
+                            //Icon Add
+
+                            IconButton(
+                                onClick = {
+                                    if (textName.isEmpty()) {
+                                        alert.value = "Please Fill Card Name"
+                                        focusRequester.requestFocus()
+                                    } else {
+                                        cardViewmodel.insertCard(
+                                            CardList(
+                                                name = textName,
+                                                detail = textDetail,
+                                            )
+                                        ); navController.navigate(BottomBarScreen.Home.route)
+                                    }
+                                    //println("Card Name : $textName. And Details : $textDetail")
+                                },
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Default.AddCircle,
+                                        contentDescription = "Add icon",
+                                        tint = Color.Black,
+                                        modifier = Modifier
+                                            .size(50.dp)
+                                    )
+                                },
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(top = 65.dp)
+                                    .clip(CircleShape)
+                                    .size(50.dp)
+                            )
+                        }
                 }
-
-
             }
         }
-
     }
 }
 

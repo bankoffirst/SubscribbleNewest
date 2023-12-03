@@ -241,6 +241,7 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
                 }
             }
         }
+
     } //Check permission if permission on insert data to usage_table
 
     Scaffold(

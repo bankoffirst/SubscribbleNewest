@@ -36,6 +36,7 @@ import java.util.Calendar
 import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
@@ -53,6 +54,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,8 +65,6 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.NavScreen
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.gestures.detectTapGestures
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DayLine(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
@@ -79,7 +79,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(NavScreen.VideoDonut.route) }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
@@ -132,6 +132,9 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
                     .pointerInput(Unit) {
                         detectTapGestures(
+                            onLongPress = {
+                                navController.navigate(NavScreen.TotalMocup.route)
+                            },
                             onDoubleTap = {
                                 navController.navigate(NavScreen.TotalLine.route)
                             }
@@ -157,7 +160,8 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                             textAlign = TextAlign.Center,
                             text = "No Video Streaming",
                             fontWeight = FontWeight.Bold,
-                            fontSize = 15.sp
+                            fontSize = 15.sp,
+                            color = colorResource(id = R.color.custom_text)
                         )
                     } else {
                         Canvas(
@@ -343,7 +347,8 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                     textAlign = TextAlign.Center,
                     text = "No Video Streaming",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp
+                    fontSize = 15.sp,
+                    color = colorResource(id = R.color.custom_text)
                 )
             } else {
                 LazyColumn(modifier = Modifier
@@ -477,18 +482,15 @@ fun getCurrentDayIndex(): Int {
     val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
     return (currentDay - 1) % 7
 }
-
-@Composable
 fun getUsageStatsForDays(context: Context, packageName: String): List<Float> {
     val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
     val calendar = Calendar.getInstance()
 
     val dataPoints = mutableListOf<Float>()
-
     for (dayIndex in 0 until 7) {
         calendar.timeInMillis = System.currentTimeMillis()
 
-        calendar.add(Calendar.DAY_OF_WEEK, -dayIndex)
+        calendar.add(Calendar.DAY_OF_MONTH, -dayIndex)
 
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)

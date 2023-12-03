@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -147,328 +148,327 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
     ) { contentPadding ->
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding)
-        ) {
-            Column(modifier = Modifier.fillMaxHeight()) {
-
-                Card(
+        LazyColumn(){
+            item {
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        //.height(750.dp)
-                        .padding(start = 20.dp, end = 20.dp, top = 0.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White)
-                ){
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 15.dp, start = 26.dp, end = 15.dp)
-                    ) {
-                        Text(
-                            text = "Select Your Subscription",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 20.sp,
-                            color = Color.Black
-                        )
-
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 15.dp, start = 26.dp, end = 15.dp)
-                    ) {
-                        Box(
+                        .fillMaxSize()
+                        .padding(contentPadding)
+                ) {
+                        Card(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .align(Alignment.Top)
-                        ) {
-                            ExposedDropdownMenuBox(
-                                expanded = expanded,
-                                onExpandedChange = {
-                                    expanded = !expanded
-                                }
+                                //.fillMaxWidth()
+                                .height(850.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White)
+                        ){
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 15.dp, start = 26.dp, end = 15.dp)
                             ) {
-                                OutlinedTextField(
-                                    value = selectedItem,
-                                    onValueChange = {},
-                                    readOnly = true,
-                                    trailingIcon = {
-                                        ExposedDropdownMenuDefaults.TrailingIcon(
-                                            expanded = expanded
+                                Text(
+                                    text = "Select Your Subscription",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 20.sp,
+                                    color = Color.Black
+                                )
+
+                            }
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 15.dp, start = 26.dp, end = 15.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .align(Alignment.Top)
+                                ) {
+                                    ExposedDropdownMenuBox(
+                                        expanded = expanded,
+                                        onExpandedChange = {
+                                            expanded = !expanded
+                                        }
+                                    ) {
+                                        OutlinedTextField(
+                                            value = selectedItem,
+                                            onValueChange = {},
+                                            readOnly = true,
+                                            trailingIcon = {
+                                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                                    expanded = expanded
+                                                )
+                                            },
+                                            modifier = Modifier
+                                                .menuAnchor(),
+                                            textStyle = TextStyle(fontSize = 18.sp)
+                                        )
+
+                                        ExposedDropdownMenu(
+                                            expanded = expanded,
+                                            onDismissRequest = { expanded = false },
+                                            modifier = Modifier.background(color = Color.White)
+                                        ) {
+                                            listItems.forEach { item ->
+                                                DropdownMenuItem(
+                                                    text = { Text(text = item) },
+                                                    onClick = {
+                                                        selectedItem = item
+                                                        expanded = false
+                                                    },
+                                                    modifier = Modifier.background(color = Color.White)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            Text(
+                                text = "Plan",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                            )
+
+                            TextField(
+                                value = textPlan,
+                                onValueChange = { textPlan = it },
+                                modifier = Modifier
+                                    .padding(start = 26.dp)
+                                    .width(170.dp)
+                                    .focusRequester(planfocusRequester),
+                                placeholder = { Text(text = "Subscription Plan")},
+                                shape = RectangleShape,
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                maxLines = 1,
+                                singleLine = true,
+                                textStyle = TextStyle(fontSize = 18.sp)
+                            )
+
+                            Text(
+                                text = "Price",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                            )
+
+                            Row(modifier = Modifier.fillMaxWidth()) {
+                                TextField(
+                                    value = numPrice,
+                                    onValueChange = { numPrice = it },
+                                    modifier = Modifier
+                                        .padding(start = 26.dp)
+                                        .width(170.dp)
+                                        .focusRequester(pricefocusRequester),
+                                    placeholder = { Text(text = "Price per month") },
+                                    shape = RectangleShape,
+                                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                    maxLines = 1,
+                                    singleLine = true,
+                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                    textStyle = TextStyle(fontSize = 18.sp)
+                                )
+                                Text(
+                                    text = "/Month",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(top = 15.dp)
+                                )
+                            }
+
+                            Text(
+                                text = "Membership Start Date",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                            )
+
+                            // button select date
+                            Row(modifier = Modifier.fillMaxWidth()){
+                                OutlinedButton(onClick = { dateToday.show() },
+                                    Modifier
+                                        .padding(start = 26.dp, top = 10.dp)
+                                        .background(Color.White)
+                                        .focusRequester(datefocusRequester)
+
+                                ) {
+                                    if (selectDate.value.isNotEmpty()){
+                                        Text(
+                                            text = "${selectDate.value}",
+                                            fontSize = 18.sp,
+                                            color = Color.Black
+                                        )
+                                    } else {
+                                        Icon(
+                                            imageVector = Icons.Default.DateRange,
+                                            contentDescription = null,
+                                            tint = Color.Black
+                                        )
+
+                                    }
+                                }
+                            }
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ){
+                                Text(
+                                    text = "Payment Method",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 18.sp,
+                                    modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                                )
+
+                                Spacer(modifier = Modifier.width(5.dp))
+
+                                if (cards.value.isNotEmpty()) {
+                                    IconButton(
+                                        onClick = {
+                                            selectedCard = ""
+                                        },
+                                        content = {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_cancel),
+                                                contentDescription = "Close icon",
+                                                tint = Color.Red,
+                                                modifier = Modifier
+                                                    .size(50.dp)
+                                            )
+                                        },
+                                        modifier = Modifier
+                                            //.align(Alignment.CenterHorizontally)
+                                            .padding(top = 15.dp)
+                                            .background(Color.White)
+                                            .clip(CircleShape)
+                                            .size(20.dp)
+                                    )
+                                }
+                            }
+
+                            if (cards.value.isEmpty()) {
+                                IconButton(
+                                    onClick = { navController.navigate(NavScreen.AddPayment.route) },
+                                    content = {
+                                        Icon(
+                                            imageVector = Icons.Default.AddCircle,
+                                            contentDescription = "Add icon",
+                                            tint = Color.Black,
+                                            modifier = Modifier
+                                                .size(35.dp)
                                         )
                                     },
                                     modifier = Modifier
-                                        .menuAnchor(),
-                                    textStyle = TextStyle(fontSize = 18.sp)
+                                        .padding(start = 26.dp, top = 10.dp)
+                                        .clip(CircleShape)
+                                        .size(35.dp)
                                 )
-
-                                ExposedDropdownMenu(
-                                    expanded = expanded,
-                                    onDismissRequest = { expanded = false },
-                                    modifier = Modifier.background(color = Color.White)
-                                ) {
-                                    listItems.forEach { item ->
-                                        DropdownMenuItem(
-                                            text = { Text(text = item) },
-                                            onClick = {
-                                                selectedItem = item
-                                                expanded = false
-                                            },
-                                            modifier = Modifier.background(color = Color.White)
+                            } else {
+                                LazyRow(modifier = Modifier
+                                    .padding(start = 17.dp)
+                                    //.fillMaxWidth()
+                                ){
+                                    items(cards.value){cardsList ->
+                                        CustomRadioButtons(
+                                            text = cardsList.name,
+                                            isSelected = selectedCard == cardsList.name,
+                                            onSelect = { selectedCard = cardsList.name }
                                         )
                                     }
                                 }
                             }
-                        }
-                    }
 
-                    Text(
-                        text = "Plan",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                    )
+                            Text(
+                                text = "Note",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 15.dp)
+                            )
 
-                    TextField(
-                        value = textPlan,
-                        onValueChange = { textPlan = it },
-                        modifier = Modifier
-                            .padding(start = 26.dp)
-                            .width(170.dp)
-                            .focusRequester(planfocusRequester),
-                        placeholder = { Text(text = "Subscription Plan")},
-                        shape = RectangleShape,
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                        maxLines = 1,
-                        singleLine = true,
-                        textStyle = TextStyle(fontSize = 18.sp)
-                    )
+                            OutlinedTextField(
+                                value = textNote,
+                                onValueChange = { textNote = it.take(50) },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp, end = 26.dp)
+                                    .fillMaxWidth(),
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                textStyle = TextStyle(fontSize = 18.sp),
+                                maxLines = 3
 
-                    Text(
-                        text = "Price",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                    )
+                            )
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        TextField(
-                            value = numPrice,
-                            onValueChange = { numPrice = it },
-                            modifier = Modifier
-                                .padding(start = 26.dp)
-                                .width(170.dp)
-                                .focusRequester(pricefocusRequester),
-                            placeholder = { Text(text = "Price per month") },
-                            shape = RectangleShape,
-                            colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                            maxLines = 1,
-                            singleLine = true,
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            textStyle = TextStyle(fontSize = 18.sp)
-                        )
-                        Text(
-                            text = "/Month",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(top = 15.dp)
-                        )
-                    }
+                            Text(
+                                text = alert.value,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 20.dp)
+                            )
 
-                    Text(
-                        text = "Membership Start Date",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                    )
+                            //Icon Add
 
-                    // button select date
-                    Row(modifier = Modifier.fillMaxWidth()){
-                        OutlinedButton(onClick = { dateToday.show() },
-                            Modifier
-                                .padding(start = 26.dp, top = 10.dp)
-                                .background(Color.White)
-                                .focusRequester(datefocusRequester)
-
-                        ) {
-                            if (selectDate.value.isNotEmpty()){
-                                Text(
-                                    text = "${selectDate.value}",
-                                    fontSize = 18.sp,
-                                    color = Color.Black
-                                )
-                            } else {
-                                Icon(
-                                    imageVector = Icons.Default.DateRange,
-                                    contentDescription = null,
-                                    tint = Color.Black
-                                )
-
-                            }
-                        }
-                    }
-
-                    Row (
-                        modifier = Modifier
-                        .fillMaxWidth()
-                    ){
-                        Text(
-                            text = "Payment Method",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(5.dp))
-
-                        if (cards.value.isNotEmpty()) {
                             IconButton(
                                 onClick = {
-                                          selectedCard = ""
+                                    var isAdded = false
+                                    subscriptions.value.forEach { subsList ->
+                                        if (selectedItem == subsList.name) {
+                                            alert.value = "You already add ${subsList.name} on the application."
+                                            isAdded = true
+                                        }
+                                    }
+                                    if (!isAdded) {
+                                        if (textPlan.isEmpty()) {
+                                            alert.value = "Please fill the Plan."
+                                            planfocusRequester.requestFocus()
+                                        } else if (numPrice.isEmpty()){
+                                            alert.value = "Please fill the Price."
+                                            pricefocusRequester.requestFocus()
+                                        } else if (selectDate.value.isEmpty()){
+                                            alert.value = "Please select Date"
+                                            datefocusRequester.requestFocus()
+                                        } else {
+                                            subViewmodel.insertSub(
+                                                SubsList(
+                                                    name = selectedItem,
+                                                    //cardId = cardId,
+                                                    planName = textPlan,
+                                                    price = numPrice.toFloat(),
+                                                    date = selectDate.value,
+                                                    note = textNote,
+                                                    type = classify(selectedItem),
+                                                    cardName = selectedCard
+                                                )
+                                            ); navController.navigate(BottomBarScreen.Home.route)
+                                        }
+                                    }
                                 },
                                 content = {
                                     Icon(
-                                        painter = painterResource(R.drawable.ic_cancel),
-                                        contentDescription = "Close icon",
-                                        tint = Color.Red,
+                                        imageVector = Icons.Default.AddCircle,
+                                        contentDescription = "Add icon",
+                                        tint = Color.Black,
                                         modifier = Modifier
                                             .size(50.dp)
                                     )
                                 },
                                 modifier = Modifier
-                                    //.align(Alignment.CenterHorizontally)
-                                    .padding(top = 15.dp)
-                                    .background(Color.White)
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(top = 30.dp, bottom = 30.dp)
                                     .clip(CircleShape)
-                                    .size(20.dp)
-                            )
-                        }
-                    }
-
-                    if (cards.value.isEmpty()) {
-                        IconButton(
-                            onClick = { navController.navigate(NavScreen.AddPayment.route) },
-                            content = {
-                                Icon(
-                                    imageVector = Icons.Default.AddCircle,
-                                    contentDescription = "Add icon",
-                                    tint = Color.Black,
-                                    modifier = Modifier
-                                        .size(35.dp)
-                                )
-                            },
-                            modifier = Modifier
-                                .padding(start = 26.dp, top = 10.dp)
-                                .clip(CircleShape)
-                                .size(35.dp)
-                        )
-                    } else {
-                        LazyRow(modifier = Modifier
-                            .padding(start = 17.dp)
-                            //.fillMaxWidth()
-                        ){
-                            items(cards.value){cardsList ->
-                                CustomRadioButtons(
-                                    text = cardsList.name,
-                                    isSelected = selectedCard == cardsList.name,
-                                    onSelect = { selectedCard = cardsList.name }
-                                )
-                            }
-                        }
-                    }
-
-                    Text(
-                        text = "Note",
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(start = 26.dp, top = 15.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = textNote,
-                        onValueChange = { textNote = it.take(50) },
-                        modifier = Modifier
-                            .padding(start = 26.dp, top = 10.dp, end = 26.dp)
-                            .fillMaxWidth(),
-                        colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                        textStyle = TextStyle(fontSize = 18.sp),
-                        maxLines = 3
-
-                    )
-
-                    Text(
-                        text = alert.value,
-                        color = Color.Red,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp)
-                    )
-
-                    //Icon Add
-
-                    IconButton(
-                        onClick = {
-                            var isAdded = false
-                            subscriptions.value.forEach { subsList ->
-                                if (selectedItem == subsList.name) {
-                                    alert.value = "You already add ${subsList.name} on the application."
-                                    isAdded = true
-                                }
-                            }
-                            if (!isAdded) {
-                                if (textPlan.isEmpty()) {
-                                    alert.value = "Please fill the Plan."
-                                    planfocusRequester.requestFocus()
-                                } else if (numPrice.isEmpty()){
-                                    alert.value = "Please fill the Price."
-                                    pricefocusRequester.requestFocus()
-                                } else if (selectDate.value.isEmpty()){
-                                    alert.value = "Please select Date"
-                                    datefocusRequester.requestFocus()
-                                } else {
-                                    subViewmodel.insertSub(
-                                        SubsList(
-                                            name = selectedItem,
-                                            //cardId = cardId,
-                                            planName = textPlan,
-                                            price = numPrice.toFloat(),
-                                            date = selectDate.value,
-                                            note = textNote,
-                                            type = classify(selectedItem),
-                                            cardName = selectedCard
-                                        )
-                                    ); navController.navigate(BottomBarScreen.Home.route)
-                                }
-                            }
-                        },
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.AddCircle,
-                                contentDescription = "Add icon",
-                                tint = Color.Black,
-                                modifier = Modifier
                                     .size(50.dp)
                             )
-                        },
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 30.dp, bottom = 30.dp)
-                            .clip(CircleShape)
-                            .size(50.dp)
-                    )
-
+                        }
                 }
             }
         }
     }
-
 }
 
 

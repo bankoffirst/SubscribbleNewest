@@ -53,6 +53,7 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
+import com.example.subscribble.navbar.BottomBarScreen
 
 @Composable
 fun doNut2(
@@ -113,7 +114,8 @@ fun doNut2(
                 }
             }
         }
-        val text = "$sumOfValues/month"
+        val text = "%.2f".format(sumOfValues) + "/month"
+
         Text(
             text = text,
             style = TextStyle(
@@ -141,7 +143,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(BottomBarScreen.Data_visual.route) }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
@@ -274,7 +276,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                                             }
                                         }
                                         Text(
-                                            text = PriceFormat(price = subsList.price.toString()),
+                                            text = PriceFormat(price = String.format("%.2f", subsList.price)),
                                             modifier = Modifier
                                                 .fillMaxSize()
                                                 .weight(1f),

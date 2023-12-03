@@ -67,7 +67,7 @@ import com.example.subscribble.nameYou
 import com.example.subscribble.navbar.NavScreen
 
 @Composable
-fun LineChart(
+fun LineChart1(
     xAxisLabels: List<String>,
     yAxisLabels: List<String>
 ) {
@@ -94,36 +94,47 @@ fun LineChart(
             strokeWidth = 2.dp.toPx()
         )
 
-        val xStep = size.width / 3
-        val yStep = size.height / 15
+
+        val xStep = size.width / 6
+        val yStep = size.height / 12
 
         val line1Path = Path()
         val line2Path = Path()
         val line3Path = Path()
 
-        line1Path.moveTo(0 * xStep, size.height - 4 * yStep)
-        line1Path.lineTo(1 * xStep, size.height - 8 * yStep)
-        line1Path.lineTo(2 * xStep, size.height - 4 * yStep)
-        line1Path.lineTo(3 * xStep, size.height - 5 * yStep)
+        line1Path.moveTo(0 * xStep, size.height - 2 * yStep)
+        line1Path.lineTo(1 * xStep, size.height - 9 * yStep)
+        line1Path.lineTo(2 * xStep, size.height - 2 * yStep)
+        line1Path.lineTo(3 * xStep, size.height - 3 * yStep)
+        line1Path.lineTo(4 * xStep, size.height - 1 * yStep)
+        line1Path.lineTo(5 * xStep, size.height - 3 * yStep)
+        line1Path.lineTo(6 * xStep, size.height - 3 * yStep)
 
-        line2Path.moveTo(0 * xStep, size.height - 8 * yStep)
-        line2Path.lineTo(1 * xStep, size.height - 5 * yStep)
-        line2Path.lineTo(2 * xStep, size.height - 6 * yStep)
-        line2Path.lineTo(3 * xStep, size.height - 8 * yStep)
+        line2Path.moveTo(0 * xStep, size.height - 6 * yStep)
+        line2Path.lineTo(1 * xStep, size.height - 1 * yStep)
+        line2Path.lineTo(2 * xStep, size.height - 3 * yStep)
+        line2Path.lineTo(3 * xStep, size.height - 5 * yStep)
+        line2Path.lineTo(4 * xStep, size.height - 2 * yStep)
+        line2Path.lineTo(5 * xStep, size.height - 5 * yStep)
+        line2Path.lineTo(6 * xStep, size.height - 2 * yStep)
 
         line3Path.moveTo(0 * xStep, size.height - 5 * yStep)
-        line3Path.lineTo(1 * xStep, size.height - 2 * yStep)
-        line3Path.lineTo(2 * xStep, size.height - 9 * yStep)
-        line3Path.lineTo(3 * xStep, size.height - 2 * yStep)
+        line3Path.lineTo(1 * xStep, size.height - 5 * yStep)
+        line3Path.lineTo(2 * xStep, size.height - 7 * yStep)
+        line3Path.lineTo(3 * xStep, size.height - 9 * yStep)
+        line3Path.lineTo(4 * xStep, size.height - 6 * yStep)
+        line3Path.lineTo(5 * xStep, size.height - 1 * yStep)
+        line3Path.lineTo(6 * xStep, size.height - 1 * yStep)
+
 
         for (i in xAxisLabels.indices) {
             drawIntoCanvas { canvas ->
                 val text = xAxisLabels[i]
-                val xPos = (i)  * size.width/ 3
+                val xPos = (i) * size.width / 6
                 paint.textSize = 15f
                 canvas.nativeCanvas.drawText(
                     text,
-                    xPos - (text.length *4),
+                    xPos - (text.length * 5),
                     size.height + 40f,
                     paint
                 )
@@ -136,7 +147,7 @@ fun LineChart(
                 paint.textSize = 14f
                 canvas.nativeCanvas.drawText(
                     text,
-                    0f - 30,
+                    0f - 25,
                     yPos +15,
                     paint
                 )
@@ -165,11 +176,11 @@ fun LineChart(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalMocup(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
-
+fun DayMocup(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
     val videoSub = subViewmodel.getSubscriptionByCategory("video")
+
     Scaffold(
         topBar = {
             Row(
@@ -201,13 +212,12 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Usage per Month",
+                text = "Usage per Week",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
-            val xAxisLabels = listOf("Week1", "Week2", "Week3", "Week4")
-            val yAxisLabels = listOf(" 10", " 20", " 30", " 40", " 50", " 60", " 70", " 80", " 90", "100", "110", "120", "130", "140", "150")
-
+            val xAxisLabels = listOf("Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "Mon")
+            val yAxisLabels = listOf(" 2", " 4", " 6", " 8", "10", "12", "14", "16", "18", "20", "22", "24")
 
             Card(
                 modifier = Modifier
@@ -218,10 +228,10 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navController.navigate(NavScreen.TotalLine.route)
+                                navController.navigate(NavScreen.DayLine.route)
                             },
                             onDoubleTap = {
-                                navController.navigate(NavScreen.DayMocup.route)
+                                navController.navigate(NavScreen.TotalMocup.route)
                             }
                         )
                     },
@@ -237,7 +247,7 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                     horizontalAlignment = Alignment.CenterHorizontally
 
                 ) {
-                    LineChart( xAxisLabels, yAxisLabels)
+                    LineChart1( xAxisLabels, yAxisLabels)
                 }
             }
             if (videoSub == null){
@@ -315,24 +325,25 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                                                 Box(modifier = Modifier.size(10.dp).background(colorSub, shape = CircleShape).align(Alignment.CenterVertically))
                                             }
                                         }
+
                                         when (subsList.name) {
                                             nameYou -> {
                                                 val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val minutes = (599 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
                                                     text = PriceFormat(price ="$totaltime hr"),
                                                     modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameDis -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (546 / 60).toInt()
+                                                val minutes = (333 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (343 / 60).toInt()
+                                                val minutes = (565 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
@@ -347,4 +358,3 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
         }
     }
 }
-

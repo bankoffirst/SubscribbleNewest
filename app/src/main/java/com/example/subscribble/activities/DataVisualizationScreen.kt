@@ -73,7 +73,6 @@ fun doNut(
         360 * it / 100
     }
 
-
     Box(
         modifier = Modifier
             .size(size = size)

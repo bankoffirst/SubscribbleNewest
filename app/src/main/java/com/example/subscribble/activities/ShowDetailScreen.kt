@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -112,286 +111,289 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
             }
         ) { contentPadding ->
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-            ) {
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 26.dp, end = 26.dp, bottom = 90.dp)
-                        .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_list))
-                ) {
-
+            LazyColumn(){
+                item {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 20.dp)
+                            .padding(contentPadding)
                     ) {
 
-                        Row(
+                        Card(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .height(100.dp), verticalAlignment = Alignment.CenterVertically
+                                .height(850.dp)
+                                .padding(start = 26.dp, end = 26.dp, bottom = 90.dp)
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_list))
                         ) {
-
-                            Image(
-                                painter = painterResource(id = getDrawableResource(app)),
-                                contentDescription = "",
-                                modifier = Modifier
-                                    .size(64.dp)
-                                    .clip(RoundedCornerShape(20.dp))
-                            )
 
                             Column(
                                 modifier = Modifier
-                                    .width(150.dp)
-                                    .padding(start = 10.dp),
-                            ) {
-
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .weight(1f), contentAlignment = Alignment.BottomStart
-                                ) {
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = app,
-                                            color = colorResource(id = R.color.custom_text),
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 24.sp,
-                                        )
-
-
-                                        Spacer(modifier = Modifier.width(5.dp))
-                                    }
-                                }
-
-                                Text(
-                                    text = price,
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .weight(1f),
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 20.sp,
-                                )
-
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize(), contentAlignment = Alignment.CenterEnd
-                            ) {
-                                IconButton(onClick = {
-                                    subViewmodel.deleteSubscription(subs)
-                                    subViewmodel.deleteUsage(subs.name)
-                                    navController.popBackStack()
-                                })
-                                {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_delete),
-                                        contentDescription = "delete",
-                                        tint = Color(0xFF333333)
-                                    )
-                                }
-                            }
-
-                        }
-
-                        Row {
-                            Text(
-                                text = "Plan",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = colorResource(id = R.color.custom_text)
-                            )
-                            Text(
-                                text = plan,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = colorResource(id = R.color.custom_text_light),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Row(modifier = Modifier.padding(top = 4.dp)) {
-                            Text(
-                                text = "Membership start date",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = colorResource(id = R.color.custom_text)
-                            )
-                            Text(
-                                text = date,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = colorResource(id = R.color.custom_text_light),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Row(modifier = Modifier.padding(top = 4.dp)) {
-                            Text(
-                                text = "Payment method",
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = colorResource(id = R.color.custom_text)
-                            )
-                            Text(
-                                text = card,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = colorResource(id = R.color.custom_text_light),
-                                textAlign = TextAlign.Right,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        if(!checkForUsagePermission(context)){
-                            Text(
-                                text = "Note", fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = colorResource(id = R.color.custom_text),
-                                modifier = Modifier.padding(top = 22.dp)
-                            )
-
-                            Text(text = note)
-
-                            Row(
-                                modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(bottom = 20.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.Bottom
+                                    .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 20.dp)
                             ) {
-                                IconButton(
-                                    onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .background(Color(0xFF333333))
-                                        .size(46.dp)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_edit),
-                                        contentDescription = "edit", tint = Color.White,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                }
-                            }
-
-                        } else {
-                            if (subs.type == "video") {
 
                                 Row(
-                                    modifier = Modifier.padding(top = 12.dp)
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(100.dp), verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Text(
-                                        text = "Usage",
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 18.sp,
-                                        color = colorResource(id = R.color.custom_text)
+
+                                    Image(
+                                        painter = painterResource(id = getDrawableResource(app)),
+                                        contentDescription = "",
+                                        modifier = Modifier
+                                            .size(64.dp)
+                                            .clip(RoundedCornerShape(20.dp))
                                     )
-                                }
 
-                                LazyColumn() {
-                                    items(getUsage.takeLast(3)) { usageList ->
+                                    Column(
+                                        modifier = Modifier
+                                            .width(150.dp)
+                                            .padding(start = 10.dp),
+                                    ) {
 
-                                        if (usageList.name == app) {
-                                            Row(modifier = Modifier.padding(top = 4.dp)) {
+                                        Box(
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .weight(1f), contentAlignment = Alignment.BottomStart
+                                        ) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                            ) {
                                                 Text(
-                                                    text = usageList.month,
-                                                    fontSize = 16.sp,
-                                                    color = colorResource(id = R.color.custom_text_light)
+                                                    text = app,
+                                                    color = colorResource(id = R.color.custom_text),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 24.sp,
                                                 )
-                                                Text(
-                                                    text = usageList.usage + "hr",
-                                                    fontSize = 16.sp,
-                                                    color = colorResource(id = R.color.custom_text_light),
-                                                    textAlign = TextAlign.Right,
-                                                    modifier = Modifier.fillMaxWidth()
-                                                )
+
+
+                                                Spacer(modifier = Modifier.width(5.dp))
                                             }
                                         }
+
+                                        Text(
+                                            text = price,
+                                            modifier = Modifier
+                                                .fillMaxSize()
+                                                .weight(1f),
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 20.sp,
+                                        )
+
                                     }
+
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize(), contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        IconButton(onClick = {
+                                            subViewmodel.deleteSubscription(subs)
+                                            subViewmodel.deleteUsage(subs.name)
+                                            navController.popBackStack()
+                                        })
+                                        {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_delete),
+                                                contentDescription = "delete",
+                                                tint = Color(0xFF333333)
+                                            )
+                                        }
+                                    }
+
                                 }
 
-                                Row(
-                                    modifier = Modifier.padding(top = 12.dp)
-                                ) {
+                                Row {
                                     Text(
-                                        text = "Price per usage",
+                                        text = "Plan",
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 18.sp,
                                         color = colorResource(id = R.color.custom_text)
                                     )
                                     Text(
-                                        text = "THB/hr",
+                                        text = plan,
                                         fontWeight = FontWeight.Bold,
                                         fontSize = 16.sp,
-                                        color = colorResource(id = R.color.custom_text),
+                                        color = colorResource(id = R.color.custom_text_light),
                                         textAlign = TextAlign.Right,
                                         modifier = Modifier.fillMaxWidth()
                                     )
                                 }
 
-                                LazyColumn() {
-                                    items(getUsage.takeLast(3)) { usageList ->
-                                        if (usageList.name == app) {
-                                            Row(modifier = Modifier.padding(top = 4.dp)) {
-                                                Text(
-                                                    text = usageList.month,
-                                                    fontSize = 16.sp,
-                                                    color = colorResource(id = R.color.custom_text_light)
-                                                )
-                                                Text(
-                                                    text = usageList.usageprice,
-                                                    fontSize = 16.sp,
-                                                    color = colorResource(id = R.color.custom_text_light),
-                                                    textAlign = TextAlign.Right,
-                                                    modifier = Modifier.fillMaxWidth()
-                                                )
+                                Row(modifier = Modifier.padding(top = 4.dp)) {
+                                    Text(
+                                        text = "Membership start date",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text)
+                                    )
+                                    Text(
+                                        text = date,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                        color = colorResource(id = R.color.custom_text_light),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                Row(modifier = Modifier.padding(top = 4.dp)) {
+                                    Text(
+                                        text = "Payment method",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text)
+                                    )
+                                    Text(
+                                        text = card,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                        color = colorResource(id = R.color.custom_text_light),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                if(!checkForUsagePermission(context)){
+                                    Text(
+                                        text = "Note", fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text),
+                                        modifier = Modifier.padding(top = 22.dp)
+                                    )
+
+                                    Text(text = note)
+
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(bottom = 20.dp),
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.Bottom
+                                    ) {
+                                        IconButton(
+                                            onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
+                                            modifier = Modifier
+                                                .clip(CircleShape)
+                                                .background(Color(0xFF333333))
+                                                .size(46.dp)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_edit),
+                                                contentDescription = "edit", tint = Color.White,
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
+                                    }
+
+                                } else {
+                                    if (subs.type == "video") {
+
+                                        Row(
+                                            modifier = Modifier.padding(top = 12.dp)
+                                        ) {
+                                            Text(
+                                                text = "Usage",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 18.sp,
+                                                color = colorResource(id = R.color.custom_text)
+                                            )
+                                        }
+
+
+                                        val usageTakelast = getUsage.takeLast(3)
+
+                                        for (usageList in usageTakelast){
+                                            if (usageList.name == app) {
+                                                Row(modifier = Modifier.padding(top = 4.dp)) {
+                                                    Text(
+                                                        text = usageList.month,
+                                                        fontSize = 16.sp,
+                                                        color = colorResource(id = R.color.custom_text_light)
+                                                    )
+                                                    Text(
+                                                        text = usageList.usage + "hr",
+                                                        fontSize = 16.sp,
+                                                        color = colorResource(id = R.color.custom_text_light),
+                                                        textAlign = TextAlign.Right,
+                                                        modifier = Modifier.fillMaxWidth()
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.padding(top = 12.dp)
+                                        ) {
+                                            Text(
+                                                text = "Price per usage",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 18.sp,
+                                                color = colorResource(id = R.color.custom_text)
+                                            )
+                                            Text(
+                                                text = "THB/hr",
+                                                fontWeight = FontWeight.Bold,
+                                                fontSize = 16.sp,
+                                                color = colorResource(id = R.color.custom_text),
+                                                textAlign = TextAlign.Right,
+                                                modifier = Modifier.fillMaxWidth()
+                                            )
+                                        }
+
+                                        for (usageList in usageTakelast){
+                                            if (usageList.name == app) {
+                                                Row(modifier = Modifier.padding(top = 4.dp)) {
+                                                    Text(
+                                                        text = usageList.month,
+                                                        fontSize = 16.sp,
+                                                        color = colorResource(id = R.color.custom_text_light)
+                                                    )
+                                                    Text(
+                                                        text = usageList.usage + "hr",
+                                                        fontSize = 16.sp,
+                                                        color = colorResource(id = R.color.custom_text_light),
+                                                        textAlign = TextAlign.Right,
+                                                        modifier = Modifier.fillMaxWidth()
+                                                    )
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            }
-                            Text(
-                                text = "Note", fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp,
-                                color = colorResource(id = R.color.custom_text),
-                                modifier = Modifier.padding(top = 22.dp)
-                            )
-
-                            Text(text = note)
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(bottom = 20.dp),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.Bottom
-                            ) {
-                                IconButton(
-                                    onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
-                                    modifier = Modifier
-                                        .clip(CircleShape)
-                                        .background(Color(0xFF333333))
-                                        .size(46.dp)
-                                ) {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_edit),
-                                        contentDescription = "edit", tint = Color.White,
-                                        modifier = Modifier.size(24.dp)
+                                    Text(
+                                        text = "Note", fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                        color = colorResource(id = R.color.custom_text),
+                                        modifier = Modifier.padding(top = 22.dp)
                                     )
+
+                                    Text(text = note,
+                                        modifier = Modifier.padding())
+
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(bottom = 20.dp),
+                                        horizontalArrangement = Arrangement.Center,
+                                        verticalAlignment = Alignment.Bottom
+                                    ) {
+                                        IconButton(
+                                            onClick = { navController.navigate(NavScreen.EditScreen.route + "/${subs.id}") },
+                                            modifier = Modifier
+                                                .clip(CircleShape)
+                                                .background(Color(0xFF333333))
+                                                .size(46.dp)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_edit),
+                                                contentDescription = "edit", tint = Color.White,
+                                                modifier = Modifier.size(24.dp)
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }

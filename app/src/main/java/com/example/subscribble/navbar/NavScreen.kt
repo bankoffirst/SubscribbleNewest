@@ -42,4 +42,8 @@ sealed class NavScreen(
     object DayLine : NavScreen(
         route = "DayLine"
     )
+
+    object DayMocup : NavScreen(
+        route = "DayMocup"
+    )
 }

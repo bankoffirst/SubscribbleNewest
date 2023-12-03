@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -54,6 +56,7 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
+import com.example.subscribble.navbar.BottomBarScreen
 
 @Composable
 fun doNut1(
@@ -114,7 +117,7 @@ fun doNut1(
                 }
             }
         }
-        val text = "$sumOfValues/month"
+        val text = "%.2f".format(sumOfValues) + "/month"
 
         Text(
             text = text,
@@ -144,7 +147,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(BottomBarScreen.Data_visual.route) }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
@@ -179,7 +182,16 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     .padding(top = 20.dp, start = 30.dp, end = 30.dp)
                     .height(250.dp)
                     .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp))
-                    .clickable { navController.navigate(NavScreen.TotalLine.route) },
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onLongPress = {
+                                navController.navigate(NavScreen.TotalMocup.route)
+                            },
+                            onDoubleTap = {
+                                navController.navigate(NavScreen.TotalLine.route)
+                            }
+                        )
+                    },
                 shape = RoundedCornerShape(20.dp),
                 colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {

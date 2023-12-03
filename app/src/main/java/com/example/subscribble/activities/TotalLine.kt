@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 
 import android.content.Context
 import android.app.AppOpsManager
+import android.app.usage.UsageStatsManager
 import android.provider.Settings
 import android.content.Intent
 
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import android.graphics.Paint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 
@@ -56,6 +58,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,8 +69,8 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.foundation.gestures.detectTapGestures
+import java.util.Calendar
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TotalLine(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
@@ -76,15 +79,13 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
 
     val videoSub = subViewmodel.getSubscriptionByCategory("video")
 
-
-
     Scaffold(
         topBar = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(start = 26.dp, top = 22.dp, bottom = 22.dp)
-                    .clickable { navController.popBackStack() }
+                    .clickable { navController.navigate(NavScreen.VideoDonut.route) }
             ) {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowLeft,
@@ -95,8 +96,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                 Text(
                     text = "Video Streaming",
                     fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp,
-                    color = colorResource(id = R.color.custom_text)
+                    fontSize = 24.sp
                 )
             }
         }
@@ -109,7 +109,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "Usage per Month",
+                text = " Usage per Month",
                 fontWeight = FontWeight.Bold,
                 fontSize = 15.sp
             )
@@ -119,8 +119,8 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             val nameNet = subViewmodel.getNameByName("Netflix")
 
             val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
-            val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
-            val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
+            val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.discord")
+            val netflixDataPoints = getUsageStatsForWeeks(context, "com.spotify.music")
 
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
@@ -185,7 +185,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                     bottom = 20.dp
                                 )
                         ) {
-
+                            val timeSize = 15f
                             val paint = Paint()
                             paint.color = android.graphics.Color.BLACK
                             val minValue = minOf(
@@ -243,7 +243,9 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                     xAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                                 val hours = (value / 60).toInt()
                                                 val minutes = (value % 60).toInt()
@@ -274,7 +276,9 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                     xAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                                 val hours = (value / 60).toInt()
                                                 val minutes = (value % 60).toInt()
@@ -304,7 +308,9 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                     xAxisLabels.getOrNull(index) ?: "",
                                                     x,
                                                     size.height + 40,
-                                                    paint
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
                                                 )
                                                 val hours = (value / 60).toInt()
                                                 val minutes = (value % 60).toInt()
@@ -441,7 +447,6 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
     }
 }
 
-
 fun checkForUsagePermission(context: Context): Boolean {
     val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
     val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(), context.packageName)
@@ -467,4 +472,47 @@ private fun showPermissionDialog(context: Context) {
         .setNegativeButton("Cancel") { dialog, which ->
         }
         .show()
+}
+fun getUsageStatsForWeeks(context: Context, packageName: String): List<Float> {
+    val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    val calendar = Calendar.getInstance()
+    val dataPoints = mutableListOf<Float>()
+
+    val currentMonth = calendar.get(Calendar.MONTH)
+    val maxDayOfMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+
+    for (weekIndex in 0 until 4) {
+        calendar.set(Calendar.MONTH, currentMonth)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        val startDay = weekIndex * 7 + 1
+        calendar.set(Calendar.DAY_OF_MONTH, startDay.coerceAtMost(maxDayOfMonth))
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startTime = calendar.timeInMillis
+
+        val endDay = if (weekIndex == 3) maxDayOfMonth else (weekIndex + 1) * 7
+        calendar.set(Calendar.DAY_OF_MONTH, endDay.coerceAtMost(maxDayOfMonth))
+        calendar.set(Calendar.HOUR_OF_DAY, 23)
+        calendar.set(Calendar.MINUTE, 59)
+        calendar.set(Calendar.SECOND, 59)
+        calendar.set(Calendar.MILLISECOND, 999)
+        val endTime = calendar.timeInMillis
+
+        val appUsageData = usageStatsManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_DAILY,
+            startTime,
+            endTime
+        )
+        var weeklyUsage = 0f
+        for (usageStats in appUsageData) {
+            if (usageStats.packageName == packageName) {
+                weeklyUsage += usageStats.totalTimeInForeground / (1000 * 60).toFloat()
+            }
+        }
+        dataPoints.add(weeklyUsage)
+    }
+
+    return dataPoints
 }
