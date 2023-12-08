@@ -92,7 +92,6 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
             subs.cardName
         }
 
-
         Scaffold(
             topBar = {
                 Row(
@@ -341,9 +340,7 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
 
                                 } else {
 
-                                    val usage_name = subViewmodel.getUsageByName(subs.name)
-
-                                    if (subs.type == "video" && usage_name.isNotEmpty()) {
+                                    if (subs.type == "video") {
 
                                         Row(
                                             modifier = Modifier.padding(top = 12.dp)

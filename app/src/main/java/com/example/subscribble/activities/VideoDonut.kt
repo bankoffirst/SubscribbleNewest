@@ -187,7 +187,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navController.navigate(NavScreen.TotalMocup.route)
+                                //navController.navigate(NavScreen.TotalMocup.route)
                             },
                             onDoubleTap = {
                                 navController.navigate(NavScreen.TotalLine.route)
