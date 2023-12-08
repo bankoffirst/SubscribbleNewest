@@ -7,14 +7,13 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [CardList::class,SubsList::class,UsageList::class],
-    version = 3,
+    version = 1,
     exportSchema = false
 )
 abstract class SubscriptionDatabase:RoomDatabase() {
 
     abstract fun cardDao():CardDao
     abstract fun subDao():SubDao
-
     abstract fun usageDao():UsageDao
 
     companion object{

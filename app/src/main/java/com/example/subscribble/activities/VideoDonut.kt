@@ -188,10 +188,11 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                         detectTapGestures(
                             onLongPress = {
                                 //navController.navigate(NavScreen.TotalMocup.route)
-                            },
-                            onDoubleTap = {
                                 navController.navigate(NavScreen.TotalLine.route)
-                            }
+                            },
+//                            onDoubleTap = {
+//                                navController.navigate(NavScreen.DayLine.route)
+//                            }
                         )
                     },
                 shape = RoundedCornerShape(20.dp),
