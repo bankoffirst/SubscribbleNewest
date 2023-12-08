@@ -111,11 +111,13 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
             val nameYou = subViewmodel.getNameByName("Youtube")
             val nameDis = subViewmodel.getNameByName("DisneyPlus")
             val nameNet = subViewmodel.getNameByName("Netflix")
+            val namePrime = subViewmodel.getNameByName("PrimeVideo")
 
 
             val youtubeDataPoints = getUsageStatsForDays(context, "com.google.android.youtube")
             val disneyplusDataPoints = getUsageStatsForDays(context, "com.disney.disneyplus")
             val netflixDataPoints = getUsageStatsForDays(context, "com.netflix.mediaclient")
+            val primevideoDataPoints = getUsageStatsForDays(context, "com.amazon.avod.thirdpartyclient")
 
             val xAxisLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             val yAxisLabels = listOf(" 2", " 4", " 6", " 8", " 10", "12", "14", "16", "18", "20", "22", "24")
@@ -188,6 +190,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                             val youtubePath = Path()
                             val disneyplusPath = Path()
                             val netflixDataPath = Path()
+                            val primevideoDataPath = Path()
 
                             drawLine(
                                 color = Color.Black,
@@ -205,6 +208,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                             youtubePath.moveTo(0f, size.height - (youtubeDataPoints[0] - minValue) * yStep)
                             disneyplusPath.moveTo(0f, size.height - (disneyplusDataPoints[0] - minValue) * yStep)
                             netflixDataPath.moveTo(0f, size.height - (netflixDataPoints[0] - minValue) * yStep)
+                            primevideoDataPath.moveTo(0f, size.height - (primevideoDataPoints[0] - minValue) * yStep)
 
                             for (i in yAxisLabels.indices) {
                                 drawIntoCanvas { canvas ->
@@ -325,6 +329,43 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                                             drawPath(
                                                 path = netflixDataPath,
                                                 getApplicationColor("Netflix"),
+                                                style = Stroke(
+                                                    width = 1.dp.toPx(),
+                                                    cap = StrokeCap.Round
+                                                )
+                                            )
+                                        }
+                                        namePrime -> {
+                                            primevideoDataPoints.forEachIndexed { index, value ->
+                                                val x = index * xStep
+                                                val y = size.height - (value - minValue) * yStep
+                                                val timeSize = 15f
+                                                primevideoDataPath.lineTo(x, y)
+
+                                                drawContext.canvas.nativeCanvas.drawText(
+                                                    reorderedXAxisLabels.getOrNull(index) ?: "",
+                                                    x,
+                                                    size.height + 40,
+
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
+                                                )
+
+                                                val hours = (value / 60).toInt()
+                                                val minutes = (value / 60).toInt()
+                                                drawContext.canvas.nativeCanvas.drawText(
+                                                    "%02d:%02d".format(hours, minutes),
+                                                    x,
+                                                    y - 10.dp.toPx(),
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
+                                                )
+                                            }
+                                            drawPath(
+                                                path = primevideoDataPath,
+                                                getApplicationColor("PrimeVideo"),
                                                 style = Stroke(
                                                     width = 1.dp.toPx(),
                                                     cap = StrokeCap.Round
@@ -452,6 +493,19 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
 
                                             }
                                             nameNet -> {
+                                                val hours = (totalnet / 60).toInt()
+                                                val minutes = (totalnet % 60).toInt()
+                                                val totaltime = "%02d.%02d".format(hours, minutes)
+                                                Text(
+                                                    text = PriceFormatWeek(price ="$totaltime hr"),
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .weight(1f),
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 16.sp
+                                                )
+                                            }
+                                            namePrime -> {
                                                 val hours = (totalnet / 60).toInt()
                                                 val minutes = (totalnet % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)

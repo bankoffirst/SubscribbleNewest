@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -60,16 +61,22 @@ fun BottomBar(navController: NavController)
     val currentDestination = navStackBackStackEntry?.destination
 
     val iconSizes = mapOf(
-        BottomBarScreen.Data_visual to 26.dp,
-        BottomBarScreen.Bills to 25.dp
+        BottomBarScreen.Data_visual to 32.dp,
+        BottomBarScreen.Bills to 32.dp
     )
 
     Row(
         modifier = Modifier
-            .padding(top = 8.dp)
+            //.padding(8.dp)
             .fillMaxWidth()
-            .height(46.dp)
+            .height(47.dp)
+            //.background(Color.Yellow)
             .background(color = colorResource(id = R.color.default_screen))
+            .shadow(
+                elevation = 0.9.dp,
+                clip = false
+            ),
+        horizontalArrangement = Arrangement.Center
             //.background(Color.Red)
     ) {
         screens.forEach {screen ->
@@ -78,6 +85,7 @@ fun BottomBar(navController: NavController)
             }
         }
     }
+
 }
 
 @Composable
@@ -88,15 +96,16 @@ fun RowScope.AddItem(
     iconSizes: Map<BottomBarScreen, Dp>
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-    val iconSize = iconSizes[screen] ?: 40.dp // default icon 40
+    val iconSize = iconSizes[screen] ?: 35.dp // default icon 40
 
     Row(
         modifier = Modifier
-            .padding(8.dp)
+            //.padding(6.dp)
             .weight(1f)
             //.background(Color.Blue)
+            .background(Color.Transparent)
             .align(Alignment.CenterVertically)
-            .clickable {
+            .clickable (){
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
@@ -104,7 +113,6 @@ fun RowScope.AddItem(
                     launchSingleTop = true
                 }
             },
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Icon(
@@ -112,7 +120,11 @@ fun RowScope.AddItem(
             contentDescription = screen.title,
             tint = if (selected) Color(0xFF0AA6EC) else Color(0xFFD808080),
             modifier = Modifier.size(iconSize)
+                .fillMaxWidth()
+                .align(Alignment.CenterVertically)
+                .padding(top = 5.dp)
         )
     }
 
 }
+

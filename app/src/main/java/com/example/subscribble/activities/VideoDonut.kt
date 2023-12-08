@@ -67,16 +67,18 @@ fun doNut1(
     val priceNet = subViewmodel.getPriceByMusic("Netflix")
     val priceYou = subViewmodel.getPriceByMusic("Youtube")
     val priceDis = subViewmodel.getPriceByMusic("DisneyPlus")
+    val pricePrime = subViewmodel.getPriceByMusic("PrimeVideo")
 
     val videoSub = subViewmodel.getSubscriptionByCategory("video")
 
-    val values = mutableListOf(priceNet, priceYou, priceDis)
+    val values = mutableListOf(priceNet, priceYou, priceDis, pricePrime)
 
     val sumOfValues = values.sum()
     val colors = listOf(
         getApplicationColor("Netflix"),
         getApplicationColor("Youtube"),
-        getApplicationColor("DisneyPlus")
+        getApplicationColor("DisneyPlus"),
+        getApplicationColor("PrimeVideo")
     )
 
     val proportions = values.map {

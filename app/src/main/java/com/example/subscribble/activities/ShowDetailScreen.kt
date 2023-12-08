@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +46,12 @@ import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.NavScreen
+import androidx.compose.material.AlertDialog
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,6 +62,8 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
     val usage_table = subViewmodel.tests.collectAsState(initial = emptyList())
     val subscription = subViewmodel.getSubscriptionById(subsId)
     val cards = subViewmodel.cards.collectAsState(initial = emptyList())
+
+    var showDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(key1 = subViewmodel) {
         subViewmodel.loadSubs()
@@ -131,7 +140,12 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(start = 22.dp, end = 22.dp, top = 10.dp, bottom = 20.dp)
+                                    .padding(
+                                        start = 22.dp,
+                                        end = 22.dp,
+                                        top = 10.dp,
+                                        bottom = 20.dp
+                                    )
                             ) {
 
                                 Row(
@@ -191,17 +205,53 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                             .fillMaxSize(), contentAlignment = Alignment.CenterEnd
                                     ) {
                                         IconButton(onClick = {
-                                            subViewmodel.deleteSubscription(subs)
-                                            subViewmodel.deleteUsage(subs.name)
-                                            navController.popBackStack()
-                                        })
-                                        {
+                                            showDialog = true
+                                            }
+                                        ) {
                                             Icon(
                                                 painter = painterResource(id = R.drawable.ic_delete),
                                                 contentDescription = "delete",
                                                 tint = Color(0xFF333333)
                                             )
                                         }
+
+                                        if (showDialog) {
+                                            AlertDialog(
+                                                onDismissRequest = {
+                                                    showDialog = false
+                                                },
+                                                title = {
+                                                    Text(text = "Delete Subscription")
+                                                },
+                                                text = {
+                                                    Text(text = "Are you sure you want to delete?")
+                                                },
+                                                confirmButton = {
+                                                    Button(
+                                                        onClick = {
+                                                            subViewmodel.deleteSubscription(subs)
+                                                            subViewmodel.deleteUsage(subs.name)
+                                                            navController.popBackStack()
+                                                            showDialog = false
+                                                        },
+                                                        colors = buttonColors(containerColor = Color.Red)
+                                                    ) {
+                                                        Text(text = "Confirm")
+                                                    }
+                                                },
+                                                dismissButton = {
+                                                    Button(
+                                                        onClick = {
+                                                            showDialog = false
+                                                        },
+                                                        colors = buttonColors(containerColor = colorResource(id = R.color.custom_text_light)),
+                                                    ) {
+                                                        Text(text = "Cancel")
+                                                    }
+                                                }
+                                            )
+                                        }
+
                                     }
 
                                 }
@@ -290,7 +340,10 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                     }
 
                                 } else {
-                                    if (subs.type == "video") {
+
+                                    val usage_name = subViewmodel.getUsageByName(subs.name)
+
+                                    if (subs.type == "video" && usage_name.isNotEmpty()) {
 
                                         Row(
                                             modifier = Modifier.padding(top = 12.dp)
@@ -302,7 +355,6 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
                                                 color = colorResource(id = R.color.custom_text)
                                             )
                                         }
-
 
                                         val usageTakelast = getUsage.takeLast(3)
 

@@ -63,6 +63,7 @@ import com.example.subscribble.getApplicationColor
 import com.example.subscribble.getDrawableResource
 import com.example.subscribble.nameDis
 import com.example.subscribble.nameNet
+import com.example.subscribble.namePrime
 import com.example.subscribble.nameYou
 import com.example.subscribble.navbar.NavScreen
 
@@ -101,6 +102,7 @@ fun LineChart1(
         val line1Path = Path()
         val line2Path = Path()
         val line3Path = Path()
+        val line4Path = Path()
 
         line1Path.moveTo(0 * xStep, size.height - 2 * yStep)
         line1Path.lineTo(1 * xStep, size.height - 9 * yStep)
@@ -125,6 +127,14 @@ fun LineChart1(
         line3Path.lineTo(4 * xStep, size.height - 6 * yStep)
         line3Path.lineTo(5 * xStep, size.height - 1 * yStep)
         line3Path.lineTo(6 * xStep, size.height - 1 * yStep)
+
+        line4Path.moveTo(0 * xStep, size.height - 1 * yStep)
+        line4Path.lineTo(1 * xStep, size.height - 2 * yStep)
+        line4Path.lineTo(2 * xStep, size.height - 1 * yStep)
+        line4Path.lineTo(3 * xStep, size.height - 1 * yStep)
+        line4Path.lineTo(4 * xStep, size.height - 4 * yStep)
+        line4Path.lineTo(5 * xStep, size.height - 2 * yStep)
+        line4Path.lineTo(6 * xStep, size.height - 6 * yStep)
 
 
         for (i in xAxisLabels.indices) {
@@ -168,6 +178,12 @@ fun LineChart1(
         drawPath(
             path = line3Path,
             getApplicationColor("DisneyPlus"),
+            style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
+        )
+
+        drawPath(
+            path = line4Path,
+            getApplicationColor("PrimeVideo"),
             style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
         )
     }
@@ -342,6 +358,12 @@ fun DayMocup(context: Context,navController: NavController, subViewmodel: Subscr
                                                 Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
+                                                val hours = (343 / 60).toInt()
+                                                val minutes = (565 % 60).toInt()
+                                                val totaltime = "%02d.%02d".format(hours, minutes)
+                                                Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                            }
+                                            namePrime -> {
                                                 val hours = (343 / 60).toInt()
                                                 val minutes = (565 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)

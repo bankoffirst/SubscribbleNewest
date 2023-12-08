@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.icu.util.Calendar
 import android.widget.DatePicker
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -71,6 +72,7 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
 
+import androidx.compose.runtime.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +86,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
         subViewmodel.loadCards()
     }
 
-    val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleMusic")
+    val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleMusic","PrimeVideo","Tidal","JooxMusic","SoundCloud")
 
     val planfocusRequester = remember { FocusRequester() }
     val pricefocusRequester = remember { FocusRequester() }
@@ -145,7 +147,6 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
             }
         }
 
-
     ) { contentPadding ->
 
         LazyColumn(){
@@ -158,7 +159,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         Card(
                             modifier = Modifier
                                 //.fillMaxWidth()
-                                .height(850.dp)
+                                .height(900.dp)
                                 .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                             shape = RoundedCornerShape(20.dp),
@@ -329,26 +330,48 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 Spacer(modifier = Modifier.width(5.dp))
 
                                 if (cards.value.isNotEmpty()) {
-                                    IconButton(
-                                        onClick = {
-                                            selectedCard = ""
-                                        },
-                                        content = {
-                                            Icon(
-                                                painter = painterResource(R.drawable.ic_cancel),
-                                                contentDescription = "Close icon",
-                                                tint = Color.Red,
-                                                modifier = Modifier
-                                                    .size(50.dp)
-                                            )
-                                        },
-                                        modifier = Modifier
-                                            //.align(Alignment.CenterHorizontally)
-                                            .padding(top = 15.dp)
-                                            .background(Color.White)
-                                            .clip(CircleShape)
-                                            .size(20.dp)
-                                    )
+                                    if (selectedCard != ""){
+                                        IconButton(
+                                            onClick = {
+                                                selectedCard = ""
+                                            },
+                                            content = {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.ic_cancel),
+                                                    contentDescription = "Close icon",
+                                                    tint = colorResource(id = R.color.custom_text_light),
+                                                    modifier = Modifier
+                                                        .size(50.dp)
+                                                )
+                                            },
+                                            modifier = Modifier
+                                                //.align(Alignment.CenterHorizontally)
+                                                .padding(top = 15.dp)
+                                                .background(Color.White)
+                                                .clip(CircleShape)
+                                                .size(20.dp)
+                                        )
+                                    }
+//                                    IconButton(
+//                                        onClick = {
+//                                            selectedCard = ""
+//                                        },
+//                                        content = {
+//                                            Icon(
+//                                                painter = painterResource(R.drawable.ic_cancel),
+//                                                contentDescription = "Close icon",
+//                                                tint = Color.Red,
+//                                                modifier = Modifier
+//                                                    .size(50.dp)
+//                                            )
+//                                        },
+//                                        modifier = Modifier
+//                                            //.align(Alignment.CenterHorizontally)
+//                                            .padding(top = 15.dp)
+//                                            .background(Color.White)
+//                                            .clip(CircleShape)
+//                                            .size(20.dp)
+//                                    )
                                 }
                             }
 
@@ -414,56 +437,111 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
                             //Icon Add
 
-                            IconButton(
-                                onClick = {
-                                    var isAdded = false
-                                    subscriptions.value.forEach { subsList ->
-                                        if (selectedItem == subsList.name) {
-                                            alert.value = "You already add ${subsList.name} on the application."
-                                            isAdded = true
+                            Row(modifier = Modifier.fillMaxSize(),
+                                verticalAlignment = Alignment.Bottom,
+                                horizontalArrangement = Arrangement.Center){
+                                IconButton(
+                                    onClick = {
+                                        var isAdded = false
+                                        subscriptions.value.forEach { subsList ->
+                                            if (selectedItem == subsList.name) {
+                                                alert.value = "You already add ${subsList.name} on the application."
+                                                isAdded = true
+                                            }
                                         }
-                                    }
-                                    if (!isAdded) {
-                                        if (textPlan.isEmpty()) {
-                                            alert.value = "Please fill the Plan."
-                                            planfocusRequester.requestFocus()
-                                        } else if (numPrice.isEmpty()){
-                                            alert.value = "Please fill the Price."
-                                            pricefocusRequester.requestFocus()
-                                        } else if (selectDate.value.isEmpty()){
-                                            alert.value = "Please select Date"
-                                            datefocusRequester.requestFocus()
-                                        } else {
-                                            subViewmodel.insertSub(
-                                                SubsList(
-                                                    name = selectedItem,
-                                                    //cardId = cardId,
-                                                    planName = textPlan,
-                                                    price = numPrice.toFloat(),
-                                                    date = selectDate.value,
-                                                    note = textNote,
-                                                    type = classify(selectedItem),
-                                                    cardName = selectedCard
-                                                )
-                                            ); navController.navigate(BottomBarScreen.Home.route)
+                                        if (!isAdded) {
+                                            if (textPlan.isEmpty()) {
+                                                alert.value = "Please fill the Plan."
+                                                planfocusRequester.requestFocus()
+                                            } else if (numPrice.isEmpty()){
+                                                alert.value = "Please fill the Price."
+                                                pricefocusRequester.requestFocus()
+                                            } else if (selectDate.value.isEmpty()){
+                                                alert.value = "Please select Date"
+                                                datefocusRequester.requestFocus()
+                                            } else {
+                                                subViewmodel.insertSub(
+                                                    SubsList(
+                                                        name = selectedItem,
+                                                        //cardId = cardId,
+                                                        planName = textPlan,
+                                                        price = numPrice.toFloat(),
+                                                        date = selectDate.value,
+                                                        note = textNote,
+                                                        type = classify(selectedItem),
+                                                        cardName = selectedCard
+                                                    )
+                                                ); navController.navigate(BottomBarScreen.Home.route)
+                                            }
                                         }
-                                    }
-                                },
-                                content = {
-                                    Icon(
-                                        imageVector = Icons.Default.AddCircle,
-                                        contentDescription = "Add icon",
-                                        tint = Color.Black,
-                                        modifier = Modifier
-                                            .size(50.dp)
-                                    )
-                                },
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(top = 30.dp, bottom = 30.dp)
-                                    .clip(CircleShape)
-                                    .size(50.dp)
-                            )
+                                    },
+                                    content = {
+                                        Icon(
+                                            imageVector = Icons.Default.AddCircle,
+                                            contentDescription = "Add icon",
+                                            tint = Color.Black,
+                                            modifier = Modifier
+                                                .size(50.dp)
+                                        )
+                                    },
+                                    modifier = Modifier
+                                        //.align(Alignment.CenterHorizontally)
+                                        .padding(top = 20.dp, bottom = 30.dp)
+                                        .clip(CircleShape)
+                                        .size(50.dp)
+                                )
+                            }
+
+//                            IconButton(
+//                                onClick = {
+//                                    var isAdded = false
+//                                    subscriptions.value.forEach { subsList ->
+//                                        if (selectedItem == subsList.name) {
+//                                            alert.value = "You already add ${subsList.name} on the application."
+//                                            isAdded = true
+//                                        }
+//                                    }
+//                                    if (!isAdded) {
+//                                        if (textPlan.isEmpty()) {
+//                                            alert.value = "Please fill the Plan."
+//                                            planfocusRequester.requestFocus()
+//                                        } else if (numPrice.isEmpty()){
+//                                            alert.value = "Please fill the Price."
+//                                            pricefocusRequester.requestFocus()
+//                                        } else if (selectDate.value.isEmpty()){
+//                                            alert.value = "Please select Date"
+//                                            datefocusRequester.requestFocus()
+//                                        } else {
+//                                            subViewmodel.insertSub(
+//                                                SubsList(
+//                                                    name = selectedItem,
+//                                                    //cardId = cardId,
+//                                                    planName = textPlan,
+//                                                    price = numPrice.toFloat(),
+//                                                    date = selectDate.value,
+//                                                    note = textNote,
+//                                                    type = classify(selectedItem),
+//                                                    cardName = selectedCard
+//                                                )
+//                                            ); navController.navigate(BottomBarScreen.Home.route)
+//                                        }
+//                                    }
+//                                },
+//                                content = {
+//                                    Icon(
+//                                        imageVector = Icons.Default.AddCircle,
+//                                        contentDescription = "Add icon",
+//                                        tint = Color.Black,
+//                                        modifier = Modifier
+//                                            .size(50.dp)
+//                                    )
+//                                },
+//                                modifier = Modifier
+//                                    .align(Alignment.CenterHorizontally)
+//                                    .padding(top = 30.dp, bottom = 30.dp)
+//                                    .clip(CircleShape)
+//                                    .size(50.dp)
+//                            )
                         }
                 }
             }
@@ -492,10 +570,3 @@ fun CustomRadioButtons(text: String, isSelected: Boolean, onSelect: () -> Unit) 
         )
     }
 }
-
-
-//@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
-//@Composable
-//fun NewSubscriptionPreview() {
-//    AddSubscription()
-//}

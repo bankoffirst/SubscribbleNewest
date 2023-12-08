@@ -64,6 +64,7 @@ import com.example.subscribble.getDrawableResource
 import com.example.subscribble.nameDis
 import com.example.subscribble.nameNet
 import com.example.subscribble.nameYou
+import com.example.subscribble.namePrime
 import com.example.subscribble.navbar.NavScreen
 
 @Composable
@@ -100,6 +101,7 @@ fun LineChart(
         val line1Path = Path()
         val line2Path = Path()
         val line3Path = Path()
+        val line4Path = Path()
 
         line1Path.moveTo(0 * xStep, size.height - 4 * yStep)
         line1Path.lineTo(1 * xStep, size.height - 8 * yStep)
@@ -115,6 +117,11 @@ fun LineChart(
         line3Path.lineTo(1 * xStep, size.height - 2 * yStep)
         line3Path.lineTo(2 * xStep, size.height - 9 * yStep)
         line3Path.lineTo(3 * xStep, size.height - 2 * yStep)
+
+        line4Path.moveTo(0 * xStep, size.height - 3 * yStep)
+        line4Path.lineTo(1 * xStep, size.height - 7 * yStep)
+        line4Path.lineTo(2 * xStep, size.height - 2 * yStep)
+        line4Path.lineTo(3 * xStep, size.height - 5 * yStep)
 
         for (i in xAxisLabels.indices) {
             drawIntoCanvas { canvas ->
@@ -157,6 +164,12 @@ fun LineChart(
         drawPath(
             path = line3Path,
             getApplicationColor("DisneyPlus"),
+            style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
+        )
+
+        drawPath(
+            path = line4Path,
+            getApplicationColor("PrimeVideo"),
             style = Stroke(width = 1.dp.toPx(), cap = StrokeCap.Round)
         )
     }
@@ -331,6 +344,12 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
+                                                val hours = (300 / 60).toInt()
+                                                val minutes = (300 % 60).toInt()
+                                                val totaltime = "%02d.%02d".format(hours, minutes)
+                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                            }
+                                            namePrime -> {
                                                 val hours = (300 / 60).toInt()
                                                 val minutes = (300 % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)

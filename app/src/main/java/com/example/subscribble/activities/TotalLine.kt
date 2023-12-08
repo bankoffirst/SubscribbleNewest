@@ -117,10 +117,12 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             val nameYou = subViewmodel.getNameByName("Youtube")
             val nameDis = subViewmodel.getNameByName("DisneyPlus")
             val nameNet = subViewmodel.getNameByName("Netflix")
+            val namePrime = subViewmodel.getNameByName("PrimeVideo")
 
             val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
             val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
-            val netflixDataPoints = getUsageStatsForWeeks(context, "com.spotify.music")
+            val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
+            val primevideoDataPoints = getUsageStatsForWeeks(context, "com.amazon.avod.thirdpartyclient")
 
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
@@ -199,6 +201,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                             val youtubePath = Path()
                             val disneyplusPath = Path()
                             val netflixDataPath = Path()
+                            val primevideoDataPath = Path()
 
                             drawLine(
                                 color = Color.Black,
@@ -216,6 +219,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                             youtubePath.moveTo(0f, size.height - (youtubeDataPoints[0] - minValue) * yStep)
                             disneyplusPath.moveTo(0f, size.height - (disneyplusDataPoints[0] - minValue) * yStep)
                             netflixDataPath.moveTo(0f, size.height - (netflixDataPoints[0] - minValue) * yStep)
+                            primevideoDataPath.moveTo(0f, size.height - (primevideoDataPoints[0] - minValue) * yStep)
 
                             for (i in yAxisLabels.indices) {
                                 drawIntoCanvas { canvas ->
@@ -331,6 +335,38 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                 )
                                             )
                                         }
+                                        namePrime -> {
+                                            primevideoDataPoints.forEachIndexed { index, value ->
+                                                val x = index * xStep
+                                                val y = size.height - (value - minValue) * yStep
+                                                primevideoDataPath.lineTo(x, y)
+                                                drawContext.canvas.nativeCanvas.drawText(
+                                                    xAxisLabels.getOrNull(index) ?: "",
+                                                    x,
+                                                    size.height + 40,
+                                                    paint.apply {
+                                                        textSize = timeSize
+                                                    }
+                                                )
+                                                val hours = (value / 60).toInt()
+                                                val minutes = (value % 60).toInt()
+                                                val timeLabel = "%02d.%02d".format(hours, minutes)
+                                                drawContext.canvas.nativeCanvas.drawText(
+                                                    timeLabel,
+                                                    x,
+                                                    y - 5.dp.toPx(),
+                                                    paint
+                                                )
+                                            }
+                                            drawPath(
+                                                path = primevideoDataPath,
+                                                getApplicationColor("PrimeVideo"),
+                                                style = Stroke(
+                                                    width = 1.dp.toPx(),
+                                                    cap = StrokeCap.Round
+                                                )
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -430,6 +466,12 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
+                                                val hours = (totalnet / 60).toInt()
+                                                val minutes = (totalnet % 60).toInt()
+                                                val totaltime = "%02d.%02d".format(hours, minutes)
+                                                Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                            }
+                                            namePrime -> {
                                                 val hours = (totalnet / 60).toInt()
                                                 val minutes = (totalnet % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
