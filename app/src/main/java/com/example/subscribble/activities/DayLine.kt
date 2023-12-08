@@ -135,7 +135,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navController.navigate(NavScreen.TotalMocup.route)
+                                //navController.navigate(NavScreen.TotalMocup.route)
                             },
                             onDoubleTap = {
                                 navController.navigate(NavScreen.TotalLine.route)
