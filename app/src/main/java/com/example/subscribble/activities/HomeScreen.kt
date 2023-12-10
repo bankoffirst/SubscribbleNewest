@@ -174,10 +174,12 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
         val nameYou = subViewmodel.getNameByName("Youtube")
         val nameDis = subViewmodel.getNameByName("DisneyPlus")
         val nameNet = subViewmodel.getNameByName("Netflix")
+        val namePrime = subViewmodel.getNameByName("PrimeVideo")
 
         val youtubeDataPoints = getUsageStatsForWeeks(context, "com.google.android.youtube")
         val disneyplusDataPoints = getUsageStatsForWeeks(context, "com.disney.disneyplus")
         val netflixDataPoints = getUsageStatsForWeeks(context, "com.netflix.mediaclient")
+        val primevideoDataPoints = getUsageStatsForWeeks(context, "com.amazon.avod.thirdpartyclient")
 
         val totalyou =
             String.format("%.2f", youtubeDataPoints.sum()).toFloat()
@@ -185,6 +187,9 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
             String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
         val totalnet =
             String.format("%.2f", netflixDataPoints.sum()).toFloat()
+        val totalprime =
+            String.format("%.2f", primevideoDataPoints.sum()).toFloat()
+
         val usagetable = usage_table.value
         val currentMonthYear = SimpleDateFormat("MMM/yyyy", Locale.getDefault()).format(Date())
 
@@ -210,6 +215,7 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
                     nameYou -> totalyou
                     nameDis -> totaldis
                     nameNet -> totalnet
+                    namePrime -> totalprime
                     else -> 0f
                 }
                 val hours = (total / 60).toInt()
@@ -252,7 +258,12 @@ fun HomeScreen(context: Context, navController: NavController, subViewmodel: Sub
                     val dateSubs = subsList.date
                     val daysLeft = getDueDateCountDown(dateSubs)
 
-                    alert = daysLeft.toInt() <= 3
+                    if (daysLeft.toInt() <= 3){
+                        alert = true
+                    }
+//                    println(daysLeft)
+//
+//                    alert = daysLeft.toInt() <= 3
                 }
 
                 if (alert) {

@@ -64,15 +64,21 @@ fun doNut2(
 
     val priceApple = subViewmodel.getPriceByMusic("AppleMusic")
     val priceSpo = subViewmodel.getPriceByMusic("Spotify")
+    val priceTidal = subViewmodel.getPriceByMusic("Tidal")
+    val priceJoox = subViewmodel.getPriceByMusic("JooxMusic")
+    val priceSc = subViewmodel.getPriceByMusic("SoundCloud")
 
     val musicSub = subViewmodel.getSubscriptionByCategory("music")
 
-    val values = mutableListOf(priceApple,priceSpo)
+    val values = mutableListOf(priceApple,priceSpo,priceTidal,priceJoox,priceSc)
 
     val sumOfValues = values.sum()
     val colors = listOf(
         getApplicationColor("AppleMusic"),
         getApplicationColor("Spotify"),
+        getApplicationColor("Tidal"),
+        getApplicationColor("JooxMusic"),
+        getApplicationColor("SoundCloud")
     )
 
     val proportions = values.map {
@@ -165,6 +171,11 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
+
+            val sortedSubscription = subscription.value.sortedBy { subsList ->
+                subsList.price
+            }
+
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -207,7 +218,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     .padding(top = 28.dp, bottom = 40.dp)
                     .fillMaxHeight())
                 {
-                    items(subscription.value) {subsList ->
+                    items(sortedSubscription) {subsList ->
                         if (subsList.type == "music"){
 
                             val colorSub = getApplicationColor(subsList.name)

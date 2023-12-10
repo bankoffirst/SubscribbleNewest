@@ -127,6 +127,7 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
             val totalnet =  String.format("%.2f", netflixDataPoints.sum()).toFloat()
+            val totalprime = String.format("%.2f", netflixDataPoints.sum()).toFloat()
 
             val xAxisLabels = listOf("Week1", "Week2", "Week3", "Week4")
             val yAxisLabels = listOf(" 10", " 20", " 30", " 40", " 50", " 60", " 70", " 80", " 90", "100", "110", "120", "130", "140", "150")
@@ -472,8 +473,8 @@ fun TotalLine(context: Context,navController: NavController, subViewmodel: Subsc
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             namePrime -> {
-                                                val hours = (totalnet / 60).toInt()
-                                                val minutes = (totalnet % 60).toInt()
+                                                val hours = (totalprime / 60).toInt()
+                                                val minutes = (totalprime % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }

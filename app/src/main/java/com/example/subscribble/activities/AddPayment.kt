@@ -57,13 +57,8 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
     val cards = cardViewmodel.cards.collectAsState(initial = emptyList())
 
-    val name = remember {
-        mutableStateOf("")
-    }
+    val cardLists = cards.value
 
-    val detail = remember {
-        mutableStateOf("")
-    }
 
     val alert = remember {
         mutableStateOf("")
@@ -281,18 +276,28 @@ fun AddPayment(navController: NavController,cardViewmodel:SubscriptionViewModel 
 
                             IconButton(
                                 onClick = {
-                                    if (textName.isEmpty()) {
-                                        alert.value = "Please Fill Card Name"
-                                        focusRequester.requestFocus()
-                                    } else {
-                                        cardViewmodel.insertCard(
-                                            CardList(
-                                                name = textName,
-                                                detail = textDetail,
-                                            )
-                                        ); navController.navigate(BottomBarScreen.Home.route)
+                                    var isAdded = false
+
+                                    cards.value.forEach{ cardList ->
+                                        if (cardList.name == textName){
+                                            alert.value = "You already add ${cardList.name} on the application."
+                                            isAdded = true
+                                        }
                                     }
-                                    //println("Card Name : $textName. And Details : $textDetail")
+
+                                    if (!isAdded){
+                                        if (textName.isEmpty()) {
+                                            alert.value = "Please Fill Card Name"
+                                            focusRequester.requestFocus()
+                                        } else {
+                                            cardViewmodel.insertCard(
+                                                CardList(
+                                                    name = textName,
+                                                    detail = textDetail,
+                                                )
+                                            ); navController.navigate(BottomBarScreen.Home.route)
+                                        }
+                                    }
                                 },
                                 content = {
                                     Icon(

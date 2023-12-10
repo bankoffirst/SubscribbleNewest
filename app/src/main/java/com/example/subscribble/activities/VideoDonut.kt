@@ -171,6 +171,11 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                 .fillMaxSize()
                 .padding(contentPadding)
         ) {
+
+            val sortedSubscription = subscription.value.sortedBy { subsList ->
+                subsList.price
+            }
+
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -224,7 +229,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     .padding(top = 28.dp, bottom = 40.dp)
                     .fillMaxHeight())
                 {
-                    items(subscription.value) {subsList ->
+                    items(sortedSubscription) {subsList ->
                         if (subsList.type == "video"){
 
                             val colorSub = getApplicationColor(subsList.name)

@@ -52,7 +52,7 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 @Composable
 fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:SubscriptionViewModel = hiltViewModel()) {
 
-    val cards = cardViewmodel.cards.collectAsState(initial = emptyList())
+    val cardList = cardViewmodel.cards.collectAsState(initial = emptyList())
     val subscription = cardViewmodel.subs.collectAsState(initial = emptyList())
 
     val card = cardViewmodel.getCardById(cardsId)
@@ -274,20 +274,32 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                                     .padding(bottom = 20.dp, top = 40.dp)
                                     , horizontalArrangement = Arrangement.Center) {
                                     IconButton(onClick = {
-                                        if (textName != "") {
-                                            val updateCard = cards.copy(name = textName, detail = textDetail)
-                                            cardViewmodel.updateCard(updateCard)
-                                            for (subsList in subscription.value) {
-                                                if (subsList.cardName == cards.name){
-                                                    subsList.cardName = textName
-                                                    cardViewmodel.updateSubscription(subsList)
-                                                }
-                                            }
-                                            navController.popBackStack()
+                                        var isAdded = false
 
-                                        } else {
-                                            alert.value = "Please Fill Card Name"
-                                        } },
+                                        cardList.value.forEach{ cardList ->
+                                            if (cardList.name == textName){
+                                                alert.value = "You already add ${cardList.name} on the application."
+                                                isAdded = true
+                                            }
+                                        }
+
+                                        if (!isAdded){
+                                            if (textName != "") {
+                                                val updateCard = cards.copy(name = textName, detail = textDetail)
+                                                cardViewmodel.updateCard(updateCard)
+                                                for (subsList in subscription.value) {
+                                                    if (subsList.cardName == cards.name){
+                                                        subsList.cardName = textName
+                                                        cardViewmodel.updateSubscription(subsList)
+                                                    }
+                                                }
+                                                navController.popBackStack()
+
+                                            } else {
+                                                alert.value = "Please Fill Card Name"
+                                            }
+                                        }
+                                    },
                                         modifier = Modifier
                                             .clip(CircleShape)
                                             .background(Color(0xFF333333))

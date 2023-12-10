@@ -301,27 +301,30 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     Spacer(modifier = Modifier.width(5.dp))
 
                                     if (cards.value.isNotEmpty()) {
-                                        IconButton(
-                                            onClick = {
-                                                selectedCard = ""
-                                            },
-                                            content = {
-                                                Icon(
-                                                    painter = painterResource(R.drawable.ic_cancel),
-                                                    contentDescription = "Close icon",
-                                                    tint = Color.Red,
-                                                    modifier = Modifier
-                                                        .size(50.dp)
-                                                )
-                                            },
-                                            modifier = Modifier
-                                                //.align(Alignment.CenterHorizontally)
-                                                .padding(top = 15.dp)
-                                                .background(Color.White)
-                                                .clip(CircleShape)
-                                                .size(20.dp)
-                                        )
+                                        if (selectedCard != ""){
+                                            IconButton(
+                                                onClick = {
+                                                    selectedCard = ""
+                                                },
+                                                content = {
+                                                    Icon(
+                                                        painter = painterResource(R.drawable.ic_cancel),
+                                                        contentDescription = "Close icon",
+                                                        tint = colorResource(id = R.color.custom_text_light),
+                                                        modifier = Modifier
+                                                            .size(50.dp)
+                                                    )
+                                                },
+                                                modifier = Modifier
+                                                    //.align(Alignment.CenterHorizontally)
+                                                    .padding(top = 15.dp)
+                                                    .background(Color.White)
+                                                    .clip(CircleShape)
+                                                    .size(20.dp)
+                                            )
+                                        }
                                     }
+
                                 }
 
                                 if (cards.value.isEmpty()) {
@@ -388,13 +391,19 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     , horizontalArrangement = Arrangement.Center
                                     , verticalAlignment = Alignment.Bottom) {
                                     IconButton(onClick = {
-                                        if (priceText != ""){
+
+                                        if (planText.isEmpty()){
+                                            alert.value = "Please fill the Plan."
+                                            planfocusRequester.requestFocus()
+                                        } else if (priceText.isEmpty()){
+                                            alert.value = "Please fill the Price."
+                                            pricefocusRequester.requestFocus()
+                                        } else {
                                             val updateSubs = subs.copy(planName = planText, price = priceText.toFloat(), date = selectDate.value, cardName = selectedCard, note = noteText)
                                             subViewmodel.updateSubscription(updateSubs)
                                             navController.navigate(BottomBarScreen.Home.route)
-                                        } else {
-                                            alert.value = "Please fill out the price"
-                                        } },
+                                        }
+                                    },
                                         modifier = Modifier
                                             .clip(CircleShape)
                                             .background(Color(0xFF333333))

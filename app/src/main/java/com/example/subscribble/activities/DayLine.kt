@@ -113,7 +113,6 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
             val nameNet = subViewmodel.getNameByName("Netflix")
             val namePrime = subViewmodel.getNameByName("PrimeVideo")
 
-
             val youtubeDataPoints = getUsageStatsForDays(context, "com.google.android.youtube")
             val disneyplusDataPoints = getUsageStatsForDays(context, "com.disney.disneyplus")
             val netflixDataPoints = getUsageStatsForDays(context, "com.netflix.mediaclient")
@@ -122,9 +121,11 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
             val xAxisLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
             val yAxisLabels = listOf(" 2", " 4", " 6", " 8", " 10", "12", "14", "16", "18", "20", "22", "24")
             val reorderedXAxisLabels = xAxisLabels.drop(getCurrentDayIndex()).plus(xAxisLabels.take(getCurrentDayIndex()))
+
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
             val totaldis =  String.format("%.2f", disneyplusDataPoints.sum()).toFloat()
             val totalnet =  String.format("%.2f", netflixDataPoints.sum()).toFloat()
+            val totalprime = String.format("%.2f", netflixDataPoints.sum()).toFloat()
 
             Card(
                 modifier = Modifier
@@ -507,8 +508,8 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
                                                 )
                                             }
                                             namePrime -> {
-                                                val hours = (totalnet / 60).toInt()
-                                                val minutes = (totalnet % 60).toInt()
+                                                val hours = (totalprime / 60).toInt()
+                                                val minutes = (totalprime % 60).toInt()
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
                                                     text = PriceFormatWeek(price ="$totaltime hr"),

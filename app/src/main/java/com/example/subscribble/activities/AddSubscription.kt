@@ -159,7 +159,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                         Card(
                             modifier = Modifier
                                 //.fillMaxWidth()
-                                .height(900.dp)
+                                .height(850.dp)
                                 .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
                                 .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
                             shape = RoundedCornerShape(20.dp),
@@ -352,26 +352,6 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                                 .size(20.dp)
                                         )
                                     }
-//                                    IconButton(
-//                                        onClick = {
-//                                            selectedCard = ""
-//                                        },
-//                                        content = {
-//                                            Icon(
-//                                                painter = painterResource(R.drawable.ic_cancel),
-//                                                contentDescription = "Close icon",
-//                                                tint = Color.Red,
-//                                                modifier = Modifier
-//                                                    .size(50.dp)
-//                                            )
-//                                        },
-//                                        modifier = Modifier
-//                                            //.align(Alignment.CenterHorizontally)
-//                                            .padding(top = 15.dp)
-//                                            .background(Color.White)
-//                                            .clip(CircleShape)
-//                                            .size(20.dp)
-//                                    )
                                 }
                             }
 
@@ -491,57 +471,6 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                         .size(50.dp)
                                 )
                             }
-
-//                            IconButton(
-//                                onClick = {
-//                                    var isAdded = false
-//                                    subscriptions.value.forEach { subsList ->
-//                                        if (selectedItem == subsList.name) {
-//                                            alert.value = "You already add ${subsList.name} on the application."
-//                                            isAdded = true
-//                                        }
-//                                    }
-//                                    if (!isAdded) {
-//                                        if (textPlan.isEmpty()) {
-//                                            alert.value = "Please fill the Plan."
-//                                            planfocusRequester.requestFocus()
-//                                        } else if (numPrice.isEmpty()){
-//                                            alert.value = "Please fill the Price."
-//                                            pricefocusRequester.requestFocus()
-//                                        } else if (selectDate.value.isEmpty()){
-//                                            alert.value = "Please select Date"
-//                                            datefocusRequester.requestFocus()
-//                                        } else {
-//                                            subViewmodel.insertSub(
-//                                                SubsList(
-//                                                    name = selectedItem,
-//                                                    //cardId = cardId,
-//                                                    planName = textPlan,
-//                                                    price = numPrice.toFloat(),
-//                                                    date = selectDate.value,
-//                                                    note = textNote,
-//                                                    type = classify(selectedItem),
-//                                                    cardName = selectedCard
-//                                                )
-//                                            ); navController.navigate(BottomBarScreen.Home.route)
-//                                        }
-//                                    }
-//                                },
-//                                content = {
-//                                    Icon(
-//                                        imageVector = Icons.Default.AddCircle,
-//                                        contentDescription = "Add icon",
-//                                        tint = Color.Black,
-//                                        modifier = Modifier
-//                                            .size(50.dp)
-//                                    )
-//                                },
-//                                modifier = Modifier
-//                                    .align(Alignment.CenterHorizontally)
-//                                    .padding(top = 30.dp, bottom = 30.dp)
-//                                    .clip(CircleShape)
-//                                    .size(50.dp)
-//                            )
                         }
                 }
             }
