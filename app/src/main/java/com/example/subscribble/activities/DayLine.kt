@@ -119,7 +119,7 @@ fun DayLine(context: Context,navController: NavController, subViewmodel: Subscri
             val primevideoDataPoints = getUsageStatsForDays(context, "com.amazon.avod.thirdpartyclient")
 
             val xAxisLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
-            val yAxisLabels = listOf(" 2", " 4", " 6", " 8", " 10", "12", "14", "16", "18", "20", "22", "24")
+            val yAxisLabels = listOf(" 2", " 4", " 6", " 8", "10", "12", "14", "16", "18", "20", "22", "24")
             val reorderedXAxisLabels = xAxisLabels.drop(getCurrentDayIndex()).plus(xAxisLabels.take(getCurrentDayIndex()))
 
             val totalyou =  String.format("%.2f", youtubeDataPoints.sum()).toFloat()
