@@ -60,9 +60,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.text.isDigitsOnly
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.subscribble.PriceFormat
 import com.example.subscribble.R
 import com.example.subscribble.database.module.SubscriptionViewModel
 import com.example.subscribble.getDrawableResource
@@ -77,13 +77,11 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
 
     val cards = subViewmodel.cards.collectAsState(initial = emptyList())
 
-    val planfocusRequester = remember { FocusRequester() }
     val pricefocusRequester = remember { FocusRequester() }
     val datefocusRequester = remember { FocusRequester() }
 
     subscription?.let { subs ->
         val app = subs.name
-        var price = PriceFormat(subs.price.toString())
         val plan = subs.planName
         val date = subs.date
         val note = subs.note
@@ -213,8 +211,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     value = planText,
                                     onValueChange = { planText = it },
                                     modifier = Modifier
-                                        .width(170.dp)
-                                        .focusRequester(planfocusRequester),
+                                        .width(170.dp),
                                     placeholder = { Text(text = "Subscription Plan") },
                                     shape = RectangleShape,
                                     colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -233,7 +230,13 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                 Row(modifier = Modifier.fillMaxWidth()) {
                                     TextField(
                                         value = priceText,
-                                        onValueChange = { priceText = it },
+                                        onValueChange = {
+                                            if (it.isEmpty() || it.isDigitsOnly() || it.count { char -> char == '.' } <= 1 && it.count { char -> char == '.' } <= 1 && it.replace(".", "").isDigitsOnly()){
+                                                priceText = it
+                                            } else {
+                                                alert.value = "Please fill the valid number."
+                                            }
+                                        },
                                         modifier = Modifier
                                             .width(170.dp)
                                             .focusRequester(pricefocusRequester),
@@ -392,10 +395,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     , verticalAlignment = Alignment.Bottom) {
                                     IconButton(onClick = {
 
-                                        if (planText.isEmpty()){
-                                            alert.value = "Please fill the Plan."
-                                            planfocusRequester.requestFocus()
-                                        } else if (priceText.isEmpty()){
+                                        if (priceText.isEmpty()){
                                             alert.value = "Please fill the Price."
                                             pricefocusRequester.requestFocus()
                                         } else {

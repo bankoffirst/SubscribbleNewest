@@ -73,6 +73,7 @@ import com.example.subscribble.navbar.BottomBarScreen
 import com.example.subscribble.navbar.NavScreen
 
 import androidx.compose.runtime.*
+import androidx.core.text.isDigitsOnly
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,9 +89,9 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
 
     val listItems = arrayOf("Netflix","Spotify","DisneyPlus","Youtube","AppleMusic","PrimeVideo","Tidal","JooxMusic","SoundCloud")
 
-    val planfocusRequester = remember { FocusRequester() }
     val pricefocusRequester = remember { FocusRequester() }
     val datefocusRequester = remember { FocusRequester() }
+    var isInputValid by remember { mutableStateOf(true) }
 
     // state of menu
     var expanded by remember {
@@ -242,8 +243,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 onValueChange = { textPlan = it },
                                 modifier = Modifier
                                     .padding(start = 26.dp)
-                                    .width(170.dp)
-                                    .focusRequester(planfocusRequester),
+                                    .width(170.dp),
                                 placeholder = { Text(text = "Subscription Plan")},
                                 shape = RectangleShape,
                                 colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
@@ -262,7 +262,14 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                             Row(modifier = Modifier.fillMaxWidth()) {
                                 TextField(
                                     value = numPrice,
-                                    onValueChange = { numPrice = it },
+                                    onValueChange = {
+                                        if (it.isEmpty() || it.isDigitsOnly() || it.count { char -> char == '.' } <= 1 && it.count { char -> char == '.' } <= 1 && it.replace(".", "").isDigitsOnly()){
+                                            numPrice = it
+                                        } else {
+                                            alert.value = "Please fill the valid number."
+                                        }
+
+                                    },
                                     modifier = Modifier
                                         .padding(start = 26.dp)
                                         .width(170.dp)
@@ -301,7 +308,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                 ) {
                                     if (selectDate.value.isNotEmpty()){
                                         Text(
-                                            text = "${selectDate.value}",
+                                            text = selectDate.value,
                                             fontSize = 18.sp,
                                             color = Color.Black
                                         )
@@ -430,10 +437,7 @@ fun AddSubscription(navController: NavController, subViewmodel: SubscriptionView
                                             }
                                         }
                                         if (!isAdded) {
-                                            if (textPlan.isEmpty()) {
-                                                alert.value = "Please fill the Plan."
-                                                planfocusRequester.requestFocus()
-                                            } else if (numPrice.isEmpty()){
+                                            if (numPrice.isEmpty()){
                                                 alert.value = "Please fill the Price."
                                                 pricefocusRequester.requestFocus()
                                             } else if (selectDate.value.isEmpty()){

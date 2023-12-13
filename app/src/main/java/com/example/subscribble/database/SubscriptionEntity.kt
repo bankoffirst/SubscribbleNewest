@@ -17,22 +17,11 @@ data class CardList(
     val detail:String
 )
 
-@Entity(tableName = "subscription",
-//    foreignKeys = [ForeignKey(
-//        entity = CardList::class,
-//        parentColumns = ["card_id"],
-//        childColumns = ["cardId"],
-//        onDelete = ForeignKey.CASCADE
-//    )],
-//    indices = [Index(value = ["cardId"])]
-)
+@Entity(tableName = "subscription")
 data class SubsList(
     @ColumnInfo(name = "sub_id")
     @PrimaryKey(autoGenerate = true)
     val id:Int = 0,
-
-//    @ColumnInfo(name = "cardId")
-//    val cardId:Int,
 
     @ColumnInfo(name = "sub_name")
     val name:String,
