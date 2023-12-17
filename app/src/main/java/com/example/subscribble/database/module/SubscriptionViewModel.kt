@@ -24,19 +24,12 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
     private val _test = MutableStateFlow(emptyList<UsageList>())
     val tests : StateFlow<List<UsageList>> = _test
 
-    private val _selectedCard = MutableStateFlow("Total Price")
-    val selectedCard : StateFlow<String> = _selectedCard
-
     init {
         viewModelScope.launch {
             _card.emit(repository.getAllCards())
             _sub.emit(repository.getAllSubs())
             _test.emit(repository.getAllTests())
         }
-    }
-
-    fun updateSelectedCard(card: String){
-        _selectedCard.value = card
     }
 
     fun insertCard(cardList: CardList){
@@ -121,10 +114,6 @@ class SubscriptionViewModel @Inject constructor(private val repository: Reposito
 
     fun getSubscriptionById(id: Int): SubsList? {
         return repository.getSubscriptionById(id)
-    }
-
-    fun getSubCardByName(name: String): SubsList? {
-        return repository.getSubCardByName(name)
     }
 
     fun getSubscriptionByCategory(category: String): SubsList?{

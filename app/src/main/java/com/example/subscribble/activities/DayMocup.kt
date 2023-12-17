@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
-import android.content.Context
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -192,7 +191,7 @@ fun LineChart1(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DayMocup(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+fun DayMocup(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
     val videoSub = subViewmodel.getSubscriptionByCategory("video")
@@ -244,7 +243,8 @@ fun DayMocup(context: Context,navController: NavController, subViewmodel: Subscr
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navController.navigate(NavScreen.DayLine.route)
+//                                navController.navigate(NavScreen.DayLine.route)
+                                navController.navigate(NavScreen.VideoDonut.route)
                             },
                             onDoubleTap = {
                                 navController.navigate(NavScreen.TotalMocup.route)
@@ -344,28 +344,28 @@ fun DayMocup(context: Context,navController: NavController, subViewmodel: Subscr
 
                                         when (subsList.name) {
                                             nameYou -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (599 % 60).toInt()
+                                                val hours = (300 / 60)
+                                                val minutes = (599 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
                                                     text = PriceFormatWeek(price ="$totaltime hr"),
                                                     modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameDis -> {
-                                                val hours = (546 / 60).toInt()
-                                                val minutes = (333 % 60).toInt()
+                                                val hours = (546 / 60)
+                                                val minutes = (333 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
-                                                val hours = (343 / 60).toInt()
-                                                val minutes = (565 % 60).toInt()
+                                                val hours = (343 / 60)
+                                                val minutes = (565 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             namePrime -> {
-                                                val hours = (343 / 60).toInt()
-                                                val minutes = (565 % 60).toInt()
+                                                val hours = (343 / 60)
+                                                val minutes = (565 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormatWeek(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }

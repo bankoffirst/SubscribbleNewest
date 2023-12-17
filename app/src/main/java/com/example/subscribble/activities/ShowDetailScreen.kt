@@ -27,7 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,10 +57,7 @@ import androidx.compose.runtime.setValue
 @Composable
 fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
-    //val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
-    val usage_table = subViewmodel.tests.collectAsState(initial = emptyList())
     val subscription = subViewmodel.getSubscriptionById(subsId)
-    val cards = subViewmodel.cards.collectAsState(initial = emptyList())
 
     var showDialog by remember { mutableStateOf(false) }
 
@@ -69,12 +65,6 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
         subViewmodel.loadSubs()
         subViewmodel.loadCards()
     }
-
-//    val app = "Netflix"
-//    val price = PriceFormat("199")
-//    val plan = "Basic"
-//    val date = "16/2/2023"
-//    val note = "lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua obcaecati ipsa assumenda doloremque ipsam eos cupiditate libero fuga provident nemo architecto deserunt magnam praesentium natus impedit tenetur dolor pariatur suscipit ab sunt aspernatur vel ipsum necessitatibus voluptatum mollitia odio eligendi"
 
     subscription?.let { subs ->
         val app = subs.name
@@ -119,7 +109,7 @@ fun ShowDetailScreen(context: Context, navController: NavController, subsId: Int
             }
         ) { contentPadding ->
 
-            LazyColumn(){
+            LazyColumn{
                 item {
                     Column(
                         modifier = Modifier

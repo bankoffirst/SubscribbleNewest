@@ -136,7 +136,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
 
         ) { contentPadding ->
 
-            LazyColumn(){
+            LazyColumn{
                 item {
                     Column(
                         modifier = Modifier
@@ -275,7 +275,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                     ) {
                                         if (selectDate.value.isNotEmpty()){
                                             Text(
-                                                text = "${selectDate.value}",
+                                                text = selectDate.value,
                                                 fontSize = 18.sp,
                                                 color = Color.Black
                                             )
@@ -348,9 +348,7 @@ fun EditScreen(navController: NavController, subsId: Int,subViewmodel: Subscript
                                             .size(35.dp)
                                     )
                                 } else {
-                                    LazyRow(
-                                        //.fillMaxWidth()
-                                    ){
+                                    LazyRow{
                                         items(cards.value){cardsList ->
                                             CustomRadioButtonsEdit(
                                                 text = cardsList.name,

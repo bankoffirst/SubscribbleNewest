@@ -23,63 +23,65 @@ import com.example.subscribble.activities.VideoDonut
 import com.example.subscribble.activities.MusicDonut
 import com.example.subscribble.activities.TotalLine
 import com.example.subscribble.activities.TotalMocup
+
 @Composable
-fun NavGraphControl(navController: NavController){
+fun NavGraphControl(navController: NavController) {
     NavHost(
         navController = navController as NavHostController,
         startDestination = BottomBarScreen.Home.route
-    ){
+    ) {
         composable(route = BottomBarScreen.Home.route)
         {
             val context = LocalContext.current
-            HomeScreen(context,navController = navController)
+            HomeScreen(context, navController = navController)
         }
+
         composable(route = BottomBarScreen.Add.route)
         {
             AddScreen(navController = navController)
         }
+
         composable(route = BottomBarScreen.Data_visual.route)
         {
             DataVisualizationScreen(navController = navController)
         }
+
         composable(route = BottomBarScreen.Bills.route)
         {
             UpcomingBillsScreen(navController = navController)
         }
+
         composable(route = NavScreen.AddPayment.route)
         {
             AddPayment(navController = navController)
         }
+
         composable(route = NavScreen.AddSubscription.route)
         {
             AddSubscription(navController = navController)
         }
-//        composable(route = NavScreen.ShowDetailScreen.route)
-//        {
-//            val subsId= it.arguments?.getInt("subsId")?: -1
-//            ShowDetailScreen(navController = navController, subsId = subsId)
-//        }
+
         composable(
             route = "${NavScreen.ShowDetailScreen.route}/{subsId}",
-            arguments = listOf(navArgument("subsId") {type = NavType.IntType})
-        ){
+            arguments = listOf(navArgument("subsId") { type = NavType.IntType })
+        ) {
             val subsId = it.arguments?.getInt("subsId") ?: -1
             val context = LocalContext.current
-            ShowDetailScreen(context,navController = navController, subsId = subsId)
+            ShowDetailScreen(context, navController = navController, subsId = subsId)
         }
 
         composable(
             route = "${NavScreen.EditScreen.route}/{subsId}",
-            arguments = listOf(navArgument("subsId") {type = NavType.IntType})
-        ){
+            arguments = listOf(navArgument("subsId") { type = NavType.IntType })
+        ) {
             val subsId = it.arguments?.getInt("subsId") ?: -1
             EditScreen(navController = navController, subsId = subsId)
         }
 
         composable(
             route = "${NavScreen.EditCard.route}/{cardsId}",
-            arguments = listOf(navArgument("cardsId") {type = NavType.IntType})
-        ){
+            arguments = listOf(navArgument("cardsId") { type = NavType.IntType })
+        ) {
             val cardsId = it.arguments?.getInt("cardsId") ?: -1
             EditCard(navController = navController, cardsId = cardsId)
         }
@@ -93,30 +95,28 @@ fun NavGraphControl(navController: NavController){
         {
             VideoDonut(navController = navController)
         }
+
         composable(route = NavScreen.TotalLine.route)
         {
             val context = LocalContext.current
-            TotalLine(context,navController = navController)
+            TotalLine(context, navController = navController)
         }
+
         composable(route = NavScreen.TotalMocup.route)
         {
-            val context = LocalContext.current
-            TotalMocup(context,navController = navController)
+            TotalMocup(navController = navController)
         }
 
         composable(route = NavScreen.DayLine.route)
         {
             val context = LocalContext.current
-            DayLine(context,navController = navController)
+            DayLine(context, navController = navController)
         }
 
         composable(route = NavScreen.DayMocup.route)
         {
-            val context = LocalContext.current
-            DayMocup(context = context, navController = navController)
+            DayMocup(navController = navController)
         }
-
     }
-
 }
 

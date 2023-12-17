@@ -50,7 +50,11 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:SubscriptionViewModel = hiltViewModel()) {
+fun EditCard(
+    navController: NavController,
+    cardsId: Int,
+    cardViewmodel: SubscriptionViewModel = hiltViewModel()
+) {
 
     val cardList = cardViewmodel.cards.collectAsState(initial = emptyList())
     val subscription = cardViewmodel.subs.collectAsState(initial = emptyList())
@@ -60,9 +64,8 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
     val focusRequester = remember { FocusRequester() }
 
     card?.let { cards ->
-        var name = cards.name
-        var detail = cards.detail
-
+        val name = cards.name
+        val detail = cards.detail
 
         val alert = remember {
             mutableStateOf("")
@@ -83,8 +86,10 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                     Modifier.padding(start = 26.dp, top = 22.dp, bottom = 22.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { navController.popBackStack() },
-                        modifier = Modifier.size(24.dp)) {
+                    IconButton(
+                        onClick = { navController.popBackStack() },
+                        modifier = Modifier.size(24.dp)
+                    ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_back_ios),
                             contentDescription = "arrow back",
@@ -102,7 +107,7 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
             }
         ) { contentPadding ->
 
-            LazyColumn(){
+            LazyColumn {
                 item {
                     Column(
                         modifier = Modifier
@@ -110,185 +115,185 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                             .padding(contentPadding)
                     ) {
 
+                        Card(
+                            modifier = Modifier
+                                .height(850.dp)
+                                .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
+                                .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.White)
+                        ) {
+
                             Card(
                                 modifier = Modifier
-                                    //.fillMaxWidth()
-                                    .height(850.dp)
-                                    .padding(start = 20.dp, end = 20.dp, top = 0.dp, bottom = 90.dp)
-                                    .shadow(elevation = 8.dp, shape = RoundedCornerShape(20.dp)),
+                                    .fillMaxWidth()
+                                    .shadow(
+                                        elevation = 8.dp,
+                                        shape = RoundedCornerShape(20.dp),
+                                        spotColor = Color.LightGray
+                                    )
+                                    .height(200.dp),
                                 shape = RoundedCornerShape(20.dp),
-                                colors = CardDefaults.cardColors(containerColor = Color.White)
+                                colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
                             ) {
 
-                                Card(
+                                Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        //.padding(start = 20.dp, end = 20.dp)
-                                        .shadow(
-                                            elevation = 8.dp,
-                                            shape = RoundedCornerShape(20.dp),
-                                            spotColor = Color.LightGray
-                                        )
-                                        .height(200.dp),
-                                    shape = RoundedCornerShape(20.dp),
-                                    colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.custom_card))
+                                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
                                 ) {
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 22.dp, start = 26.dp, end = 26.dp)
-                                            .weight(1f)
-                                    ) {
-                                        Text(
-                                            text = textName, //card name
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 20.sp,
-                                            color = Color.White
-                                        )
-                                        Text(
-                                            text = "$formattedTotal THB",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 20.sp,
-                                            color = Color(0xFF0AA6EC),
-                                            textAlign = TextAlign.Right,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 4.dp, start = 26.dp, end = 26.dp)
-                                            .weight(1f)
-                                    ) {
-                                        Text(
-                                            text = textDetail, // credit card number
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 16.sp,
-                                            color = Color.White
-                                        )
-                                    }
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 22.dp, start = 26.dp, end = 26.dp)
-                                            .weight(1f)
-                                    ) {
-                                        Text(
-                                            text = "Video Streaming",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 14.sp,
-                                            color = Color(0xFF808080)
-                                        )
-                                        Text(
-                                            text = "$formattedvideoPrice THB",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 14.sp,
-                                            color = Color(0xFF808080),
-                                            textAlign = TextAlign.Right,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(start = 26.dp, end = 26.dp)
-                                            .weight(1f)
-                                    ) {
-                                        Text(
-                                            text = "Music Streaming",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 14.sp,
-                                            color = Color(0xFF808080)
-                                        )
-                                        Text(
-                                            text = "$formattedmusicPrice THB",
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 14.sp,
-                                            color = Color(0xFF808080),
-                                            textAlign = TextAlign.Right,
-                                            modifier = Modifier.fillMaxWidth()
-                                        )
-                                    }
-
+                                    Text(
+                                        text = textName, //card name
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = Color.White
+                                    )
+                                    Text(
+                                        text = "$formattedTotal THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 20.sp,
+                                        color = Color(0xFF0AA6EC),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
                                 }
 
-                                Text(
-                                    text = "Credit or Debit Name",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                    modifier = Modifier.padding(start = 26.dp, top = 60.dp)
-                                )
-
-                                //textName
-
-                                TextField(
-                                    value = textName,
-                                    onValueChange = { textName = it.take(10) },
-                                    modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                                        .width(200.dp)
-                                        .focusRequester(focusRequester),
-                                    placeholder = { Text(text = "Credit or Debit Name") },
-                                    shape = RectangleShape,
-                                    singleLine = true,
-                                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                                    maxLines = 1
-                                )
-
-                                Text(
-                                    text = "Details",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                    modifier = Modifier.padding(start = 26.dp, top = 50.dp)
-                                )
-
-                                //textDetail
-
-                                TextField(
-                                    value = textDetail,
-                                    onValueChange = { textDetail = it.take(20) },
-                                    modifier = Modifier.padding(start = 26.dp, top = 10.dp)
-                                        .width(200.dp),
-                                    placeholder = { Text(text = "Details of Card") },
-                                    shape = RectangleShape,
-                                    colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
-                                    maxLines = 1,
-                                    singleLine = true
-                                )
-
-
-                                Text(
-                                    text = alert.value,
-                                    color = Color.Red,
-                                    textAlign = TextAlign.Center,
+                                Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(top = 25.dp)
-                                )
+                                        .padding(top = 4.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = textDetail, // credit card number
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                        color = Color.White
+                                    )
+                                }
 
-                                Row(modifier = Modifier
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 22.dp, start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Video Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080)
+                                    )
+                                    Text(
+                                        text = "$formattedvideoPrice THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 26.dp, end = 26.dp)
+                                        .weight(1f)
+                                ) {
+                                    Text(
+                                        text = "Music Streaming",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080)
+                                    )
+                                    Text(
+                                        text = "$formattedmusicPrice THB",
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFF808080),
+                                        textAlign = TextAlign.Right,
+                                        modifier = Modifier.fillMaxWidth()
+                                    )
+                                }
+
+                            }
+
+                            Text(
+                                text = "Credit or Debit Name",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 60.dp)
+                            )
+
+                            TextField(
+                                value = textName,
+                                onValueChange = { textName = it.take(10) },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp)
+                                    .width(200.dp)
+                                    .focusRequester(focusRequester),
+                                placeholder = { Text(text = "Credit or Debit Name") },
+                                shape = RectangleShape,
+                                singleLine = true,
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                maxLines = 1
+                            )
+
+                            Text(
+                                text = "Details",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(start = 26.dp, top = 50.dp)
+                            )
+
+                            TextField(
+                                value = textDetail,
+                                onValueChange = { textDetail = it.take(20) },
+                                modifier = Modifier
+                                    .padding(start = 26.dp, top = 10.dp)
+                                    .width(200.dp),
+                                placeholder = { Text(text = "Details of Card") },
+                                shape = RectangleShape,
+                                colors = TextFieldDefaults.textFieldColors(containerColor = Color.White),
+                                maxLines = 1,
+                                singleLine = true
+                            )
+
+                            Text(
+                                text = alert.value,
+                                color = Color.Red,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 25.dp)
+                            )
+
+                            Row(
+                                modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(bottom = 20.dp, top = 40.dp)
-                                    , horizontalArrangement = Arrangement.Center) {
-                                    IconButton(onClick = {
+                                    .padding(bottom = 20.dp, top = 40.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                IconButton(
+                                    onClick = {
                                         var isAdded = false
 
-                                        cardList.value.forEach{ cardList ->
-                                            if (cardList.name == textName){
-                                                alert.value = "You already add ${cardList.name} on the application."
+                                        cardList.value.forEach { cardList ->
+                                            if (cardList.name == textName) {
+                                                alert.value =
+                                                    "You already add ${cardList.name} on the application."
                                                 isAdded = true
                                             }
                                         }
 
-                                        if (!isAdded){
+                                        if (!isAdded) {
                                             if (textName != "") {
-                                                val updateCard = cards.copy(name = textName, detail = textDetail)
+                                                val updateCard =
+                                                    cards.copy(name = textName, detail = textDetail)
                                                 cardViewmodel.updateCard(updateCard)
                                                 for (subsList in subscription.value) {
-                                                    if (subsList.cardName == cards.name){
+                                                    if (subsList.cardName == cards.name) {
                                                         subsList.cardName = textName
                                                         cardViewmodel.updateSubscription(subsList)
                                                     }
@@ -300,17 +305,19 @@ fun EditCard(navController: NavController, cardsId: Int, cardViewmodel:Subscript
                                             }
                                         }
                                     },
-                                        modifier = Modifier
-                                            .clip(CircleShape)
-                                            .background(Color(0xFF333333))
-                                            .size(50.dp)
-                                    ) {
-                                        Icon(painter = painterResource(id = R.drawable.ic_save),
-                                            contentDescription = "save", tint = Color.White,
-                                            modifier = Modifier.size(30.dp))
-                                    }
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .background(Color(0xFF333333))
+                                        .size(50.dp)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.ic_save),
+                                        contentDescription = "save", tint = Color.White,
+                                        modifier = Modifier.size(30.dp)
+                                    )
                                 }
                             }
+                        }
                     }
                 }
             }

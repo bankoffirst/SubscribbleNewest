@@ -56,7 +56,7 @@ import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.BottomBarScreen
 
 @Composable
-fun doNut2(
+fun DoNut2(
     subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
@@ -199,7 +199,7 @@ fun MusicDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    doNut2()
+                    DoNut2()
                 }
             }
 

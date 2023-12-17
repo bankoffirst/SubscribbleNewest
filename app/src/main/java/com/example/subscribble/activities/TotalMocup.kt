@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.*
 
 import androidx.compose.ui.Alignment
-import android.content.Context
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -178,7 +177,7 @@ fun LineChart(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TotalMocup(context: Context,navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
+fun TotalMocup(navController: NavController, subViewmodel: SubscriptionViewModel = hiltViewModel()) {
 
     val subscription = subViewmodel.subs.collectAsState(initial = emptyList())
 
@@ -231,7 +230,7 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                navController.navigate(NavScreen.TotalLine.route)
+                                navController.navigate(NavScreen.VideoDonut.route)
                             },
                             onDoubleTap = {
                                 navController.navigate(NavScreen.DayMocup.route)
@@ -330,28 +329,28 @@ fun TotalMocup(context: Context,navController: NavController, subViewmodel: Subs
                                         }
                                         when (subsList.name) {
                                             nameYou -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (300 / 60)
+                                                val minutes = (300 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(
                                                     text = PriceFormat(price ="$totaltime hr"),
                                                     modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameDis -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (300 / 60)
+                                                val minutes = (300 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f),fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             nameNet -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (300 / 60)
+                                                val minutes = (300 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }
                                             namePrime -> {
-                                                val hours = (300 / 60).toInt()
-                                                val minutes = (300 % 60).toInt()
+                                                val hours = (300 / 60)
+                                                val minutes = (300 % 60)
                                                 val totaltime = "%02d.%02d".format(hours, minutes)
                                                 Text(text = PriceFormat(price ="$totaltime hr"), modifier = Modifier.fillMaxSize().weight(1f), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                                             }

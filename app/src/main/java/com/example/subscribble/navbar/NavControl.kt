@@ -36,20 +36,19 @@ import com.example.subscribble.R
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavControl(){
+fun NavControl() {
     val navController = rememberNavController()
-    
-    Scaffold (
+
+    Scaffold(
         bottomBar = { BottomBar(navController = navController) }
-    ){
+    ) {
         NavGraphControl(navController = navController)
     }
 
 }
 
 @Composable
-fun BottomBar(navController: NavController)
-{
+fun BottomBar(navController: NavController) {
     val screens = listOf(
         BottomBarScreen.Home,
         BottomBarScreen.Add,
@@ -67,21 +66,23 @@ fun BottomBar(navController: NavController)
 
     Row(
         modifier = Modifier
-            //.padding(8.dp)
             .fillMaxWidth()
             .height(47.dp)
-            //.background(Color.Yellow)
             .background(color = colorResource(id = R.color.default_screen))
             .shadow(
                 elevation = 0.9.dp,
                 clip = false
             ),
         horizontalArrangement = Arrangement.Center
-            //.background(Color.Red)
     ) {
-        screens.forEach {screen ->
+        screens.forEach { screen ->
             if (currentDestination != null) {
-                AddItem(screen = screen, currentDestination = currentDestination, navController = navController, iconSizes = iconSizes)
+                AddItem(
+                    screen = screen,
+                    currentDestination = currentDestination,
+                    navController = navController,
+                    iconSizes = iconSizes
+                )
             }
         }
     }
@@ -96,16 +97,14 @@ fun RowScope.AddItem(
     iconSizes: Map<BottomBarScreen, Dp>
 ) {
     val selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
-    val iconSize = iconSizes[screen] ?: 35.dp // default icon 40
+    val iconSize = iconSizes[screen] ?: 35.dp
 
     Row(
         modifier = Modifier
-            //.padding(6.dp)
             .weight(1f)
-            //.background(Color.Blue)
             .background(Color.Transparent)
             .align(Alignment.CenterVertically)
-            .clickable (){
+            .clickable{
                 navController.navigate(screen.route) {
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
@@ -118,8 +117,9 @@ fun RowScope.AddItem(
         Icon(
             painter = painterResource(id = if (selected) screen.icon else screen.icon),
             contentDescription = screen.title,
-            tint = if (selected) Color(0xFF0AA6EC) else Color(0xFFD808080),
-            modifier = Modifier.size(iconSize)
+            tint = if (selected) Color(0xFF0AA6EC) else Color(0xFF808080),
+            modifier = Modifier
+                .size(iconSize)
                 .fillMaxWidth()
                 .align(Alignment.CenterVertically)
                 .padding(top = 5.dp)

@@ -59,7 +59,7 @@ import com.example.subscribble.getDrawableResource
 import com.example.subscribble.navbar.BottomBarScreen
 
 @Composable
-fun doNut1(
+fun DoNut1(
     subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
@@ -192,11 +192,10 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = {
-                                //navController.navigate(NavScreen.TotalMocup.route)
                                 navController.navigate(NavScreen.TotalLine.route)
                             },
 //                            onDoubleTap = {
-//                                navController.navigate(NavScreen.DayLine.route)
+//                                navController.navigate(NavScreen.TotalMocup.route)
 //                            }
                         )
                     },
@@ -210,7 +209,7 @@ fun VideoDonut(navController: NavController, subViewmodel: SubscriptionViewModel
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    doNut1()
+                    DoNut1()
                 }
             }
 

@@ -48,7 +48,7 @@ import com.example.subscribble.database.module.SubscriptionViewModel
 import androidx.compose.ui.graphics.ColorFilter
 
 @Composable
-fun doNut(
+fun DoNut(
     subViewmodel: SubscriptionViewModel = hiltViewModel(),
     size: Dp = 150.dp,
     thickness: Dp = 60.dp
@@ -170,7 +170,7 @@ fun DataVisualizationScreen(navController: NavController, subViewmodel: Subscrip
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    doNut()
+                    DoNut()
                 }
             }
             Column(

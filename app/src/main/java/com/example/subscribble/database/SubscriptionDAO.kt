@@ -76,7 +76,4 @@ interface UsageDao{
     @Query("SELECT * FROM usage_table WHERE Usage_name =:name")
     fun getUsageByName(name: String): List<UsageList>
 
-//    @Query("SELECT * FROM usage_table ORDER BY Usage_month_name DESC")
-//    fun getRecentMonths(name: String): List<UsageList>
-
 }

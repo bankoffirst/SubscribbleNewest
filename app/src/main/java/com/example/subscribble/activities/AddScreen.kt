@@ -24,7 +24,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -61,7 +60,6 @@ fun AddScreen(navController: NavController){
                     color = colorResource(id = R.color.custom_text)
                 )
 
-                //Show add payment method
                 Card(modifier = Modifier
                     .fillMaxWidth()
                     .height(220.dp)
@@ -82,8 +80,6 @@ fun AddScreen(navController: NavController){
                     )
                 }
 
-                //Show Streaming
-
                 Text(
                     text = "New Subscription",
                     fontWeight = FontWeight.Bold,
@@ -92,7 +88,6 @@ fun AddScreen(navController: NavController){
                     color = colorResource(id = R.color.custom_text)
                 )
 
-                //Show add subscription method
                 Card(modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
@@ -143,19 +138,7 @@ fun AddScreen(navController: NavController){
                             .weight(1f)
                     )
                 }
-
-                //Show Streaming
-
             }
-
-
         }
     }
-
 }
-
-//@Preview(showBackground = true, device = "spec:width=1440px,height=3088px,dpi=441")
-//@Composable
-//fun AddScreenPreview(){
-//    AddScreen()
-//}
